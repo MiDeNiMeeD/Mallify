@@ -1,0 +1,24 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A78BFA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="24" cy="24" r="24" fill="url(#logoGradient)"/>
+  
+  <!-- Shopping Bag Icon -->
+  <path d="M16 14C16 14 16 11 20 11C24 11 24 14 24 14M24 14C24 14 24 11 28 11C32 11 32 14 32 14M16 14H32L30 34H18L16 14Z" 
+        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Sparkle/Star Accent -->
+  <circle cx="36" cy="12" r="4" fill="url(#accentGradient)"/>
+  <path d="M36 9 L36 15 M33 12 L39 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

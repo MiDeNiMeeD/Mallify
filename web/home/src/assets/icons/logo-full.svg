@@ -1,0 +1,25 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon Circle -->
+  <circle cx="30" cy="30" r="24" fill="url(#iconGradient)"/>
+  
+  <!-- Shopping Bag -->
+  <path d="M20 20C20 20 20 17 24 17C28 17 28 20 28 20M28 20C28 20 28 17 32 17C36 17 36 20 36 20M20 20H36L34.5 38H21.5L20 20Z" 
+        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Text: Mallify -->
+  <text x="65" y="40" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="url(#textGradient)">
+    Mallify
+  </text>
+</svg>

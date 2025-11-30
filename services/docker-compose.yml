@@ -1,0 +1,662 @@
+version: "3.8"
+
+services:
+  # Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - mall-network
+
+  # Databases
+  mongo-user:
+    image: mongo:7
+    container_name: mongo-user
+    ports:
+      - "27117:27017" # Changed to 27117 to avoid conflict with local MongoDB
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: user_db
+    volumes:
+      - mongo_user_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-boutique:
+    image: mongo:7
+    container_name: mongo-boutique
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: boutique_db
+    volumes:
+      - mongo_boutique_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-product:
+    image: mongo:7
+    container_name: mongo-product
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: product_db
+    volumes:
+      - mongo_product_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-order:
+    image: mongo:7
+    container_name: mongo-order
+    ports:
+      - "27020:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: order_db
+    volumes:
+      - mongo_order_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-payment:
+    image: mongo:7
+    container_name: mongo-payment
+    ports:
+      - "27021:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: payment_db
+    volumes:
+      - mongo_payment_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-delivery:
+    image: mongo:7
+    container_name: mongo-delivery
+    ports:
+      - "27022:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: delivery_db
+    volumes:
+      - mongo_delivery_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-driver:
+    image: mongo:7
+    container_name: mongo-driver
+    ports:
+      - "27023:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: driver_db
+    volumes:
+      - mongo_driver_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-notification:
+    image: mongo:7
+    container_name: mongo-notification
+    ports:
+      - "27024:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: notification_db
+    volumes:
+      - mongo_notification_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-review:
+    image: mongo:7
+    container_name: mongo-review
+    ports:
+      - "27025:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: review_db
+    volumes:
+      - mongo_review_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-analytics:
+    image: mongo:7
+    container_name: mongo-analytics
+    ports:
+      - "27026:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: analytics_db
+    volumes:
+      - mongo_analytics_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-chat:
+    image: mongo:7
+    container_name: mongo-chat
+    ports:
+      - "27027:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: chat_db
+    volumes:
+      - mongo_chat_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-promotion:
+    image: mongo:7
+    container_name: mongo-promotion
+    ports:
+      - "27028:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: promotion_db
+    volumes:
+      - mongo_promotion_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-wishlist:
+    image: mongo:7
+    container_name: mongo-wishlist
+    ports:
+      - "27029:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: wishlist_db
+    volumes:
+      - mongo_wishlist_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-dispute:
+    image: mongo:7
+    container_name: mongo-dispute
+    ports:
+      - "27030:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: dispute_db
+    volumes:
+      - mongo_dispute_data:/data/db
+    networks:
+      - mall-network
+
+  mongo-audit:
+    image: mongo:7
+    container_name: mongo-audit
+    ports:
+      - "27031:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: audit_db
+    volumes:
+      - mongo_audit_data:/data/db
+    networks:
+      - mall-network
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - mall-network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api-gateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - user-service
+    volumes:
+      # - ./api-gateway:/app  # Commented for production
+      # - ./shared:/app/shared
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # User Service
+  user-service:
+    build:
+      context: .
+      dockerfile: ./user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - MONGODB_URI=mongodb://admin:admin123@mongo-user:27017/user_db?authSource=admin
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - JWT_EXPIRE=7d
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo-user
+      - rabbitmq
+      - redis
+    volumes:
+      # - ./user-service:/app  # Commented out for production - use docker compose build to update
+      # - ./shared:/app/shared # Not needed without service directory mount
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Boutique Service
+  boutique-service:
+    build:
+      context: .
+      dockerfile: ./boutique-service/Dockerfile
+    container_name: boutique-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - MONGODB_URI=mongodb://admin:admin123@mongo-boutique:27017/boutique_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - USER_SERVICE_URL=http://user-service:3001
+      - PAYMENT_SERVICE_URL=http://payment-service:3007
+    depends_on:
+      - mongo-boutique
+      - rabbitmq
+      - user-service
+    volumes:
+      # - ./boutique-service:/app  # Commented for production
+      # - ./shared:/app/shared
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Product Service
+  product-service:
+    build:
+      context: .
+      dockerfile: ./product-service/Dockerfile
+    container_name: product-service
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=development
+      - PORT=3003
+      - MONGODB_URI=mongodb://admin:admin123@mongo-product:27017/product_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - BOUTIQUE_SERVICE_URL=http://boutique-service:3002
+    depends_on:
+      - mongo-product
+      - rabbitmq
+      - boutique-service
+    volumes:
+      # - ./product-service:/app  # Commented for production
+      # - ./shared:/app/shared
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Order Service
+  order-service:
+    build:
+      context: .
+      dockerfile: ./order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=development
+      - PORT=3004
+      - MONGODB_URI=mongodb://admin:admin123@mongo-order:27017/order_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PRODUCT_SERVICE_URL=http://product-service:3003
+      - PAYMENT_SERVICE_URL=http://payment-service:3007
+      - DELIVERY_SERVICE_URL=http://delivery-service:3008
+    depends_on:
+      - mongo-order
+      - rabbitmq
+      - product-service
+    volumes:
+      # - ./order-service:/app  # Commented for production
+      # - ./shared:/app/shared
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Payment Service
+  payment-service:
+    build:
+      context: .
+      dockerfile: ./payment-service/Dockerfile
+    container_name: payment-service
+    ports:
+      - "3007:3007"
+    environment:
+      - NODE_ENV=development
+      - PORT=3007
+      - MONGODB_URI=mongodb://admin:admin123@mongo-payment:27017/payment_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - STRIPE_SECRET_KEY=your-stripe-secret-key
+      - STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
+    depends_on:
+      - mongo-payment
+      - rabbitmq
+    volumes:
+      # - ./payment-service:/app  # Commented for production
+      # - ./shared:/app/shared
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Delivery Service
+  delivery-service:
+    build:
+      context: .
+      dockerfile: ./delivery-service/Dockerfile
+    container_name: delivery-service
+    ports:
+      - "3008:3008"
+    environment:
+      - NODE_ENV=development
+      - PORT=3008
+      - MONGODB_URI=mongodb://admin:admin123@mongo-delivery:27017/delivery_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - ORDER_SERVICE_URL=http://order-service:3004
+      - DRIVER_SERVICE_URL=http://driver-service:3009
+      - GOOGLE_MAPS_API_KEY=your-google-maps-api-key
+    depends_on:
+      - mongo-delivery
+      - rabbitmq
+      - order-service
+    volumes:
+      # - ./delivery-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Driver Service
+  driver-service:
+    build:
+      context: .
+      dockerfile: ./driver-service/Dockerfile
+    container_name: driver-service
+    ports:
+      - "3009:3009"
+    environment:
+      - NODE_ENV=development
+      - PORT=3009
+      - MONGODB_URI=mongodb://admin:admin123@mongo-driver:27017/driver_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - USER_SERVICE_URL=http://user-service:3001
+    depends_on:
+      - mongo-driver
+      - rabbitmq
+      - user-service
+    volumes:
+      # - ./driver-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Notification Service
+  notification-service:
+    build:
+      context: .
+      dockerfile: ./notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "3010:3010"
+    environment:
+      - NODE_ENV=development
+      - PORT=3010
+      - MONGODB_URI=mongodb://admin:admin123@mongo-notification:27017/notification_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USER=your-email@gmail.com
+      - SMTP_PASS=your-email-password
+      - TWILIO_ACCOUNT_SID=your-twilio-account-sid
+      - TWILIO_AUTH_TOKEN=your-twilio-auth-token
+      - TWILIO_PHONE_NUMBER=your-twilio-phone-number
+      - FCM_SERVER_KEY=your-fcm-server-key
+    depends_on:
+      - mongo-notification
+      - rabbitmq
+    volumes:
+      # - ./notification-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Review Service
+  review-service:
+    build:
+      context: .
+      dockerfile: ./review-service/Dockerfile
+    container_name: review-service
+    ports:
+      - "3011:3011"
+    environment:
+      - NODE_ENV=development
+      - PORT=3011
+      - MONGODB_URI=mongodb://admin:admin123@mongo-review:27017/review_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PRODUCT_SERVICE_URL=http://product-service:3003
+      - BOUTIQUE_SERVICE_URL=http://boutique-service:3002
+      - DRIVER_SERVICE_URL=http://driver-service:3009
+    depends_on:
+      - mongo-review
+      - rabbitmq
+    volumes:
+      # - ./review-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Analytics Service
+  analytics-service:
+    build:
+      context: .
+      dockerfile: ./analytics-service/Dockerfile
+    container_name: analytics-service
+    ports:
+      - "3012:3012"
+    environment:
+      - NODE_ENV=development
+      - PORT=3012
+      - MONGODB_URI=mongodb://admin:admin123@mongo-analytics:27017/analytics_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo-analytics
+      - rabbitmq
+      - redis
+    volumes:
+      # - ./analytics-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Chat Service
+  chat-service:
+    build:
+      context: .
+      dockerfile: ./chat-service/Dockerfile
+    container_name: chat-service
+    ports:
+      - "3013:3013"
+    environment:
+      - NODE_ENV=development
+      - PORT=3013
+      - MONGODB_URI=mongodb://admin:admin123@mongo-chat:27017/chat_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+      - USER_SERVICE_URL=http://user-service:3001
+    depends_on:
+      - mongo-chat
+      - rabbitmq
+      - redis
+      - user-service
+    volumes:
+      # - ./chat-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Promotion Service
+  promotion-service:
+    build:
+      context: .
+      dockerfile: ./promotion-service/Dockerfile
+    container_name: promotion-service
+    ports:
+      - "3014:3014"
+    environment:
+      - NODE_ENV=development
+      - PORT=3014
+      - MONGODB_URI=mongodb://admin:admin123@mongo-promotion:27017/promotion_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PRODUCT_SERVICE_URL=http://product-service:3003
+      - BOUTIQUE_SERVICE_URL=http://boutique-service:3002
+    depends_on:
+      - mongo-promotion
+      - rabbitmq
+    volumes:
+      # - ./promotion-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Wishlist Service
+  wishlist-service:
+    build:
+      context: .
+      dockerfile: ./wishlist-service/Dockerfile
+    container_name: wishlist-service
+    ports:
+      - "3015:3015"
+    environment:
+      - NODE_ENV=development
+      - PORT=3015
+      - MONGODB_URI=mongodb://admin:admin123@mongo-wishlist:27017/wishlist_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PRODUCT_SERVICE_URL=http://product-service:3003
+    depends_on:
+      - mongo-wishlist
+      - rabbitmq
+    volumes:
+      # - ./wishlist-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Dispute Service
+  dispute-service:
+    build:
+      context: .
+      dockerfile: ./dispute-service/Dockerfile
+    container_name: dispute-service
+    ports:
+      - "3016:3016"
+    environment:
+      - NODE_ENV=development
+      - PORT=3016
+      - MONGODB_URI=mongodb://admin:admin123@mongo-dispute:27017/dispute_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - ORDER_SERVICE_URL=http://order-service:3004
+      - DELIVERY_SERVICE_URL=http://delivery-service:3008
+    depends_on:
+      - mongo-dispute
+      - rabbitmq
+    volumes:
+      # - ./dispute-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+  # Audit Service
+  audit-service:
+    build:
+      context: .
+      dockerfile: ./audit-service/Dockerfile
+    container_name: audit-service
+    ports:
+      - "3017:3017"
+    environment:
+      - NODE_ENV=development
+      - PORT=3017
+      - MONGODB_URI=mongodb://admin:admin123@mongo-audit:27017/audit_db?authSource=admin
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+    depends_on:
+      - mongo-audit
+      - rabbitmq
+    volumes:
+      # - ./audit-service:/app  # Commented for production
+      - /app/node_modules
+    networks:
+      - mall-network
+
+volumes:
+  rabbitmq_data:
+  mongo_user_data:
+  mongo_boutique_data:
+  mongo_product_data:
+  mongo_order_data:
+  mongo_payment_data:
+  mongo_delivery_data:
+  mongo_driver_data:
+  mongo_notification_data:
+  mongo_review_data:
+  mongo_analytics_data:
+  mongo_chat_data:
+  mongo_promotion_data:
+  mongo_wishlist_data:
+  mongo_dispute_data:
+  mongo_audit_data:
+  redis_data:
+
+networks:
+  mall-network:
+    driver: bridge

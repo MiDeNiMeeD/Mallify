@@ -1,0 +1,10 @@
+spacing.xs = 4px (very tight)
+spacing.sm = 8px (tight)
+spacing.md = 16px (medium)
+spacing.lg = 24px (large) ← currently applied
+spacing.xl = 32px (extra large) ← was previously
+spacing.xxl = 48px (extra extra large).
+
+
+
+    marginTop: StatusBar.currentHeight || 0,
