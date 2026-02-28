@@ -1,4 +1,4 @@
-Your project is a Virtual Mall Platform - a comprehensive e-commerce ecosystem built with microservices architecture. Here's the concept:
+Virtual Mall Platform - a comprehensive e-commerce ecosystem built with microservices architecture. Here's the concept:
 
 🛍️ Core Idea
 A multi-vendor online marketplace platform (like Amazon or Alibaba) where multiple boutiques/stores can operate under one unified platform, with integrated delivery services similar to Amazon Flex.
