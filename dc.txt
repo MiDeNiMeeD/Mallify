@@ -1,0 +1,453 @@
+@startuml
+
+' Base User class and inheritance
+class User {
+  +id: String
+  +name: String
+  +email: String
+  +password: String
+  +phone: String
+  +role: Enum
+  +login()
+  +logout()
+  +updateProfile()
+  +changePassword()
+  +receiveNotification()
+}
+
+class Client {
+  +wishlist: List<Product>
+  +orderHistory: List<Order>
+  +loyaltyPoints: Integer
+  +browseProducts()
+  +searchProducts()
+  +addToCart()
+  +placeOrder()
+  +trackOrder()
+  +rateProduct()
+  +addToWishlist()
+  +viewOrderHistory()
+  +requestReturn()
+  +applyPromoCode()
+}
+
+class BoutiqueOwner {
+  +boutiqueList: List<Boutique>
+  +subscriptionStatus: SubscriptionPlan
+  +createBoutique()
+  +manageBoutique()
+  +addProduct()
+  +editProduct()
+  +removeProduct()
+  +viewOrders()
+  +updateOrderStatus()
+  +viewSalesAnalytics()
+  +managePromotions()
+  +respondToReview()
+  +manageInventory()
+  +scheduleProductLaunch()
+  +requestSupport()
+}
+
+class DeliveryPerson {
+  +availability: Boolean
+  +assignedDeliveries: List<Delivery>
+  +earnings: Float
+  +applicationStatus: Enum
+  +viewAssignedDeliveries()
+  +updateDeliveryStatus()
+  +viewDeliveryHistory()
+  +setAvailability()
+  +contactSupport()
+  +viewEarnings()
+  +reportIncident()
+  +accessTrainingMaterials()
+  +applyForPosition()
+}
+
+class Admin {
+  +permissions: List<String>
+  +activityLogs: List<String>
+  +manageUsers()
+  +approveBoutiqueRegistration()
+  +rejectBoutiqueRegistration()
+  +manageSubscriptions()
+  +viewReports()
+  +managePlatformSettings()
+  +moderateContent()
+  +sendAnnouncement()
+  +monitorSystemHealth()
+  +exportData()
+  +reviewFeedback()
+  +setCommissionRates()
+  +manageTaxSettings()
+  +handleRefundRequest()
+  +impersonateUser()
+  +manageLocalizationSettings()
+  +integrateThirdPartyService()
+}
+
+class DeliveryManager {
+  +managedDeliveries: List<Delivery>
+  +managedPersonnel: List<DeliveryPerson>
+  +assignDelivery()
+  +trackDeliveryStatus()
+  +manageDeliveryPersonnel()
+  +viewDeliveryAnalytics()
+  +receiveOrderNotification()
+  +manageDeliveryZones()
+  +optimizeRoutes()
+  +manageSchedules()
+  +handleDeliveryIssue()
+  +communicateWithPersonnel()
+  +approveDeliveryPersonApplication()
+  +monitorRealTimeLocation()
+  +generatePerformanceReport()
+  +setDeliveryPolicy()
+  +accessSupport()
+}
+
+class AllBoutiquesManager {
+  +managedBoutiques: List<Boutique>
+  +complianceReports: List<Report>
+  +overseeBoutiques()
+  +approveBoutique()
+  +manageCompliance()
+  +viewPlatformAnalytics()
+  +communicateWithBoutiqueOwner()
+  +receiveBoutiqueNotification()
+  +moderateDispute()
+  +setPlatformPromotion()
+  +generateBoutiqueReport()
+  +monitorSubscriptionStatus()
+  +provideSupport()
+  +reviewBoutiqueFeedback()
+  +scheduleAudit()
+  +accessHelpCenter()
+}
+
+class Visitor {
+  +sessionId: String
+  +applicationStatus: Enum
+  +browseProducts()
+  +registerAsClient()
+  +applyToCreateBoutique()
+  +applyToBecomeDeliveryPerson()
+  +accessHelpCenter()
+}
+
+class Boutique {
+  +id: String
+  +name: String
+  +description: String
+  +status: Enum
+  +workingHours: String
+  +deliveryOptions: List<String>
+  +addProduct()
+  +removeProduct()
+  +updateProduct()
+  +manageOrders()
+  +viewAnalytics()
+  +managePromotions()
+  +updateBranding()
+  +setWorkingHours()
+  +setDeliveryOptions()
+  +respondToReview()
+  +manageInventory()
+  +scheduleProductLaunch()
+}
+
+class Product {
+  +id: String
+  +name: String
+  +description: String
+  +price: Float
+  +stock: Integer
+  +images: List<String>
+  +status: Enum
+  +updateStock()
+  +updatePrice()
+  +addImage()
+  +removeImage()
+  +addReview()
+  +updateStatus()
+}
+
+class Order {
+  +id: String
+  +totalAmount: Float
+  +status: Enum
+  +orderDate: Date
+  +updateStatus()
+  +assignDeliveryPerson()
+  +processPayment()
+  +requestReturn()
+}
+
+class OrderItem {
+  +id: String
+  +quantity: Integer
+  +price: Float
+  +subtotal: Float
+  +updateQuantity()
+  +calculateSubtotal()
+}
+
+class Delivery {
+  +id: String
+  +status: Enum
+  +deliveryDate: Date
+  +updateStatus()
+  +reportIncident()
+  +updateRoute()
+  +assignDeliveryPerson()
+}
+
+class SubscriptionPlan {
+  +id: String
+  +name: String
+  +price: Float
+  +features: List<String>
+  +duration: Integer
+  +updateFeatures()
+  +updatePrice()
+  +updateDuration()
+}
+
+class ProductReview {
+  +id: String
+  +rating: Integer
+  +comment: String
+  +date: Date
+  +updateRating()
+  +updateComment()
+}
+
+class BoutiqueReview {
+  +id: String
+  +rating: Integer
+  +comment: String
+  +date: Date
+  +updateRating()
+  +updateComment()
+}
+
+class Notification {
+  +id: String
+  +message: String
+  +type: String
+  +date: Date
+  +status: Enum
+  +markAsRead()
+  +send()
+}
+
+class Promotion {
+  +id: String
+  +discount: Float
+  +startDate: Date
+  +endDate: Date
+  +updateDiscount()
+  +updateDates()
+  +addProduct()
+  +removeProduct()
+}
+
+class Cart {
+  +id: String
+  +totalAmount: Float
+  +addProduct()
+  +removeProduct()
+  +updateTotal()
+  +clearCart()
+}
+
+class CartItem {
+  +id: String
+  +quantity: Integer
+  +addQuantity()
+  +removeQuantity()
+}
+
+class Payment {
+  +id: String
+  +amount: Float
+  +method: String
+  +status: Enum
+  +date: Date
+  +process()
+  +refund()
+}
+
+class Branding {
+  +logo: String
+  +description: String
+  +banners: List<String>
+  +updateLogo()
+  +updateDescription()
+  +addBanner()
+  +removeBanner()
+}
+
+class Incident {
+  +id: String
+  +description: String
+  +date: Date
+  +status: Enum
+  +updateStatus()
+  +updateDescription()
+}
+
+class Route {
+  +id: String
+  +startLocation: String
+  +endLocation: String
+  +waypoints: List<String>
+  +estimatedTime: Float
+  +updateWaypoints()
+  +updateEstimatedTime()
+}
+
+class ProductStock {
+  +stock: Integer
+  +updateStock()
+}
+
+class Report {
+  +id: String
+  +type: String
+  +content: String
+  +date: Date
+  +relatedEntity: String
+  +updateContent()
+  +updateType()
+}
+
+class Schedule {
+  +id: String
+  +shifts: List<Shift>
+  +addShift()
+  +removeShift()
+  +updateShift()
+}
+
+class Shift {
+  +id: String
+  +startTime: DateTime
+  +endTime: DateTime
+  +updateStartTime()
+  +updateEndTime()
+}
+
+class Address {
+  +id: String
+  +street: String
+  +city: String
+  +state: String
+  +zipCode: String
+  +country: String
+  +updateAddress()
+}
+
+class Category {
+  +id: String
+  +name: String
+  +description: String
+  +parentCategory: Category
+  +updateName()
+  +updateDescription()
+}
+
+class ReturnRequest {
+  +id: String
+  +reason: String
+  +status: Enum
+  +requestDate: Date
+  +processReturn()
+  +approveReturn()
+  +rejectReturn()
+}
+
+' Inheritance
+User <|-- Client
+User <|-- BoutiqueOwner
+User <|-- DeliveryPerson
+User <|-- Admin
+User <|-- DeliveryManager
+User <|-- AllBoutiquesManager
+
+' User and Address
+User "1" -- "1..*" Address
+
+' Client Associations
+Client "1" -- "0..*" Order
+Client "1" -- "0..1" Cart
+Client "1" -- "0..*" ProductReview
+Client "1" -- "0..*" BoutiqueReview
+
+' Cart and CartItem
+Cart "1" *-- "0..*" CartItem
+CartItem "0..*" -- "1" Product
+
+' BoutiqueOwner Associations
+BoutiqueOwner "1" -- "0..*" Boutique
+
+' Boutique Associations
+Boutique "1" -- "0..*" Product
+Boutique "1" -- "0..*" Order
+Boutique "1" -- "0..*" Promotion
+Boutique "1" -- "0..*" BoutiqueReview
+Boutique "1" -- "1" Branding
+Boutique "1" -- "1" SubscriptionPlan
+Boutique "1" *-- "0..*" ProductStock
+Boutique "1" -- "1..*" Address
+
+' Product Associations
+Product "1" -- "0..*" ProductReview
+Product "1" -- "1" Category
+ProductStock "1" -- "1" Product
+
+' Order and OrderItem (Many-to-Many with attributes)
+Order "1" *-- "1..*" OrderItem
+OrderItem "0..*" -- "1" Product
+Order "1" -- "1" Delivery
+Order "1" -- "1" Payment
+Order "0..*" -- "1" Address : deliveryAddress
+
+' Delivery Associations
+Delivery "1" -- "0..*" Incident
+Delivery "1" -- "1" Route
+DeliveryPerson "1" -- "0..*" Delivery
+
+' Manager Associations
+DeliveryManager "1" -- "0..*" DeliveryPerson
+AllBoutiquesManager "1" -- "0..*" Boutique
+
+' Promotion Associations
+Promotion "1" -- "1" Boutique
+Promotion "0..*" -- "0..*" Product
+
+' Schedule and Shift
+DeliveryPerson "1" -- "0..1" Schedule
+Schedule "1" *-- "0..*" Shift
+
+' Report Associations
+Report "1" -- "0..1" Boutique
+Report "1" -- "0..1" Order
+
+' Notification
+User "1" -- "0..*" Notification
+
+' ReturnRequest
+Order "1" -- "0..1" ReturnRequest
+Client "1" -- "0..*" ReturnRequest
+
+' Category hierarchy
+Category "0..1" -- "0..*" Category : subcategories
+
+' Visitor transitions (dotted lines for conceptual flow)
+Visitor ..> Client : <<creates>>
+Visitor ..> BoutiqueOwner : <<applies>>
+Visitor ..> DeliveryPerson : <<applies>>
+
+@enduml

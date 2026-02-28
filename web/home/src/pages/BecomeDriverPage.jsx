@@ -8,19 +8,19 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  User,
-  MapPin,
-  Car,
+  Upload,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./BecomeDriverPage.css";
-import mallifyLogo from "../assets/images/mallifyW.png";
+import homeApiClient from "../api/homeApiClient";
+import logo from "../assets/icons/logo.png";
 
 const BecomeDriverPage = () => {
   const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -33,9 +33,9 @@ const BecomeDriverPage = () => {
   });
 
   const steps = [
-    { number: 1, title: "Personal Info", icon: <User size={20} /> },
-    { number: 2, title: "Address", icon: <MapPin size={20} /> },
-    { number: 3, title: "Documents", icon: <Car size={20} /> },
+    { number: 1, title: "Personal Info" },
+    { number: 2, title: "Address" },
+    { number: 3, title: "Documents" },
   ];
 
   const handleChange = (e) => {
@@ -98,262 +98,333 @@ const BecomeDriverPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Driver Application:", formData);
-    setSubmitted(true);
+    
+    if (!validateStep()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await homeApiClient.submitDriverApplication(formData);
+      showToast("Application submitted successfully!", "success");
+      setSubmitted(true);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      showToast(
+        error.response?.data?.message || "Failed to submit application. Please try again.",
+        "error"
+      );
+      setLoading(false);
+    }
   };
 
   if (submitted) {
     return (
       <div className="driver-page">
-        <div className="split-layout">
-          <div className="left-panel">
-            <div className="left-content">
-              <div className="logo-header" onClick={() => navigate("/")}>
-                <img src={mallifyLogo} alt="Mallify" className="logo" />
-                <span className="logo-text">Mallify</span>
-              </div>
-              <div className="success-illustration">
-                <CheckCircle size={120} color="#ffffff" strokeWidth={2} />
-              </div>
-              <h1>Application Submitted!</h1>
-              <p>
-                Your journey with Mallify starts here. We'll review your
-                application and get back to you soon.
-              </p>
+        <header className="page-header">
+          <div className="header-content">
+            <div className="logo-header" onClick={() => navigate("/")}>
+              <img src={logo} alt="Mallify Logo" className="logo" />
+              <span className="logo-text">Mallify</span>
             </div>
           </div>
-          <div className="right-panel">
-            <div className="success-message">
-              <div className="success-icon-small">
-                <CheckCircle size={48} color="#10b981" />
-              </div>
-              <h2>Thank You!</h2>
-              <p>
-                We've received your driver application and our team will review
-                it carefully.
-              </p>
-              <p className="info-text">
-                You should receive an email within 2-3 business days with the
-                next steps in the process.
-              </p>
-              <button
-                className="btn-primary btn-large"
-                onClick={() => navigate("/")}
-              >
-                <ArrowLeft size={20} />
-                Back to Home
-              </button>
+        </header>
+
+        <div className="page-container">
+          <div className="success-container">
+            <div className="success-icon">
+              <CheckCircle size={48} />
             </div>
+            <h2>Application Submitted!</h2>
+            <p>
+              Thank you for applying to become a Mallify driver. We'll review
+              your application and get back to you within 2-3 business days.
+            </p>
+            <button className="btn-primary" onClick={() => navigate("/")}>
+              Return to Home <ArrowRight size={18} />
+            </button>
           </div>
         </div>
+
+        <footer className="page-footer">
+          <div className="footer-content">
+            <p className="footer-text">© 2026 Mallify. All rights reserved.</p>
+            <div className="social-links">
+              <a href="#" className="social-icon">
+                <Facebook size={18} />
+              </a>
+              <a href="#" className="social-icon">
+                <Twitter size={18} />
+              </a>
+              <a href="#" className="social-icon">
+                <Instagram size={18} />
+              </a>
+              <a href="#" className="social-icon">
+                <Linkedin size={18} />
+              </a>
+            </div>
+          </div>
+        </footer>
+        <ToastContainer />
       </div>
     );
   }
 
   return (
     <div className="driver-page">
-      <div className="split-layout">
-        {/* Left Panel */}
-        <div className="left-panel">
+      <header className="page-header">
+        <div className="header-content">
           <div className="logo-header" onClick={() => navigate("/")}>
-            <img src={mallifyLogo} alt="Mallify" className="logo" />
+            <img src={logo} alt="Mallify Logo" className="logo" />
             <span className="logo-text">Mallify</span>
           </div>
+          <button className="btn-back" onClick={() => navigate("/")}>
+            <ArrowLeft size={18} />
+            Back to home
+          </button>
+        </div>
+      </header>
+
+      <div className="page-container">
+        <div className="page-hero">
+          <h1>Become a driver</h1>
+          <p>
+            Join our delivery network and start earning on your own schedule.
+            Complete the application below to get started.
+          </p>
         </div>
 
-        {/* Right Panel - Form */}
-        <div className="right-panel">
-          <div className="form-wrapper">
-            <div className="form-header">
-              <h2>Driver Application</h2>
-              <p>Fill in your details to get started</p>
-            </div>
-
-            {/* Stepper */}
-            <div className="stepper">
-              {steps.map((step, index) => (
-                <div key={step.number} className="step-container">
-                  <div
-                    className={`step ${
-                      currentStep === step.number ? "active" : ""
-                    } ${currentStep > step.number ? "completed" : ""}`}
-                  >
-                    <div className="step-number">
-                      {currentStep > step.number ? (
-                        <CheckCircle size={20} />
-                      ) : (
-                        step.icon
-                      )}
-                    </div>
-                    <div className="step-info">
-                      <div className="step-title">{step.title}</div>
-                    </div>
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div
-                      className={`step-line ${
-                        currentStep > step.number ? "completed" : ""
-                      }`}
-                    ></div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <form onSubmit={handleSubmit} className="driver-form">
-              {/* Step 1: Personal Info */}
-              {currentStep === 1 && (
-                <div className="form-step">
-                  <div className="form-group">
-                    <label htmlFor="email">Email Address</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="fullName">Full Name</label>
-                      <input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="phone">Phone Number</label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter your phone number"
-                      />
-                    </div>
-                  </div>
-                </div>
+        {/* Progress Steps */}
+        <div className="step-progress">
+          {steps.map((step, index) => (
+            <React.Fragment key={step.number}>
+              <div
+                className={`step ${
+                  currentStep === step.number
+                    ? "active"
+                    : currentStep > step.number
+                    ? "completed"
+                    : ""
+                }`}
+              >
+                <div className="step-circle">{step.number}</div>
+                <span className="step-label">{step.title}</span>
+              </div>
+              {index < steps.length - 1 && (
+                <div
+                  className={`step-divider ${
+                    currentStep > step.number ? "completed" : ""
+                  }`}
+                />
               )}
+            </React.Fragment>
+          ))}
+        </div>
 
-              {/* Step 2: Address */}
-              {currentStep === 2 && (
-                <div className="form-step">
-                  <div className="form-group">
-                    <label htmlFor="address">Address</label>
-                    <input
-                      type="text"
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      required
-                      placeholder="Enter your address"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="city">City</label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      required
-                      placeholder="Enter your city"
-                    />
-                  </div>
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          <div className="form-container">
+            {/* Step 1: Personal Info */}
+            {currentStep === 1 && (
+              <>
+                <h3 className="form-section-title">Personal Information</h3>
+                
+                <div className="form-group">
+                  <label htmlFor="fullName">Full name</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                    required
+                  />
                 </div>
-              )}
 
-              {/* Step 3: Documents */}
-              {currentStep === 3 && (
-                <div className="form-step">
-                  <div className="form-group">
-                    <label htmlFor="cinFile">
-                      CIN (Carte d'Identité Nationale)
-                    </label>
+                <div className="form-group">
+                  <label htmlFor="email">Email address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="your.email@example.com"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="phone">Phone number</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+1 (555) 000-0000"
+                    required
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Step 2: Address */}
+            {currentStep === 2 && (
+              <>
+                <h3 className="form-section-title">Address Information</h3>
+                
+                <div className="form-group">
+                  <label htmlFor="address">Street address</label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="Enter your street address"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="city">City</label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="Enter your city"
+                    required
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Step 3: Documents */}
+            {currentStep === 3 && (
+              <>
+                <h3 className="form-section-title">Required Documents</h3>
+                
+                <div className="form-group">
+                  <label>National ID (CIN)</label>
+                  <div className="file-upload">
                     <input
                       type="file"
                       id="cinFile"
                       name="cinFile"
                       onChange={handleFileChange}
+                      accept=".jpg,.jpeg,.png,.pdf"
                       required
-                      accept="image/*,.pdf"
                     />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="permisFile">
-                      Permis de Conduire (Driver's License)
+                    <label htmlFor="cinFile" className="file-upload-label">
+                      <Upload size={32} />
+                      <div className="file-upload-text">
+                        <strong>Click to upload</strong> or drag and drop
+                        <br />
+                        <span style={{ fontSize: '13px', color: '#8c9196' }}>
+                          PDF, JPG or PNG (max. 10MB)
+                        </span>
+                      </div>
                     </label>
+                    {formData.cinFile && (
+                      <div className="file-name">✓ {formData.cinFile.name}</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Driver's License (Permis)</label>
+                  <div className="file-upload">
                     <input
                       type="file"
                       id="permisFile"
                       name="permisFile"
                       onChange={handleFileChange}
+                      accept=".jpg,.jpeg,.png,.pdf"
                       required
-                      accept="image/*,.pdf"
                     />
-                  </div>
-
-                  <div className="terms-check">
-                    <input type="checkbox" id="terms" required />
-                    <label htmlFor="terms">
-                      I agree to the <a href="#">terms of service</a> and{" "}
-                      <a href="#">privacy policy</a>
+                    <label htmlFor="permisFile" className="file-upload-label">
+                      <Upload size={32} />
+                      <div className="file-upload-text">
+                        <strong>Click to upload</strong> or drag and drop
+                        <br />
+                        <span style={{ fontSize: '13px', color: '#8c9196' }}>
+                          PDF, JPG or PNG (max. 10MB)
+                        </span>
+                      </div>
                     </label>
+                    {formData.permisFile && (
+                      <div className="file-name">✓ {formData.permisFile.name}</div>
+                    )}
                   </div>
                 </div>
+              </>
+            )}
+
+            {/* Form Actions */}
+            <div className="form-actions">
+              {currentStep > 1 && (
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={handlePrevious}
+                >
+                  <ArrowLeft size={18} />
+                  Previous
+                </button>
               )}
-
-              {/* Navigation Buttons */}
-              <div className="form-navigation">
-                {currentStep > 1 && (
-                  <button
-                    type="button"
-                    onClick={handlePrevious}
-                    className="btn-secondary"
-                  >
-                    <ArrowLeft size={20} />
-                    Previous
-                  </button>
-                )}
-
-                {currentStep < 3 ? (
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    className="btn-next"
-                  >
-                    Next
-                    <ArrowRight size={20} />
-                  </button>
-                ) : (
-                  <button type="submit" className="btn-submit">
-                    Submit Application
-                  </button>
-                )}
-              </div>
-            </form>
+              
+              {currentStep < 3 ? (
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={handleNext}
+                >
+                  Next
+                  <ArrowRight size={18} />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Submit Application"}
+                  <ArrowRight size={18} />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        </form>
       </div>
 
-      {/* Toast Notification */}
+      <footer className="page-footer">
+        <div className="footer-content">
+          <p className="footer-text">© 2026 Mallify. All rights reserved.</p>
+          <div className="social-links">
+            <a href="#" className="social-icon">
+              <Facebook size={18} />
+            </a>
+            <a href="#" className="social-icon">
+              <Twitter size={18} />
+            </a>
+            <a href="#" className="social-icon">
+              <Instagram size={18} />
+            </a>
+            <a href="#" className="social-icon">
+              <Linkedin size={18} />
+            </a>
+          </div>
+        </div>
+      </footer>
+
       <ToastContainer />
     </div>
   );

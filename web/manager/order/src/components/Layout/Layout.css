@@ -1,0 +1,38 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--gray-50);
+}
+
+.layout-main {
+  flex: 1;
+  margin-left: 260px;
+  transition: margin-left 0.3s ease;
+  max-width: calc(100vw - 260px);
+  overflow-x: hidden;
+}
+
+.sidebar.collapsed ~ .layout-main {
+  margin-left: 80px;
+  max-width: calc(100vw - 80px);
+}
+
+.layout-content {
+  margin-top: 70px;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .layout-main {
+    margin-left: 0;
+  }
+  
+  .layout-content {
+    padding: 1rem;
+  }
+}

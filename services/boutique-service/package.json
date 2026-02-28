@@ -1,25 +1,43 @@
 {
-  "name": "boutique-service",
+  "name": "@mallify/boutique-service",
   "version": "1.0.0",
-  "description": "Boutique management and subscription service",
-  "main": "src/index.js",
+  "description": "Boutique/store management microservice for Mallify",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "jest"
   },
+  "keywords": [
+    "microservice",
+    "boutique",
+    "store",
+    "mallify"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^8.0.3",
-    "dotenv": "^16.3.1",
-    "cors": "^2.8.5",
-    "helmet": "^7.1.0",
+    "@mallify/shared": "file:../shared",
+    "@types/multer": "^2.0.0",
     "amqplib": "^0.10.3",
-    "axios": "^1.6.2",
-    "morgan": "^1.10.0",
-    "jsonwebtoken": "^9.0.2",
-    "winston": "^3.11.0"
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.0.3",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "@types/amqplib": "^0.10.4",
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

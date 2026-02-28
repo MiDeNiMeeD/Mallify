@@ -1,0 +1,170 @@
+Mallify Project – Actors, Use Cases, and AI Features
+
+----------------------------------------------------
+1. Client (Customer)
+----------------------------------------------------
+Use Cases:
+- Browse boutiques and products
+- Search/filter products
+- Add products to cart
+- Place orders
+- Track order status
+- Manage profile and addresses
+- Rate and review products/boutiques
+- Wishlist/Favorites
+- View order history and reorder
+- Receive notifications (order status, promotions, new arrivals)
+- Secure payments with multiple options
+- Contact boutique owners or customer support (chat/support)
+- Personalized product recommendations
+- Apply promo codes and discounts
+- Participate in loyalty/rewards program
+- Share products/boutiques on social media
+- Compare products
+- Initiate return/refund requests
+
+AI Features:
+- Personalized product recommendations using AI based on browsing and purchase history
+- Smart search and filtering with natural language understanding
+- Visual search: Upload a photo to find similar products
+- Chatbot support for instant help and order tracking
+- Dynamic pricing suggestions (showing best deals or price drops)
+
+----------------------------------------------------
+2. Delivery Person
+----------------------------------------------------
+Use Cases:
+- View assigned deliveries
+- Update delivery status (picked up, on the way, delivered)
+- View delivery history
+- Contact customer or support
+- Apply to become a delivery person (visitor submits application and documents)
+- Manage profile and availability (set working hours, mark as available/unavailable)
+- Receive notifications for new delivery assignments or updates
+- View earnings and payment history
+- Rate and review delivery experience (feedback from/to customers)
+- Access navigation/maps for delivery routes
+- Report issues or incidents during delivery
+- Access training materials or guidelines
+
+AI Features:
+- Optimized delivery route planning using AI for fastest/most efficient routes
+- Predictive workload management (suggesting best times to work)
+- Automatic incident detection (AI detects delays or issues and notifies support)
+
+----------------------------------------------------
+3. Admin
+----------------------------------------------------
+Use Cases:
+- Manage users (clients, boutique owners, delivery personnel, managers)
+- Approve/reject boutique registrations
+- Manage subscriptions and payments
+- View analytics and reports
+- Manage platform settings
+- Manage roles and permissions for all users
+- Moderate and resolve disputes (orders, reviews, etc.)
+- Send platform-wide notifications or announcements
+- Manage content (banners, promotions, FAQs, terms & conditions)
+- Monitor system health and logs (error tracking, uptime)
+- Export data (users, orders, sales, etc.) for reporting
+- Manage and review feedback/complaints from users
+- Set and manage commission rates or fees for boutiques/deliveries
+- Manage tax and invoicing settings
+- View and manage refund/return requests
+- Impersonate users for troubleshooting/support
+- Manage multi-language/localization settings
+- Integrate and manage third-party services (payment gateways, SMS, etc.)
+
+----------------------------------------------------
+4. Boutique Owner
+----------------------------------------------------
+Use Cases:
+- Register and subscribe to a plan
+- Set up and manage boutique page (vitrine)
+- Add/edit/remove products
+- Manage orders (view, accept, prepare)
+- View sales and analytics
+- Communicate with customers
+- Manage boutique profile and branding (logo, description, banners)
+- Manage working hours and delivery options
+- Set up and manage promotions, discounts, and coupons
+- Manage inventory and stock alerts
+- Receive notifications for new orders, low stock, or customer messages
+- View and respond to customer reviews/ratings
+- Access support or help center
+- Manage return/refund requests
+- Schedule product launches or flash sales
+
+AI Features:
+- AI-driven inventory management (predicting stock needs, auto-reordering)
+- Dynamic pricing suggestions based on demand and competition
+- AI-powered customer segmentation for targeted promotions
+
+----------------------------------------------------
+5. Delivery Manager
+----------------------------------------------------
+Use Cases:
+- Assign deliveries to delivery personnel
+- Track delivery status and performance
+- Manage delivery personnel
+- View delivery analytics
+- Receive notifications for new orders requiring delivery assignment
+- Manage delivery zones/areas and optimize routes
+- View and manage delivery schedules and shifts
+- Handle delivery issues or incidents (report, resolve, reassign)
+- Communicate with delivery personnel and customers
+- Approve or reject delivery personnel applications
+- Monitor real-time location of delivery personnel
+- Generate and export delivery performance reports
+- Set delivery policies (timing, fees, etc.)
+- Access support or help center
+
+AI Features:
+- AI-based delivery assignment (auto-assigning orders to the best-suited delivery person)
+- Predictive demand analytics (forecasting busy times/areas)
+- Performance analytics with AI-driven insights and suggestions
+- Incident prediction and prevention (AI flags potential delivery issues)
+
+----------------------------------------------------
+6. All Boutiques Manager
+----------------------------------------------------
+Use Cases:
+- Oversee all boutiques on the platform
+- Manage boutique approvals and compliance
+- View overall sales and performance analytics
+- Communicate with boutique owners
+- Receive notifications for boutique issues, compliance alerts, or performance drops
+- Moderate and resolve disputes between boutiques and customers
+- Set and manage platform-wide promotions or campaigns for boutiques
+- Generate and export platform-wide boutique reports
+- Monitor boutique subscription statuses and renewals
+- Provide support or guidance to boutique owners
+- Review and manage boutique ratings and feedback
+- Schedule audits or compliance checks for boutiques
+- Access help center and resources for boutique management
+
+AI Features:
+- AI-powered compliance monitoring (detecting policy violations)
+- Automated boutique performance scoring
+- Trend analysis for boutique sales and customer feedback
+- AI-driven recommendations for platform-wide promotions or improvements
+----------------------------------------------------
+7. Visitor
+----------------------------------------------------
+Use Cases:
+- Browse boutiques and products (limited access)
+- Register to create a boutique (become a boutique owner)
+- Apply to become a delivery person (submit application and documents)
+- Register as a client
+- Access help center or FAQs
+--------------------------------------------------
+1. Delivery Workflow (Delivery Person/Agent)
+Automate assignment: When an order is ready, the system (agent) assigns it to the best available delivery person.
+Step-by-step process:
+Receive delivery assignment
+Accept/reject assignment
+Navigate to boutique
+Pick up package
+Deliver to client
+Confirm delivery (with photo/signature)
+Report incident if needed

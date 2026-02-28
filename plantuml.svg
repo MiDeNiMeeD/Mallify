@@ -1,0 +1,974 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="2147px" preserveAspectRatio="none" style="width:2196px;height:2147px;background:#FFFFFF;" version="1.1" viewBox="0 0 2196 2147" width="2196px" zoomAndPan="magnify"><defs/><g><!--MD5=[3fd616f346a44cd59a91eb10b19e157c]
+class User--><g id="elem_User"><rect codeLine="2" fill="#F1F1F1" height="227.2656" id="User" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="162" x="848.5" y="7"/><ellipse cx="909.25" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M912.2188,28.6406 Q911.6406,28.9375 911,29.0781 Q910.3594,29.2344 909.6563,29.2344 Q907.1563,29.2344 905.8281,27.5938 Q904.5156,25.9375 904.5156,22.8125 Q904.5156,19.6875 905.8281,18.0313 Q907.1563,16.375 909.6563,16.375 Q910.3594,16.375 911,16.5313 Q911.6563,16.6875 912.2188,16.9844 L912.2188,19.7031 Q911.5938,19.125 911,18.8594 Q910.4063,18.5781 909.7813,18.5781 Q908.4375,18.5781 907.75,19.6563 Q907.0625,20.7188 907.0625,22.8125 Q907.0625,24.9063 907.75,25.9844 Q908.4375,27.0469 909.7813,27.0469 Q910.4063,27.0469 911,26.7813 Q911.5938,26.5 912.2188,25.9219 L912.2188,28.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="32" x="929.75" y="27.8467">User</text><line style="stroke:#181818;stroke-width:0.5;" x1="849.5" x2="1009.5" y1="39" y2="39"/><ellipse cx="859.5" cy="52.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="868.5" y="55.9951">id: String</text><ellipse cx="859.5" cy="68.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="868.5" y="72.292">name: String</text><ellipse cx="859.5" cy="85.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="868.5" y="88.5889">email: String</text><ellipse cx="859.5" cy="101.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="868.5" y="104.8857">password: String</text><ellipse cx="859.5" cy="117.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="868.5" y="121.1826">phone: String</text><ellipse cx="859.5" cy="134.1328" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="868.5" y="137.4795">role: Enum</text><line style="stroke:#181818;stroke-width:0.5;" x1="849.5" x2="1009.5" y1="144.7813" y2="144.7813"/><ellipse cx="859.5" cy="158.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="868.5" y="161.7764">login()</text><ellipse cx="859.5" cy="174.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="868.5" y="178.0732">logout()</text><ellipse cx="859.5" cy="191.0234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101" x="868.5" y="194.3701">updateProfile()</text><ellipse cx="859.5" cy="207.3203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="868.5" y="210.667">changePassword()</text><ellipse cx="859.5" cy="223.6172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="868.5" y="226.9639">receiveNotification()</text></g><!--MD5=[ed6624c6556d5e7b1bd23032162d20b7]
+class Client--><g id="elem_Client"><rect codeLine="16" fill="#F1F1F1" height="259.8594" id="Client" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="205" x="1399" y="770.5"/><ellipse cx="1477.75" cy="786.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1480.7188,792.1406 Q1480.1406,792.4375 1479.5,792.5781 Q1478.8594,792.7344 1478.1563,792.7344 Q1475.6563,792.7344 1474.3281,791.0938 Q1473.0156,789.4375 1473.0156,786.3125 Q1473.0156,783.1875 1474.3281,781.5313 Q1475.6563,779.875 1478.1563,779.875 Q1478.8594,779.875 1479.5,780.0313 Q1480.1563,780.1875 1480.7188,780.4844 L1480.7188,783.2031 Q1480.0938,782.625 1479.5,782.3594 Q1478.9063,782.0781 1478.2813,782.0781 Q1476.9375,782.0781 1476.25,783.1563 Q1475.5625,784.2188 1475.5625,786.3125 Q1475.5625,788.4063 1476.25,789.4844 Q1476.9375,790.5469 1478.2813,790.5469 Q1478.9063,790.5469 1479.5,790.2813 Q1480.0938,790 1480.7188,789.4219 L1480.7188,792.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="1498.25" y="791.3467">Client</text><line style="stroke:#181818;stroke-width:0.5;" x1="1400" x2="1603" y1="802.5" y2="802.5"/><ellipse cx="1410" cy="816.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="160" x="1419" y="819.4951">wishlist: List&lt;Product&gt;</text><ellipse cx="1410" cy="832.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="179" x="1419" y="835.792">orderHistory: List&lt;Order&gt;</text><ellipse cx="1410" cy="848.7422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="143" x="1419" y="852.0889">loyaltyPoints: Integer</text><line style="stroke:#181818;stroke-width:0.5;" x1="1400" x2="1603" y1="859.3906" y2="859.3906"/><ellipse cx="1410" cy="873.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="1419" y="876.3857">browseProducts()</text><ellipse cx="1410" cy="889.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="1419" y="892.6826">searchProducts()</text><ellipse cx="1410" cy="905.6328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82" x="1419" y="908.9795">addToCart()</text><ellipse cx="1410" cy="921.9297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86" x="1419" y="925.2764">placeOrder()</text><ellipse cx="1410" cy="938.2266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83" x="1419" y="941.5732">trackOrder()</text><ellipse cx="1410" cy="954.5234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="1419" y="957.8701">rateProduct()</text><ellipse cx="1410" cy="970.8203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="1419" y="974.167">addToWishlist()</text><ellipse cx="1410" cy="987.1172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="1419" y="990.4639">viewOrderHistory()</text><ellipse cx="1410" cy="1003.4141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111" x="1419" y="1006.7607">requestReturn()</text><ellipse cx="1410" cy="1019.7109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="128" x="1419" y="1023.0576">applyPromoCode()</text></g><!--MD5=[1ff83bd1f3d03e420248e40ed90fb3d0]
+class BoutiqueOwner--><g id="elem_BoutiqueOwner"><rect codeLine="32" fill="#F1F1F1" height="292.4531" id="BoutiqueOwner" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="279" x="973" y="344"/><ellipse cx="1054.25" cy="360" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1057.2188,365.6406 Q1056.6406,365.9375 1056,366.0781 Q1055.3594,366.2344 1054.6563,366.2344 Q1052.1563,366.2344 1050.8281,364.5938 Q1049.5156,362.9375 1049.5156,359.8125 Q1049.5156,356.6875 1050.8281,355.0313 Q1052.1563,353.375 1054.6563,353.375 Q1055.3594,353.375 1056,353.5313 Q1056.6563,353.6875 1057.2188,353.9844 L1057.2188,356.7031 Q1056.5938,356.125 1056,355.8594 Q1055.4063,355.5781 1054.7813,355.5781 Q1053.4375,355.5781 1052.75,356.6563 Q1052.0625,357.7188 1052.0625,359.8125 Q1052.0625,361.9063 1052.75,362.9844 Q1053.4375,364.0469 1054.7813,364.0469 Q1055.4063,364.0469 1056,363.7813 Q1056.5938,363.5 1057.2188,362.9219 L1057.2188,365.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108" x="1074.75" y="364.8467">BoutiqueOwner</text><line style="stroke:#181818;stroke-width:0.5;" x1="974" x2="1251" y1="376" y2="376"/><ellipse cx="984" cy="389.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="204" x="993" y="392.9951">boutiqueList: List&lt;Boutique&gt;</text><ellipse cx="984" cy="405.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="253" x="993" y="409.292">subscriptionStatus: SubscriptionPlan</text><line style="stroke:#181818;stroke-width:0.5;" x1="974" x2="1251" y1="416.5938" y2="416.5938"/><ellipse cx="984" cy="430.2422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="993" y="433.5889">createBoutique()</text><ellipse cx="984" cy="446.5391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="993" y="449.8857">manageBoutique()</text><ellipse cx="984" cy="462.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="993" y="466.1826">addProduct()</text><ellipse cx="984" cy="479.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="993" y="482.4795">editProduct()</text><ellipse cx="984" cy="495.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="993" y="498.7764">removeProduct()</text><ellipse cx="984" cy="511.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87" x="993" y="515.0732">viewOrders()</text><ellipse cx="984" cy="528.0234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="993" y="531.3701">updateOrderStatus()</text><ellipse cx="984" cy="544.3203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137" x="993" y="547.667">viewSalesAnalytics()</text><ellipse cx="984" cy="560.6172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="993" y="563.9639">managePromotions()</text><ellipse cx="984" cy="576.9141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="135" x="993" y="580.2607">respondToReview()</text><ellipse cx="984" cy="593.2109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="993" y="596.5576">manageInventory()</text><ellipse cx="984" cy="609.5078" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="178" x="993" y="612.8545">scheduleProductLaunch()</text><ellipse cx="984" cy="625.8047" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="993" y="629.1514">requestSupport()</text></g><!--MD5=[8c5de1b0918391828fd528941fa046f6]
+class DeliveryPerson--><g id="elem_DeliveryPerson"><rect codeLine="50" fill="#F1F1F1" height="259.8594" id="DeliveryPerson" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="266" x="1923.5" y="770.5"/><ellipse cx="2000.75" cy="786.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M2003.7188,792.1406 Q2003.1406,792.4375 2002.5,792.5781 Q2001.8594,792.7344 2001.1563,792.7344 Q1998.6563,792.7344 1997.3281,791.0938 Q1996.0156,789.4375 1996.0156,786.3125 Q1996.0156,783.1875 1997.3281,781.5313 Q1998.6563,779.875 2001.1563,779.875 Q2001.8594,779.875 2002.5,780.0313 Q2003.1563,780.1875 2003.7188,780.4844 L2003.7188,783.2031 Q2003.0938,782.625 2002.5,782.3594 Q2001.9063,782.0781 2001.2813,782.0781 Q1999.9375,782.0781 1999.25,783.1563 Q1998.5625,784.2188 1998.5625,786.3125 Q1998.5625,788.4063 1999.25,789.4844 Q1999.9375,790.5469 2001.2813,790.5469 Q2001.9063,790.5469 2002.5,790.2813 Q2003.0938,790 2003.7188,789.4219 L2003.7188,792.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="2021.25" y="791.3467">DeliveryPerson</text><line style="stroke:#181818;stroke-width:0.5;" x1="1924.5" x2="2188.5" y1="802.5" y2="802.5"/><ellipse cx="1934.5" cy="816.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133" x="1943.5" y="819.4951">availability: Boolean</text><ellipse cx="1934.5" cy="832.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="240" x="1943.5" y="835.792">assignedDeliveries: List&lt;Delivery&gt;</text><ellipse cx="1934.5" cy="848.7422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="1943.5" y="852.0889">earnings: Float</text><ellipse cx="1934.5" cy="865.0391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167" x="1943.5" y="868.3857">applicationStatus: Enum</text><line style="stroke:#181818;stroke-width:0.5;" x1="1924.5" x2="2188.5" y1="875.6875" y2="875.6875"/><ellipse cx="1934.5" cy="889.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="171" x="1943.5" y="892.6826">viewAssignedDeliveries()</text><ellipse cx="1934.5" cy="905.6328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="157" x="1943.5" y="908.9795">updateDeliveryStatus()</text><ellipse cx="1934.5" cy="921.9297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="141" x="1943.5" y="925.2764">viewDeliveryHistory()</text><ellipse cx="1934.5" cy="938.2266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="1943.5" y="941.5732">setAvailability()</text><ellipse cx="1934.5" cy="954.5234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="1943.5" y="957.8701">contactSupport()</text><ellipse cx="1934.5" cy="970.8203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="1943.5" y="974.167">viewEarnings()</text><ellipse cx="1934.5" cy="987.1172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107" x="1943.5" y="990.4639">reportIncident()</text><ellipse cx="1934.5" cy="1003.4141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="175" x="1943.5" y="1006.7607">accessTrainingMaterials()</text><ellipse cx="1934.5" cy="1019.7109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="1943.5" y="1023.0576">applyForPosition()</text></g><!--MD5=[db6d18d8099558415abc41d00477ab92]
+class Admin--><g id="elem_Admin"><rect codeLine="66" fill="#F1F1F1" height="357.6406" id="Admin" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="238" x="525.5" y="311"/><ellipse cx="618.75" cy="327" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M621.7188,332.6406 Q621.1406,332.9375 620.5,333.0781 Q619.8594,333.2344 619.1563,333.2344 Q616.6563,333.2344 615.3281,331.5938 Q614.0156,329.9375 614.0156,326.8125 Q614.0156,323.6875 615.3281,322.0313 Q616.6563,320.375 619.1563,320.375 Q619.8594,320.375 620.5,320.5313 Q621.1563,320.6875 621.7188,320.9844 L621.7188,323.7031 Q621.0938,323.125 620.5,322.8594 Q619.9063,322.5781 619.2813,322.5781 Q617.9375,322.5781 617.25,323.6563 Q616.5625,324.7188 616.5625,326.8125 Q616.5625,328.9063 617.25,329.9844 Q617.9375,331.0469 619.2813,331.0469 Q619.9063,331.0469 620.5,330.7813 Q621.0938,330.5 621.7188,329.9219 L621.7188,332.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="639.25" y="331.8467">Admin</text><line style="stroke:#181818;stroke-width:0.5;" x1="526.5" x2="762.5" y1="343" y2="343"/><ellipse cx="536.5" cy="356.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="180" x="545.5" y="359.9951">permissions: List&lt;String&gt;</text><ellipse cx="536.5" cy="372.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="175" x="545.5" y="376.292">activityLogs: List&lt;String&gt;</text><line style="stroke:#181818;stroke-width:0.5;" x1="526.5" x2="762.5" y1="383.5938" y2="383.5938"/><ellipse cx="536.5" cy="397.2422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="545.5" y="400.5889">manageUsers()</text><ellipse cx="536.5" cy="413.5391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="212" x="545.5" y="416.8857">approveBoutiqueRegistration()</text><ellipse cx="536.5" cy="429.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="195" x="545.5" y="433.1826">rejectBoutiqueRegistration()</text><ellipse cx="536.5" cy="446.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="160" x="545.5" y="449.4795">manageSubscriptions()</text><ellipse cx="536.5" cy="462.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95" x="545.5" y="465.7764">viewReports()</text><ellipse cx="536.5" cy="478.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="179" x="545.5" y="482.0732">managePlatformSettings()</text><ellipse cx="536.5" cy="495.0234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133" x="545.5" y="498.3701">moderateContent()</text><ellipse cx="536.5" cy="511.3203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="152" x="545.5" y="514.667">sendAnnouncement()</text><ellipse cx="536.5" cy="527.6172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="158" x="545.5" y="530.9639">monitorSystemHealth()</text><ellipse cx="536.5" cy="543.9141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86" x="545.5" y="547.2607">exportData()</text><ellipse cx="536.5" cy="560.2109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122" x="545.5" y="563.5576">reviewFeedback()</text><ellipse cx="536.5" cy="576.5078" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="157" x="545.5" y="579.8545">setCommissionRates()</text><ellipse cx="536.5" cy="592.8047" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147" x="545.5" y="596.1514">manageTaxSettings()</text><ellipse cx="536.5" cy="609.1016" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="166" x="545.5" y="612.4482">handleRefundRequest()</text><ellipse cx="536.5" cy="625.3984" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="545.5" y="628.7451">impersonateUser()</text><ellipse cx="536.5" cy="641.6953" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="203" x="545.5" y="645.042">manageLocalizationSettings()</text><ellipse cx="536.5" cy="657.9922" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="191" x="545.5" y="661.3389">integrateThirdPartyService()</text></g><!--MD5=[d861bbc93775356ee186214367a87434]
+class DeliveryManager--><g id="elem_DeliveryManager"><rect codeLine="88" fill="#F1F1F1" height="325.0469" id="DeliveryManager" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="320" x="1625.5" y="327.5"/><ellipse cx="1724.25" cy="343.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1727.2188,349.1406 Q1726.6406,349.4375 1726,349.5781 Q1725.3594,349.7344 1724.6563,349.7344 Q1722.1563,349.7344 1720.8281,348.0938 Q1719.5156,346.4375 1719.5156,343.3125 Q1719.5156,340.1875 1720.8281,338.5313 Q1722.1563,336.875 1724.6563,336.875 Q1725.3594,336.875 1726,337.0313 Q1726.6563,337.1875 1727.2188,337.4844 L1727.2188,340.2031 Q1726.5938,339.625 1726,339.3594 Q1725.4063,339.0781 1724.7813,339.0781 Q1723.4375,339.0781 1722.75,340.1563 Q1722.0625,341.2188 1722.0625,343.3125 Q1722.0625,345.4063 1722.75,346.4844 Q1723.4375,347.5469 1724.7813,347.5469 Q1725.4063,347.5469 1726,347.2813 Q1726.5938,347 1727.2188,346.4219 L1727.2188,349.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="1744.75" y="348.3467">DeliveryManager</text><line style="stroke:#181818;stroke-width:0.5;" x1="1626.5" x2="1944.5" y1="359.5" y2="359.5"/><ellipse cx="1636.5" cy="373.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="242" x="1645.5" y="376.4951">managedDeliveries: List&lt;Delivery&gt;</text><ellipse cx="1636.5" cy="389.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="294" x="1645.5" y="392.792">managedPersonnel: List&lt;DeliveryPerson&gt;</text><line style="stroke:#181818;stroke-width:0.5;" x1="1626.5" x2="1944.5" y1="400.0938" y2="400.0938"/><ellipse cx="1636.5" cy="413.7422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="1645.5" y="417.0889">assignDelivery()</text><ellipse cx="1636.5" cy="430.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="1645.5" y="433.3857">trackDeliveryStatus()</text><ellipse cx="1636.5" cy="446.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="190" x="1645.5" y="449.6826">manageDeliveryPersonnel()</text><ellipse cx="1636.5" cy="462.6328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="154" x="1645.5" y="465.9795">viewDeliveryAnalytics()</text><ellipse cx="1636.5" cy="478.9297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="175" x="1645.5" y="482.2764">receiveOrderNotification()</text><ellipse cx="1636.5" cy="495.2266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="165" x="1645.5" y="498.5732">manageDeliveryZones()</text><ellipse cx="1636.5" cy="511.5234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="1645.5" y="514.8701">optimizeRoutes()</text><ellipse cx="1636.5" cy="527.8203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="139" x="1645.5" y="531.167">manageSchedules()</text><ellipse cx="1636.5" cy="544.1172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="148" x="1645.5" y="547.4639">handleDeliveryIssue()</text><ellipse cx="1636.5" cy="560.4141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="204" x="1645.5" y="563.7607">communicateWithPersonnel()</text><ellipse cx="1636.5" cy="576.7109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="244" x="1645.5" y="580.0576">approveDeliveryPersonApplication()</text><ellipse cx="1636.5" cy="593.0078" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="185" x="1645.5" y="596.3545">monitorRealTimeLocation()</text><ellipse cx="1636.5" cy="609.3047" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="208" x="1645.5" y="612.6514">generatePerformanceReport()</text><ellipse cx="1636.5" cy="625.6016" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="125" x="1645.5" y="628.9482">setDeliveryPolicy()</text><ellipse cx="1636.5" cy="641.8984" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="1645.5" y="645.2451">accessSupport()</text></g><!--MD5=[5cc557c40c3983b128f35a966a962977]
+class AllBoutiquesManager--><g id="elem_AllBoutiquesManager"><rect codeLine="108" fill="#F1F1F1" height="308.75" id="AllBoutiquesManager" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="281" x="209" y="335.5"/><ellipse cx="272.25" cy="351.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M275.2188,357.1406 Q274.6406,357.4375 274,357.5781 Q273.3594,357.7344 272.6563,357.7344 Q270.1563,357.7344 268.8281,356.0938 Q267.5156,354.4375 267.5156,351.3125 Q267.5156,348.1875 268.8281,346.5313 Q270.1563,344.875 272.6563,344.875 Q273.3594,344.875 274,345.0313 Q274.6563,345.1875 275.2188,345.4844 L275.2188,348.2031 Q274.5938,347.625 274,347.3594 Q273.4063,347.0781 272.7813,347.0781 Q271.4375,347.0781 270.75,348.1563 Q270.0625,349.2188 270.0625,351.3125 Q270.0625,353.4063 270.75,354.4844 Q271.4375,355.5469 272.7813,355.5469 Q273.4063,355.5469 274,355.2813 Q274.5938,355 275.2188,354.4219 L275.2188,357.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="146" x="292.75" y="356.3467">AllBoutiquesManager</text><line style="stroke:#181818;stroke-width:0.5;" x1="210" x2="489" y1="367.5" y2="367.5"/><ellipse cx="220" cy="381.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="255" x="229" y="384.4951">managedBoutiques: List&lt;Boutique&gt;</text><ellipse cx="220" cy="397.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="237" x="229" y="400.792">complianceReports: List&lt;Report&gt;</text><line style="stroke:#181818;stroke-width:0.5;" x1="210" x2="489" y1="408.0938" y2="408.0938"/><ellipse cx="220" cy="421.7422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137" x="229" y="425.0889">overseeBoutiques()</text><ellipse cx="220" cy="438.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="229" y="441.3857">approveBoutique()</text><ellipse cx="220" cy="454.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147" x="229" y="457.6826">manageCompliance()</text><ellipse cx="220" cy="470.6328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="156" x="229" y="473.9795">viewPlatformAnalytics()</text><ellipse cx="220" cy="486.9297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="242" x="229" y="490.2764">communicateWithBoutiqueOwner()</text><ellipse cx="220" cy="503.2266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="199" x="229" y="506.5732">receiveBoutiqueNotification()</text><ellipse cx="220" cy="519.5234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="131" x="229" y="522.8701">moderateDispute()</text><ellipse cx="220" cy="535.8203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="159" x="229" y="539.167">setPlatformPromotion()</text><ellipse cx="220" cy="552.1172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="183" x="229" y="555.4639">generateBoutiqueReport()</text><ellipse cx="220" cy="568.4141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="193" x="229" y="571.7607">monitorSubscriptionStatus()</text><ellipse cx="220" cy="584.7109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="229" y="588.0576">provideSupport()</text><ellipse cx="220" cy="601.0078" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="185" x="229" y="604.3545">reviewBoutiqueFeedback()</text><ellipse cx="220" cy="617.3047" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="229" y="620.6514">scheduleAudit()</text><ellipse cx="220" cy="633.6016" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137" x="229" y="636.9482">accessHelpCenter()</text></g><!--MD5=[53bf68ed638bcf4718423098b3d480ea]
+class Visitor--><g id="elem_Visitor"><rect codeLine="127" fill="#F1F1F1" height="162.0781" id="Visitor" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="251" x="1890" y="39.5"/><ellipse cx="1990.25" cy="55.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1993.2188,61.1406 Q1992.6406,61.4375 1992,61.5781 Q1991.3594,61.7344 1990.6563,61.7344 Q1988.1563,61.7344 1986.8281,60.0938 Q1985.5156,58.4375 1985.5156,55.3125 Q1985.5156,52.1875 1986.8281,50.5313 Q1988.1563,48.875 1990.6563,48.875 Q1991.3594,48.875 1992,49.0313 Q1992.6563,49.1875 1993.2188,49.4844 L1993.2188,52.2031 Q1992.5938,51.625 1992,51.3594 Q1991.4063,51.0781 1990.7813,51.0781 Q1989.4375,51.0781 1988.75,52.1563 Q1988.0625,53.2188 1988.0625,55.3125 Q1988.0625,57.4063 1988.75,58.4844 Q1989.4375,59.5469 1990.7813,59.5469 Q1991.4063,59.5469 1992,59.2813 Q1992.5938,59 1993.2188,58.4219 L1993.2188,61.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="2010.75" y="60.3467">Visitor</text><line style="stroke:#181818;stroke-width:0.5;" x1="1891" x2="2140" y1="71.5" y2="71.5"/><ellipse cx="1901" cy="85.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="1910" y="88.4951">sessionId: String</text><ellipse cx="1901" cy="101.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167" x="1910" y="104.792">applicationStatus: Enum</text><line style="stroke:#181818;stroke-width:0.5;" x1="1891" x2="2140" y1="112.0938" y2="112.0938"/><ellipse cx="1901" cy="125.7422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="1910" y="129.0889">browseProducts()</text><ellipse cx="1901" cy="142.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="1910" y="145.3857">registerAsClient()</text><ellipse cx="1901" cy="158.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="173" x="1910" y="161.6826">applyToCreateBoutique()</text><ellipse cx="1901" cy="174.6328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="225" x="1910" y="177.9795">applyToBecomeDeliveryPerson()</text><ellipse cx="1901" cy="190.9297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137" x="1910" y="194.2764">accessHelpCenter()</text></g><!--MD5=[d23f26e49378651074bbe6904c92bc8f]
+class Boutique--><g id="elem_Boutique"><rect codeLine="137" fill="#F1F1F1" height="341.3438" id="Boutique" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="228" x="638.5" y="730"/><ellipse cx="716.75" cy="746" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M719.7188,751.6406 Q719.1406,751.9375 718.5,752.0781 Q717.8594,752.2344 717.1563,752.2344 Q714.6563,752.2344 713.3281,750.5938 Q712.0156,748.9375 712.0156,745.8125 Q712.0156,742.6875 713.3281,741.0313 Q714.6563,739.375 717.1563,739.375 Q717.8594,739.375 718.5,739.5313 Q719.1563,739.6875 719.7188,739.9844 L719.7188,742.7031 Q719.0938,742.125 718.5,741.8594 Q717.9063,741.5781 717.2813,741.5781 Q715.9375,741.5781 715.25,742.6563 Q714.5625,743.7188 714.5625,745.8125 Q714.5625,747.9063 715.25,748.9844 Q715.9375,750.0469 717.2813,750.0469 Q717.9063,750.0469 718.5,749.7813 Q719.0938,749.5 719.7188,748.9219 L719.7188,751.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="737.25" y="750.8467">Boutique</text><line style="stroke:#181818;stroke-width:0.5;" x1="639.5" x2="865.5" y1="762" y2="762"/><ellipse cx="649.5" cy="775.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="658.5" y="778.9951">id: String</text><ellipse cx="649.5" cy="791.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="658.5" y="795.292">name: String</text><ellipse cx="649.5" cy="808.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="658.5" y="811.5889">description: String</text><ellipse cx="649.5" cy="824.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="658.5" y="827.8857">status: Enum</text><ellipse cx="649.5" cy="840.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="658.5" y="844.1826">workingHours: String</text><ellipse cx="649.5" cy="857.1328" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="202" x="658.5" y="860.4795">deliveryOptions: List&lt;String&gt;</text><line style="stroke:#181818;stroke-width:0.5;" x1="639.5" x2="865.5" y1="867.7813" y2="867.7813"/><ellipse cx="649.5" cy="881.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="658.5" y="884.7764">addProduct()</text><ellipse cx="649.5" cy="897.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="658.5" y="901.0732">removeProduct()</text><ellipse cx="649.5" cy="914.0234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="658.5" y="917.3701">updateProduct()</text><ellipse cx="649.5" cy="930.3203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="658.5" y="933.667">manageOrders()</text><ellipse cx="649.5" cy="946.6172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="658.5" y="949.9639">viewAnalytics()</text><ellipse cx="649.5" cy="962.9141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="658.5" y="966.2607">managePromotions()</text><ellipse cx="649.5" cy="979.2109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="658.5" y="982.5576">updateBranding()</text><ellipse cx="649.5" cy="995.5078" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="658.5" y="998.8545">setWorkingHours()</text><ellipse cx="649.5" cy="1011.8047" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="658.5" y="1015.1514">setDeliveryOptions()</text><ellipse cx="649.5" cy="1028.1016" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="135" x="658.5" y="1031.4482">respondToReview()</text><ellipse cx="649.5" cy="1044.3984" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="658.5" y="1047.7451">manageInventory()</text><ellipse cx="649.5" cy="1060.6953" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="178" x="658.5" y="1064.042">scheduleProductLaunch()</text></g><!--MD5=[72136138052d025cffdce3c22fbd185f]
+class Product--><g id="elem_Product"><rect codeLine="158" fill="#F1F1F1" height="259.8594" id="Product" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="172" x="665.5" y="1674"/><ellipse cx="720.25" cy="1690" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M723.2188,1695.6406 Q722.6406,1695.9375 722,1696.0781 Q721.3594,1696.2344 720.6563,1696.2344 Q718.1563,1696.2344 716.8281,1694.5938 Q715.5156,1692.9375 715.5156,1689.8125 Q715.5156,1686.6875 716.8281,1685.0313 Q718.1563,1683.375 720.6563,1683.375 Q721.3594,1683.375 722,1683.5313 Q722.6563,1683.6875 723.2188,1683.9844 L723.2188,1686.7031 Q722.5938,1686.125 722,1685.8594 Q721.4063,1685.5781 720.7813,1685.5781 Q719.4375,1685.5781 718.75,1686.6563 Q718.0625,1687.7188 718.0625,1689.8125 Q718.0625,1691.9063 718.75,1692.9844 Q719.4375,1694.0469 720.7813,1694.0469 Q721.4063,1694.0469 722,1693.7813 Q722.5938,1693.5 723.2188,1692.9219 L723.2188,1695.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="740.75" y="1694.8467">Product</text><line style="stroke:#181818;stroke-width:0.5;" x1="666.5" x2="836.5" y1="1706" y2="1706"/><ellipse cx="676.5" cy="1719.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="685.5" y="1722.9951">id: String</text><ellipse cx="676.5" cy="1735.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="685.5" y="1739.292">name: String</text><ellipse cx="676.5" cy="1752.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="685.5" y="1755.5889">description: String</text><ellipse cx="676.5" cy="1768.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="685.5" y="1771.8857">price: Float</text><ellipse cx="676.5" cy="1784.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96" x="685.5" y="1788.1826">stock: Integer</text><ellipse cx="676.5" cy="1801.1328" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="146" x="685.5" y="1804.4795">images: List&lt;String&gt;</text><ellipse cx="676.5" cy="1817.4297" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="685.5" y="1820.7764">status: Enum</text><line style="stroke:#181818;stroke-width:0.5;" x1="666.5" x2="836.5" y1="1828.0781" y2="1828.0781"/><ellipse cx="676.5" cy="1841.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98" x="685.5" y="1845.0732">updateStock()</text><ellipse cx="676.5" cy="1858.0234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="685.5" y="1861.3701">updatePrice()</text><ellipse cx="676.5" cy="1874.3203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="78" x="685.5" y="1877.667">addImage()</text><ellipse cx="676.5" cy="1890.6172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104" x="685.5" y="1893.9639">removeImage()</text><ellipse cx="676.5" cy="1906.9141" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="685.5" y="1910.2607">addReview()</text><ellipse cx="676.5" cy="1923.2109" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="685.5" y="1926.5576">updateStatus()</text></g><!--MD5=[cf4d6237fcae255cd2e1656cf84a30e2]
+class Order--><g id="elem_Order"><rect codeLine="174" fill="#F1F1F1" height="178.375" id="Order" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="184" x="1244.5" y="1132"/><ellipse cx="1312.75" cy="1148" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1315.7188,1153.6406 Q1315.1406,1153.9375 1314.5,1154.0781 Q1313.8594,1154.2344 1313.1563,1154.2344 Q1310.6563,1154.2344 1309.3281,1152.5938 Q1308.0156,1150.9375 1308.0156,1147.8125 Q1308.0156,1144.6875 1309.3281,1143.0313 Q1310.6563,1141.375 1313.1563,1141.375 Q1313.8594,1141.375 1314.5,1141.5313 Q1315.1563,1141.6875 1315.7188,1141.9844 L1315.7188,1144.7031 Q1315.0938,1144.125 1314.5,1143.8594 Q1313.9063,1143.5781 1313.2813,1143.5781 Q1311.9375,1143.5781 1311.25,1144.6563 Q1310.5625,1145.7188 1310.5625,1147.8125 Q1310.5625,1149.9063 1311.25,1150.9844 Q1311.9375,1152.0469 1313.2813,1152.0469 Q1313.9063,1152.0469 1314.5,1151.7813 Q1315.0938,1151.5 1315.7188,1150.9219 L1315.7188,1153.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="1333.25" y="1152.8467">Order</text><line style="stroke:#181818;stroke-width:0.5;" x1="1245.5" x2="1427.5" y1="1164" y2="1164"/><ellipse cx="1255.5" cy="1177.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1264.5" y="1180.9951">id: String</text><ellipse cx="1255.5" cy="1193.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="1264.5" y="1197.292">totalAmount: Float</text><ellipse cx="1255.5" cy="1210.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="1264.5" y="1213.5889">status: Enum</text><ellipse cx="1255.5" cy="1226.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="1264.5" y="1229.8857">orderDate: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="1245.5" x2="1427.5" y1="1237.1875" y2="1237.1875"/><ellipse cx="1255.5" cy="1250.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1264.5" y="1254.1826">updateStatus()</text><ellipse cx="1255.5" cy="1267.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="158" x="1264.5" y="1270.4795">assignDeliveryPerson()</text><ellipse cx="1255.5" cy="1283.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="1264.5" y="1286.7764">processPayment()</text><ellipse cx="1255.5" cy="1299.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111" x="1264.5" y="1303.0732">requestReturn()</text></g><!--MD5=[003718b22fee2486eeba0fa029a176b7]
+class OrderItem--><g id="elem_OrderItem"><rect codeLine="185" fill="#F1F1F1" height="145.7813" id="OrderItem" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="154" x="965.5" y="1459"/><ellipse cx="1004.35" cy="1475" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1007.3188,1480.6406 Q1006.7406,1480.9375 1006.1,1481.0781 Q1005.4594,1481.2344 1004.7563,1481.2344 Q1002.2563,1481.2344 1000.9281,1479.5938 Q999.6156,1477.9375 999.6156,1474.8125 Q999.6156,1471.6875 1000.9281,1470.0313 Q1002.2563,1468.375 1004.7563,1468.375 Q1005.4594,1468.375 1006.1,1468.5313 Q1006.7563,1468.6875 1007.3188,1468.9844 L1007.3188,1471.7031 Q1006.6938,1471.125 1006.1,1470.8594 Q1005.5063,1470.5781 1004.8813,1470.5781 Q1003.5375,1470.5781 1002.85,1471.6563 Q1002.1625,1472.7188 1002.1625,1474.8125 Q1002.1625,1476.9063 1002.85,1477.9844 Q1003.5375,1479.0469 1004.8813,1479.0469 Q1005.5063,1479.0469 1006.1,1478.7813 Q1006.6938,1478.5 1007.3188,1477.9219 L1007.3188,1480.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="1023.65" y="1479.8467">OrderItem</text><line style="stroke:#181818;stroke-width:0.5;" x1="966.5" x2="1118.5" y1="1491" y2="1491"/><ellipse cx="976.5" cy="1504.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="985.5" y="1507.9951">id: String</text><ellipse cx="976.5" cy="1520.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="985.5" y="1524.292">quantity: Integer</text><ellipse cx="976.5" cy="1537.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="985.5" y="1540.5889">price: Float</text><ellipse cx="976.5" cy="1553.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98" x="985.5" y="1556.8857">subtotal: Float</text><line style="stroke:#181818;stroke-width:0.5;" x1="966.5" x2="1118.5" y1="1564.1875" y2="1564.1875"/><ellipse cx="976.5" cy="1577.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="985.5" y="1581.1826">updateQuantity()</text><ellipse cx="976.5" cy="1594.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="128" x="985.5" y="1597.4795">calculateSubtotal()</text></g><!--MD5=[fff5db4abcb6eec6574b9ea9c3ee0eae]
+class Delivery--><g id="elem_Delivery"><rect codeLine="194" fill="#F1F1F1" height="162.0781" id="Delivery" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="184" x="1689.5" y="1451"/><ellipse cx="1750.25" cy="1467" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1753.2188,1472.6406 Q1752.6406,1472.9375 1752,1473.0781 Q1751.3594,1473.2344 1750.6563,1473.2344 Q1748.1563,1473.2344 1746.8281,1471.5938 Q1745.5156,1469.9375 1745.5156,1466.8125 Q1745.5156,1463.6875 1746.8281,1462.0313 Q1748.1563,1460.375 1750.6563,1460.375 Q1751.3594,1460.375 1752,1460.5313 Q1752.6563,1460.6875 1753.2188,1460.9844 L1753.2188,1463.7031 Q1752.5938,1463.125 1752,1462.8594 Q1751.4063,1462.5781 1750.7813,1462.5781 Q1749.4375,1462.5781 1748.75,1463.6563 Q1748.0625,1464.7188 1748.0625,1466.8125 Q1748.0625,1468.9063 1748.75,1469.9844 Q1749.4375,1471.0469 1750.7813,1471.0469 Q1751.4063,1471.0469 1752,1470.7813 Q1752.5938,1470.5 1753.2188,1469.9219 L1753.2188,1472.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="1770.75" y="1471.8467">Delivery</text><line style="stroke:#181818;stroke-width:0.5;" x1="1690.5" x2="1872.5" y1="1483" y2="1483"/><ellipse cx="1700.5" cy="1496.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1709.5" y="1499.9951">id: String</text><ellipse cx="1700.5" cy="1512.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="1709.5" y="1516.292">status: Enum</text><ellipse cx="1700.5" cy="1529.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="127" x="1709.5" y="1532.5889">deliveryDate: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="1690.5" x2="1872.5" y1="1539.8906" y2="1539.8906"/><ellipse cx="1700.5" cy="1553.5391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1709.5" y="1556.8857">updateStatus()</text><ellipse cx="1700.5" cy="1569.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107" x="1709.5" y="1573.1826">reportIncident()</text><ellipse cx="1700.5" cy="1586.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101" x="1709.5" y="1589.4795">updateRoute()</text><ellipse cx="1700.5" cy="1602.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="158" x="1709.5" y="1605.7764">assignDeliveryPerson()</text></g><!--MD5=[22347c10e9067ef77c20e49562427a95]
+class SubscriptionPlan--><g id="elem_SubscriptionPlan"><rect codeLine="204" fill="#F1F1F1" height="178.375" id="SubscriptionPlan" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="179" x="556" y="1132"/><ellipse cx="585.4" cy="1148" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M588.3688,1153.6406 Q587.7906,1153.9375 587.15,1154.0781 Q586.5094,1154.2344 585.8063,1154.2344 Q583.3063,1154.2344 581.9781,1152.5938 Q580.6656,1150.9375 580.6656,1147.8125 Q580.6656,1144.6875 581.9781,1143.0313 Q583.3063,1141.375 585.8063,1141.375 Q586.5094,1141.375 587.15,1141.5313 Q587.8063,1141.6875 588.3688,1141.9844 L588.3688,1144.7031 Q587.7438,1144.125 587.15,1143.8594 Q586.5563,1143.5781 585.9313,1143.5781 Q584.5875,1143.5781 583.9,1144.6563 Q583.2125,1145.7188 583.2125,1147.8125 Q583.2125,1149.9063 583.9,1150.9844 Q584.5875,1152.0469 585.9313,1152.0469 Q586.5563,1152.0469 587.15,1151.7813 Q587.7438,1151.5 588.3688,1150.9219 L588.3688,1153.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="602.6" y="1152.8467">SubscriptionPlan</text><line style="stroke:#181818;stroke-width:0.5;" x1="557" x2="734" y1="1164" y2="1164"/><ellipse cx="567" cy="1177.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="576" y="1180.9951">id: String</text><ellipse cx="567" cy="1193.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="576" y="1197.292">name: String</text><ellipse cx="567" cy="1210.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="576" y="1213.5889">price: Float</text><ellipse cx="567" cy="1226.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="153" x="576" y="1229.8857">features: List&lt;String&gt;</text><ellipse cx="567" cy="1242.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="576" y="1246.1826">duration: Integer</text><line style="stroke:#181818;stroke-width:0.5;" x1="557" x2="734" y1="1253.4844" y2="1253.4844"/><ellipse cx="567" cy="1267.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="576" y="1270.4795">updateFeatures()</text><ellipse cx="567" cy="1283.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="576" y="1286.7764">updatePrice()</text><ellipse cx="567" cy="1299.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118" x="576" y="1303.0732">updateDuration()</text></g><!--MD5=[7fbc0bc65ff75c22e8c3920d30806250]
+class ProductReview--><g id="elem_ProductReview"><rect codeLine="215" fill="#F1F1F1" height="145.7813" id="ProductReview" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="153" x="1629" y="1995"/><ellipse cx="1652.1" cy="2011" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1655.0688,2016.6406 Q1654.4906,2016.9375 1653.85,2017.0781 Q1653.2094,2017.2344 1652.5063,2017.2344 Q1650.0063,2017.2344 1648.6781,2015.5938 Q1647.3656,2013.9375 1647.3656,2010.8125 Q1647.3656,2007.6875 1648.6781,2006.0313 Q1650.0063,2004.375 1652.5063,2004.375 Q1653.2094,2004.375 1653.85,2004.5313 Q1654.5063,2004.6875 1655.0688,2004.9844 L1655.0688,2007.7031 Q1654.4438,2007.125 1653.85,2006.8594 Q1653.2563,2006.5781 1652.6313,2006.5781 Q1651.2875,2006.5781 1650.6,2007.6563 Q1649.9125,2008.7188 1649.9125,2010.8125 Q1649.9125,2012.9063 1650.6,2013.9844 Q1651.2875,2015.0469 1652.6313,2015.0469 Q1653.2563,2015.0469 1653.85,2014.7813 Q1654.4438,2014.5 1655.0688,2013.9219 L1655.0688,2016.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1667.9" y="2015.8467">ProductReview</text><line style="stroke:#181818;stroke-width:0.5;" x1="1630" x2="1781" y1="2027" y2="2027"/><ellipse cx="1640" cy="2040.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1649" y="2043.9951">id: String</text><ellipse cx="1640" cy="2056.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="1649" y="2060.292">rating: Integer</text><ellipse cx="1640" cy="2073.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="1649" y="2076.5889">comment: String</text><ellipse cx="1640" cy="2089.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="1649" y="2092.8857">date: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="1630" x2="1781" y1="2100.1875" y2="2100.1875"/><ellipse cx="1640" cy="2113.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1649" y="2117.1826">updateRating()</text><ellipse cx="1640" cy="2130.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="127" x="1649" y="2133.4795">updateComment()</text></g><!--MD5=[e6a7a27cdf0c120b1a6914901fdda6c8]
+class BoutiqueReview--><g id="elem_BoutiqueReview"><rect codeLine="224" fill="#F1F1F1" height="145.7813" id="BoutiqueReview" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="153" x="1056" y="1148"/><ellipse cx="1075.05" cy="1164" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1078.0188,1169.6406 Q1077.4406,1169.9375 1076.8,1170.0781 Q1076.1594,1170.2344 1075.4563,1170.2344 Q1072.9563,1170.2344 1071.6281,1168.5938 Q1070.3156,1166.9375 1070.3156,1163.8125 Q1070.3156,1160.6875 1071.6281,1159.0313 Q1072.9563,1157.375 1075.4563,1157.375 Q1076.1594,1157.375 1076.8,1157.5313 Q1077.4563,1157.6875 1078.0188,1157.9844 L1078.0188,1160.7031 Q1077.3938,1160.125 1076.8,1159.8594 Q1076.2063,1159.5781 1075.5813,1159.5781 Q1074.2375,1159.5781 1073.55,1160.6563 Q1072.8625,1161.7188 1072.8625,1163.8125 Q1072.8625,1165.9063 1073.55,1166.9844 Q1074.2375,1168.0469 1075.5813,1168.0469 Q1076.2063,1168.0469 1076.8,1167.7813 Q1077.3938,1167.5 1078.0188,1166.9219 L1078.0188,1169.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="1089.95" y="1168.8467">BoutiqueReview</text><line style="stroke:#181818;stroke-width:0.5;" x1="1057" x2="1208" y1="1180" y2="1180"/><ellipse cx="1067" cy="1193.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1076" y="1196.9951">id: String</text><ellipse cx="1067" cy="1209.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="1076" y="1213.292">rating: Integer</text><ellipse cx="1067" cy="1226.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="1076" y="1229.5889">comment: String</text><ellipse cx="1067" cy="1242.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="1076" y="1245.8857">date: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="1057" x2="1208" y1="1253.1875" y2="1253.1875"/><ellipse cx="1067" cy="1266.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1076" y="1270.1826">updateRating()</text><ellipse cx="1067" cy="1283.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="127" x="1076" y="1286.4795">updateComment()</text></g><!--MD5=[76b5e19c9337179d2d7ae334371d68c8]
+class Notification--><g id="elem_Notification"><rect codeLine="233" fill="#F1F1F1" height="162.0781" id="Notification" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="139" x="799" y="409"/><ellipse cx="827.95" cy="425" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M830.9188,430.6406 Q830.3406,430.9375 829.7,431.0781 Q829.0594,431.2344 828.3563,431.2344 Q825.8563,431.2344 824.5281,429.5938 Q823.2156,427.9375 823.2156,424.8125 Q823.2156,421.6875 824.5281,420.0313 Q825.8563,418.375 828.3563,418.375 Q829.0594,418.375 829.7,418.5313 Q830.3563,418.6875 830.9188,418.9844 L830.9188,421.7031 Q830.2938,421.125 829.7,420.8594 Q829.1063,420.5781 828.4813,420.5781 Q827.1375,420.5781 826.45,421.6563 Q825.7625,422.7188 825.7625,424.8125 Q825.7625,426.9063 826.45,427.9844 Q827.1375,429.0469 828.4813,429.0469 Q829.1063,429.0469 829.7,428.7813 Q830.2938,428.5 830.9188,427.9219 L830.9188,430.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="845.05" y="429.8467">Notification</text><line style="stroke:#181818;stroke-width:0.5;" x1="800" x2="937" y1="441" y2="441"/><ellipse cx="810" cy="454.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="819" y="457.9951">id: String</text><ellipse cx="810" cy="470.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="819" y="474.292">message: String</text><ellipse cx="810" cy="487.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="819" y="490.5889">type: String</text><ellipse cx="810" cy="503.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="819" y="506.8857">date: Date</text><ellipse cx="810" cy="519.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="819" y="523.1826">status: Enum</text><line style="stroke:#181818;stroke-width:0.5;" x1="800" x2="937" y1="530.4844" y2="530.4844"/><ellipse cx="810" cy="544.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="819" y="547.4795">markAsRead()</text><ellipse cx="810" cy="560.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45" x="819" y="563.7764">send()</text></g><!--MD5=[1d97155fbdc73f053377e8b095f5eeba]
+class Promotion--><g id="elem_Promotion"><rect codeLine="243" fill="#F1F1F1" height="178.375" id="Promotion" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="147" x="374" y="1132"/><ellipse cx="408.8" cy="1148" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M411.7688,1153.6406 Q411.1906,1153.9375 410.55,1154.0781 Q409.9094,1154.2344 409.2063,1154.2344 Q406.7063,1154.2344 405.3781,1152.5938 Q404.0656,1150.9375 404.0656,1147.8125 Q404.0656,1144.6875 405.3781,1143.0313 Q406.7063,1141.375 409.2063,1141.375 Q409.9094,1141.375 410.55,1141.5313 Q411.2063,1141.6875 411.7688,1141.9844 L411.7688,1144.7031 Q411.1438,1144.125 410.55,1143.8594 Q409.9563,1143.5781 409.3313,1143.5781 Q407.9875,1143.5781 407.3,1144.6563 Q406.6125,1145.7188 406.6125,1147.8125 Q406.6125,1149.9063 407.3,1150.9844 Q407.9875,1152.0469 409.3313,1152.0469 Q409.9563,1152.0469 410.55,1151.7813 Q411.1438,1151.5 411.7688,1150.9219 L411.7688,1153.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="427.2" y="1152.8467">Promotion</text><line style="stroke:#181818;stroke-width:0.5;" x1="375" x2="520" y1="1164" y2="1164"/><ellipse cx="385" cy="1177.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="394" y="1180.9951">id: String</text><ellipse cx="385" cy="1193.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="394" y="1197.292">discount: Float</text><ellipse cx="385" cy="1210.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="394" y="1213.5889">startDate: Date</text><ellipse cx="385" cy="1226.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="394" y="1229.8857">endDate: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="375" x2="520" y1="1237.1875" y2="1237.1875"/><ellipse cx="385" cy="1250.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="394" y="1254.1826">updateDiscount()</text><ellipse cx="385" cy="1267.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="394" y="1270.4795">updateDates()</text><ellipse cx="385" cy="1283.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="394" y="1286.7764">addProduct()</text><ellipse cx="385" cy="1299.7266" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="394" y="1303.0732">removeProduct()</text></g><!--MD5=[a608780e30028417ceff2d6f0d878efa]
+class Cart--><g id="elem_Cart"><rect codeLine="254" fill="#F1F1F1" height="145.7813" id="Cart" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="152" x="1534.5" y="1148"/><ellipse cx="1592.25" cy="1164" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1595.2188,1169.6406 Q1594.6406,1169.9375 1594,1170.0781 Q1593.3594,1170.2344 1592.6563,1170.2344 Q1590.1563,1170.2344 1588.8281,1168.5938 Q1587.5156,1166.9375 1587.5156,1163.8125 Q1587.5156,1160.6875 1588.8281,1159.0313 Q1590.1563,1157.375 1592.6563,1157.375 Q1593.3594,1157.375 1594,1157.5313 Q1594.6563,1157.6875 1595.2188,1157.9844 L1595.2188,1160.7031 Q1594.5938,1160.125 1594,1159.8594 Q1593.4063,1159.5781 1592.7813,1159.5781 Q1591.4375,1159.5781 1590.75,1160.6563 Q1590.0625,1161.7188 1590.0625,1163.8125 Q1590.0625,1165.9063 1590.75,1166.9844 Q1591.4375,1168.0469 1592.7813,1168.0469 Q1593.4063,1168.0469 1594,1167.7813 Q1594.5938,1167.5 1595.2188,1166.9219 L1595.2188,1169.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="28" x="1612.75" y="1168.8467">Cart</text><line style="stroke:#181818;stroke-width:0.5;" x1="1535.5" x2="1685.5" y1="1180" y2="1180"/><ellipse cx="1545.5" cy="1193.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1554.5" y="1196.9951">id: String</text><ellipse cx="1545.5" cy="1209.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="1554.5" y="1213.292">totalAmount: Float</text><line style="stroke:#181818;stroke-width:0.5;" x1="1535.5" x2="1685.5" y1="1220.5938" y2="1220.5938"/><ellipse cx="1545.5" cy="1234.2422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="1554.5" y="1237.5889">addProduct()</text><ellipse cx="1545.5" cy="1250.5391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="1554.5" y="1253.8857">removeProduct()</text><ellipse cx="1545.5" cy="1266.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="1554.5" y="1270.1826">updateTotal()</text><ellipse cx="1545.5" cy="1283.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="1554.5" y="1286.4795">clearCart()</text></g><!--MD5=[9bab5063b42bf90dcca070a1981b0c6a]
+class CartItem--><g id="elem_CartItem"><rect codeLine="263" fill="#F1F1F1" height="113.1875" id="CartItem" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145" x="1509" y="1475.5"/><ellipse cx="1548.75" cy="1491.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1551.7188,1497.1406 Q1551.1406,1497.4375 1550.5,1497.5781 Q1549.8594,1497.7344 1549.1563,1497.7344 Q1546.6563,1497.7344 1545.3281,1496.0938 Q1544.0156,1494.4375 1544.0156,1491.3125 Q1544.0156,1488.1875 1545.3281,1486.5313 Q1546.6563,1484.875 1549.1563,1484.875 Q1549.8594,1484.875 1550.5,1485.0313 Q1551.1563,1485.1875 1551.7188,1485.4844 L1551.7188,1488.2031 Q1551.0938,1487.625 1550.5,1487.3594 Q1549.9063,1487.0781 1549.2813,1487.0781 Q1547.9375,1487.0781 1547.25,1488.1563 Q1546.5625,1489.2188 1546.5625,1491.3125 Q1546.5625,1493.4063 1547.25,1494.4844 Q1547.9375,1495.5469 1549.2813,1495.5469 Q1549.9063,1495.5469 1550.5,1495.2813 Q1551.0938,1495 1551.7188,1494.4219 L1551.7188,1497.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="1568.25" y="1496.3467">CartItem</text><line style="stroke:#181818;stroke-width:0.5;" x1="1510" x2="1653" y1="1507.5" y2="1507.5"/><ellipse cx="1520" cy="1521.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1529" y="1524.4951">id: String</text><ellipse cx="1520" cy="1537.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="1529" y="1540.792">quantity: Integer</text><line style="stroke:#181818;stroke-width:0.5;" x1="1510" x2="1653" y1="1548.0938" y2="1548.0938"/><ellipse cx="1520" cy="1561.7422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="1529" y="1565.0889">addQuantity()</text><ellipse cx="1520" cy="1578.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="1529" y="1581.3857">removeQuantity()</text></g><!--MD5=[764fca796ce7f635542948d8fc39db5e]
+class Payment--><g id="elem_Payment"><rect codeLine="270" fill="#F1F1F1" height="162.0781" id="Payment" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="129" x="1155" y="1451"/><ellipse cx="1186.65" cy="1467" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1189.6188,1472.6406 Q1189.0406,1472.9375 1188.4,1473.0781 Q1187.7594,1473.2344 1187.0563,1473.2344 Q1184.5563,1473.2344 1183.2281,1471.5938 Q1181.9156,1469.9375 1181.9156,1466.8125 Q1181.9156,1463.6875 1183.2281,1462.0313 Q1184.5563,1460.375 1187.0563,1460.375 Q1187.7594,1460.375 1188.4,1460.5313 Q1189.0563,1460.6875 1189.6188,1460.9844 L1189.6188,1463.7031 Q1188.9938,1463.125 1188.4,1462.8594 Q1187.8063,1462.5781 1187.1813,1462.5781 Q1185.8375,1462.5781 1185.15,1463.6563 Q1184.4625,1464.7188 1184.4625,1466.8125 Q1184.4625,1468.9063 1185.15,1469.9844 Q1185.8375,1471.0469 1187.1813,1471.0469 Q1187.8063,1471.0469 1188.4,1470.7813 Q1188.9938,1470.5 1189.6188,1469.9219 L1189.6188,1472.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="1204.35" y="1471.8467">Payment</text><line style="stroke:#181818;stroke-width:0.5;" x1="1156" x2="1283" y1="1483" y2="1483"/><ellipse cx="1166" cy="1496.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1175" y="1499.9951">id: String</text><ellipse cx="1166" cy="1512.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95" x="1175" y="1516.292">amount: Float</text><ellipse cx="1166" cy="1529.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1175" y="1532.5889">method: String</text><ellipse cx="1166" cy="1545.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="1175" y="1548.8857">status: Enum</text><ellipse cx="1166" cy="1561.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="1175" y="1565.1826">date: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="1156" x2="1283" y1="1572.4844" y2="1572.4844"/><ellipse cx="1166" cy="1586.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="66" x="1175" y="1589.4795">process()</text><ellipse cx="1166" cy="1602.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="1175" y="1605.7764">refund()</text></g><!--MD5=[1a639477e471bcb5b19f88cf366e27b2]
+class Branding--><g id="elem_Branding"><rect codeLine="280" fill="#F1F1F1" height="162.0781" id="Branding" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="179" x="770" y="1140"/><ellipse cx="824.25" cy="1156" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M827.2188,1161.6406 Q826.6406,1161.9375 826,1162.0781 Q825.3594,1162.2344 824.6563,1162.2344 Q822.1563,1162.2344 820.8281,1160.5938 Q819.5156,1158.9375 819.5156,1155.8125 Q819.5156,1152.6875 820.8281,1151.0313 Q822.1563,1149.375 824.6563,1149.375 Q825.3594,1149.375 826,1149.5313 Q826.6563,1149.6875 827.2188,1149.9844 L827.2188,1152.7031 Q826.5938,1152.125 826,1151.8594 Q825.4063,1151.5781 824.7813,1151.5781 Q823.4375,1151.5781 822.75,1152.6563 Q822.0625,1153.7188 822.0625,1155.8125 Q822.0625,1157.9063 822.75,1158.9844 Q823.4375,1160.0469 824.7813,1160.0469 Q825.4063,1160.0469 826,1159.7813 Q826.5938,1159.5 827.2188,1158.9219 L827.2188,1161.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62" x="844.75" y="1160.8467">Branding</text><line style="stroke:#181818;stroke-width:0.5;" x1="771" x2="948" y1="1172" y2="1172"/><ellipse cx="781" cy="1185.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="790" y="1188.9951">logo: String</text><ellipse cx="781" cy="1201.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="790" y="1205.292">description: String</text><ellipse cx="781" cy="1218.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="153" x="790" y="1221.5889">banners: List&lt;String&gt;</text><line style="stroke:#181818;stroke-width:0.5;" x1="771" x2="948" y1="1228.8906" y2="1228.8906"/><ellipse cx="781" cy="1242.5391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="790" y="1245.8857">updateLogo()</text><ellipse cx="781" cy="1258.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="790" y="1262.1826">updateDescription()</text><ellipse cx="781" cy="1275.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86" x="790" y="1278.4795">addBanner()</text><ellipse cx="781" cy="1291.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="790" y="1294.7764">removeBanner()</text></g><!--MD5=[a2a32eb8740a34a1508bfb05a6833e01]
+class Incident--><g id="elem_Incident"><rect codeLine="290" fill="#F1F1F1" height="145.7813" id="Incident" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="164" x="1482.5" y="1731"/><ellipse cx="1532.75" cy="1747" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1535.7188,1752.6406 Q1535.1406,1752.9375 1534.5,1753.0781 Q1533.8594,1753.2344 1533.1563,1753.2344 Q1530.6563,1753.2344 1529.3281,1751.5938 Q1528.0156,1749.9375 1528.0156,1746.8125 Q1528.0156,1743.6875 1529.3281,1742.0313 Q1530.6563,1740.375 1533.1563,1740.375 Q1533.8594,1740.375 1534.5,1740.5313 Q1535.1563,1740.6875 1535.7188,1740.9844 L1535.7188,1743.7031 Q1535.0938,1743.125 1534.5,1742.8594 Q1533.9063,1742.5781 1533.2813,1742.5781 Q1531.9375,1742.5781 1531.25,1743.6563 Q1530.5625,1744.7188 1530.5625,1746.8125 Q1530.5625,1748.9063 1531.25,1749.9844 Q1531.9375,1751.0469 1533.2813,1751.0469 Q1533.9063,1751.0469 1534.5,1750.7813 Q1535.0938,1750.5 1535.7188,1749.9219 L1535.7188,1752.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="1553.25" y="1751.8467">Incident</text><line style="stroke:#181818;stroke-width:0.5;" x1="1483.5" x2="1645.5" y1="1763" y2="1763"/><ellipse cx="1493.5" cy="1776.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1502.5" y="1779.9951">id: String</text><ellipse cx="1493.5" cy="1792.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="1502.5" y="1796.292">description: String</text><ellipse cx="1493.5" cy="1809.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="1502.5" y="1812.5889">date: Date</text><ellipse cx="1493.5" cy="1825.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="1502.5" y="1828.8857">status: Enum</text><line style="stroke:#181818;stroke-width:0.5;" x1="1483.5" x2="1645.5" y1="1836.1875" y2="1836.1875"/><ellipse cx="1493.5" cy="1849.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1502.5" y="1853.1826">updateStatus()</text><ellipse cx="1493.5" cy="1866.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="1502.5" y="1869.4795">updateDescription()</text></g><!--MD5=[fc92a9f5bb5fae84dd7fa4034e6b4444]
+class Route--><g id="elem_Route"><rect codeLine="299" fill="#F1F1F1" height="162.0781" id="Route" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="191" x="1682" y="1723"/><ellipse cx="1752.25" cy="1739" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1755.2188,1744.6406 Q1754.6406,1744.9375 1754,1745.0781 Q1753.3594,1745.2344 1752.6563,1745.2344 Q1750.1563,1745.2344 1748.8281,1743.5938 Q1747.5156,1741.9375 1747.5156,1738.8125 Q1747.5156,1735.6875 1748.8281,1734.0313 Q1750.1563,1732.375 1752.6563,1732.375 Q1753.3594,1732.375 1754,1732.5313 Q1754.6563,1732.6875 1755.2188,1732.9844 L1755.2188,1735.7031 Q1754.5938,1735.125 1754,1734.8594 Q1753.4063,1734.5781 1752.7813,1734.5781 Q1751.4375,1734.5781 1750.75,1735.6563 Q1750.0625,1736.7188 1750.0625,1738.8125 Q1750.0625,1740.9063 1750.75,1741.9844 Q1751.4375,1743.0469 1752.7813,1743.0469 Q1753.4063,1743.0469 1754,1742.7813 Q1754.5938,1742.5 1755.2188,1741.9219 L1755.2188,1744.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="1772.75" y="1743.8467">Route</text><line style="stroke:#181818;stroke-width:0.5;" x1="1683" x2="1872" y1="1755" y2="1755"/><ellipse cx="1693" cy="1768.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1702" y="1771.9951">id: String</text><ellipse cx="1693" cy="1784.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="1702" y="1788.292">startLocation: String</text><ellipse cx="1693" cy="1801.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134" x="1702" y="1804.5889">endLocation: String</text><ellipse cx="1693" cy="1817.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="165" x="1702" y="1820.8857">waypoints: List&lt;String&gt;</text><ellipse cx="1693" cy="1833.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="1702" y="1837.1826">estimatedTime: Float</text><line style="stroke:#181818;stroke-width:0.5;" x1="1683" x2="1872" y1="1844.4844" y2="1844.4844"/><ellipse cx="1693" cy="1858.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="130" x="1702" y="1861.4795">updateWaypoints()</text><ellipse cx="1693" cy="1874.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="162" x="1702" y="1877.7764">updateEstimatedTime()</text></g><!--MD5=[6c7bb023babad207e2c8d90c7f82e89e]
+class ProductStock--><g id="elem_ProductStock"><rect codeLine="309" fill="#F1F1F1" height="80.5938" id="ProductStock" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125" x="7" y="1340"/><ellipse cx="22" cy="1356" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M24.9688,1361.6406 Q24.3906,1361.9375 23.75,1362.0781 Q23.1094,1362.2344 22.4063,1362.2344 Q19.9063,1362.2344 18.5781,1360.5938 Q17.2656,1358.9375 17.2656,1355.8125 Q17.2656,1352.6875 18.5781,1351.0313 Q19.9063,1349.375 22.4063,1349.375 Q23.1094,1349.375 23.75,1349.5313 Q24.4063,1349.6875 24.9688,1349.9844 L24.9688,1352.7031 Q24.3438,1352.125 23.75,1351.8594 Q23.1563,1351.5781 22.5313,1351.5781 Q21.1875,1351.5781 20.5,1352.6563 Q19.8125,1353.7188 19.8125,1355.8125 Q19.8125,1357.9063 20.5,1358.9844 Q21.1875,1360.0469 22.5313,1360.0469 Q23.1563,1360.0469 23.75,1359.7813 Q24.3438,1359.5 24.9688,1358.9219 L24.9688,1361.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="36" y="1360.8467">ProductStock</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="131" y1="1372" y2="1372"/><ellipse cx="18" cy="1385.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96" x="27" y="1388.9951">stock: Integer</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="131" y1="1396.2969" y2="1396.2969"/><ellipse cx="18" cy="1409.9453" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98" x="27" y="1413.292">updateStock()</text></g><!--MD5=[f00dbe8c0302c6aec2cb26b3c659c8fc]
+class Report--><g id="elem_Report"><rect codeLine="314" fill="#F1F1F1" height="162.0781" id="Report" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="161" x="1287" y="409"/><ellipse cx="1339.75" cy="425" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1342.7188,430.6406 Q1342.1406,430.9375 1341.5,431.0781 Q1340.8594,431.2344 1340.1563,431.2344 Q1337.6563,431.2344 1336.3281,429.5938 Q1335.0156,427.9375 1335.0156,424.8125 Q1335.0156,421.6875 1336.3281,420.0313 Q1337.6563,418.375 1340.1563,418.375 Q1340.8594,418.375 1341.5,418.5313 Q1342.1563,418.6875 1342.7188,418.9844 L1342.7188,421.7031 Q1342.0938,421.125 1341.5,420.8594 Q1340.9063,420.5781 1340.2813,420.5781 Q1338.9375,420.5781 1338.25,421.6563 Q1337.5625,422.7188 1337.5625,424.8125 Q1337.5625,426.9063 1338.25,427.9844 Q1338.9375,429.0469 1340.2813,429.0469 Q1340.9063,429.0469 1341.5,428.7813 Q1342.0938,428.5 1342.7188,427.9219 L1342.7188,430.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="47" x="1360.25" y="429.8467">Report</text><line style="stroke:#181818;stroke-width:0.5;" x1="1288" x2="1447" y1="441" y2="441"/><ellipse cx="1298" cy="454.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1307" y="457.9951">id: String</text><ellipse cx="1298" cy="470.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="1307" y="474.292">type: String</text><ellipse cx="1298" cy="487.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1307" y="490.5889">content: String</text><ellipse cx="1298" cy="503.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="1307" y="506.8857">date: Date</text><ellipse cx="1298" cy="519.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="135" x="1307" y="523.1826">relatedEntity: String</text><line style="stroke:#181818;stroke-width:0.5;" x1="1288" x2="1447" y1="530.4844" y2="530.4844"/><ellipse cx="1298" cy="544.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="1307" y="547.4795">updateContent()</text><ellipse cx="1298" cy="560.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="1307" y="563.7764">updateType()</text></g><!--MD5=[c680266cf9e454ca06c2d1bb8b683e6b]
+class Schedule--><g id="elem_Schedule"><rect codeLine="324" fill="#F1F1F1" height="129.4844" id="Schedule" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="149" x="1988" y="1156.5"/><ellipse cx="2026.4" cy="1172.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M2029.3688,1178.1406 Q2028.7906,1178.4375 2028.15,1178.5781 Q2027.5094,1178.7344 2026.8063,1178.7344 Q2024.3063,1178.7344 2022.9781,1177.0938 Q2021.6656,1175.4375 2021.6656,1172.3125 Q2021.6656,1169.1875 2022.9781,1167.5313 Q2024.3063,1165.875 2026.8063,1165.875 Q2027.5094,1165.875 2028.15,1166.0313 Q2028.8063,1166.1875 2029.3688,1166.4844 L2029.3688,1169.2031 Q2028.7438,1168.625 2028.15,1168.3594 Q2027.5563,1168.0781 2026.9313,1168.0781 Q2025.5875,1168.0781 2024.9,1169.1563 Q2024.2125,1170.2188 2024.2125,1172.3125 Q2024.2125,1174.4063 2024.9,1175.4844 Q2025.5875,1176.5469 2026.9313,1176.5469 Q2027.5563,1176.5469 2028.15,1176.2813 Q2028.7438,1176 2029.3688,1175.4219 L2029.3688,1178.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="65" x="2045.6" y="1177.3467">Schedule</text><line style="stroke:#181818;stroke-width:0.5;" x1="1989" x2="2136" y1="1188.5" y2="1188.5"/><ellipse cx="1999" cy="1202.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="2008" y="1205.4951">id: String</text><ellipse cx="1999" cy="1218.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="2008" y="1221.792">shifts: List&lt;Shift&gt;</text><line style="stroke:#181818;stroke-width:0.5;" x1="1989" x2="2136" y1="1229.0938" y2="1229.0938"/><ellipse cx="1999" cy="1242.7422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="66" x="2008" y="1246.0889">addShift()</text><ellipse cx="1999" cy="1259.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="2008" y="1262.3857">removeShift()</text><ellipse cx="1999" cy="1275.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89" x="2008" y="1278.6826">updateShift()</text></g><!--MD5=[67b95c5a8bbf052f42f5a359d5f08895]
+class Shift--><g id="elem_Shift"><rect codeLine="332" fill="#F1F1F1" height="129.4844" id="Shift" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="167" x="1980" y="1467.5"/><ellipse cx="2044.25" cy="1483.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M2047.2188,1489.1406 Q2046.6406,1489.4375 2046,1489.5781 Q2045.3594,1489.7344 2044.6563,1489.7344 Q2042.1563,1489.7344 2040.8281,1488.0938 Q2039.5156,1486.4375 2039.5156,1483.3125 Q2039.5156,1480.1875 2040.8281,1478.5313 Q2042.1563,1476.875 2044.6563,1476.875 Q2045.3594,1476.875 2046,1477.0313 Q2046.6563,1477.1875 2047.2188,1477.4844 L2047.2188,1480.2031 Q2046.5938,1479.625 2046,1479.3594 Q2045.4063,1479.0781 2044.7813,1479.0781 Q2043.4375,1479.0781 2042.75,1480.1563 Q2042.0625,1481.2188 2042.0625,1483.3125 Q2042.0625,1485.4063 2042.75,1486.4844 Q2043.4375,1487.5469 2044.7813,1487.5469 Q2045.4063,1487.5469 2046,1487.2813 Q2046.5938,1487 2047.2188,1486.4219 L2047.2188,1489.1406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="2064.75" y="1488.3467">Shift</text><line style="stroke:#181818;stroke-width:0.5;" x1="1981" x2="2146" y1="1499.5" y2="1499.5"/><ellipse cx="1991" cy="1513.1484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="2000" y="1516.4951">id: String</text><ellipse cx="1991" cy="1529.4453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="141" x="2000" y="1532.792">startTime: DateTime</text><ellipse cx="1991" cy="1545.7422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137" x="2000" y="1549.0889">endTime: DateTime</text><line style="stroke:#181818;stroke-width:0.5;" x1="1981" x2="2146" y1="1556.3906" y2="1556.3906"/><ellipse cx="1991" cy="1570.0391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="125" x="2000" y="1573.3857">updateStartTime()</text><ellipse cx="1991" cy="1586.3359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="2000" y="1589.6826">updateEndTime()</text></g><!--MD5=[0f39e4cb6f03951afbf6d14bd2505654]
+class Address--><g id="elem_Address"><rect codeLine="340" fill="#F1F1F1" height="162.0781" id="Address" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="142" x="788.5" y="1451"/><ellipse cx="827.35" cy="1467" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M830.3188,1472.6406 Q829.7406,1472.9375 829.1,1473.0781 Q828.4594,1473.2344 827.7563,1473.2344 Q825.2563,1473.2344 823.9281,1471.5938 Q822.6156,1469.9375 822.6156,1466.8125 Q822.6156,1463.6875 823.9281,1462.0313 Q825.2563,1460.375 827.7563,1460.375 Q828.4594,1460.375 829.1,1460.5313 Q829.7563,1460.6875 830.3188,1460.9844 L830.3188,1463.7031 Q829.6938,1463.125 829.1,1462.8594 Q828.5063,1462.5781 827.8813,1462.5781 Q826.5375,1462.5781 825.85,1463.6563 Q825.1625,1464.7188 825.1625,1466.8125 Q825.1625,1468.9063 825.85,1469.9844 Q826.5375,1471.0469 827.8813,1471.0469 Q828.5063,1471.0469 829.1,1470.7813 Q829.6938,1470.5 830.3188,1469.9219 L830.3188,1472.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57" x="846.65" y="1471.8467">Address</text><line style="stroke:#181818;stroke-width:0.5;" x1="789.5" x2="929.5" y1="1483" y2="1483"/><ellipse cx="799.5" cy="1496.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="808.5" y="1499.9951">id: String</text><ellipse cx="799.5" cy="1512.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="808.5" y="1516.292">street: String</text><ellipse cx="799.5" cy="1529.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72" x="808.5" y="1532.5889">city: String</text><ellipse cx="799.5" cy="1545.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84" x="808.5" y="1548.8857">state: String</text><ellipse cx="799.5" cy="1561.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="808.5" y="1565.1826">zipCode: String</text><ellipse cx="799.5" cy="1578.1328" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101" x="808.5" y="1581.4795">country: String</text><line style="stroke:#181818;stroke-width:0.5;" x1="789.5" x2="929.5" y1="1588.7813" y2="1588.7813"/><ellipse cx="799.5" cy="1602.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="808.5" y="1605.7764">updateAddress()</text></g><!--MD5=[a96594a83e2ecdc78cbf17c2ddf01934]
+class Category--><g id="elem_Category"><rect codeLine="350" fill="#F1F1F1" height="145.7813" id="Category" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="204" x="649.5" y="1995"/><ellipse cx="716.25" cy="2011" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M719.2188,2016.6406 Q718.6406,2016.9375 718,2017.0781 Q717.3594,2017.2344 716.6563,2017.2344 Q714.1563,2017.2344 712.8281,2015.5938 Q711.5156,2013.9375 711.5156,2010.8125 Q711.5156,2007.6875 712.8281,2006.0313 Q714.1563,2004.375 716.6563,2004.375 Q717.3594,2004.375 718,2004.5313 Q718.6563,2004.6875 719.2188,2004.9844 L719.2188,2007.7031 Q718.5938,2007.125 718,2006.8594 Q717.4063,2006.5781 716.7813,2006.5781 Q715.4375,2006.5781 714.75,2007.6563 Q714.0625,2008.7188 714.0625,2010.8125 Q714.0625,2012.9063 714.75,2013.9844 Q715.4375,2015.0469 716.7813,2015.0469 Q717.4063,2015.0469 718,2014.7813 Q718.5938,2014.5 719.2188,2013.9219 L719.2188,2016.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62" x="736.75" y="2015.8467">Category</text><line style="stroke:#181818;stroke-width:0.5;" x1="650.5" x2="852.5" y1="2027" y2="2027"/><ellipse cx="660.5" cy="2040.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="669.5" y="2043.9951">id: String</text><ellipse cx="660.5" cy="2056.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="669.5" y="2060.292">name: String</text><ellipse cx="660.5" cy="2073.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="669.5" y="2076.5889">description: String</text><ellipse cx="660.5" cy="2089.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="178" x="669.5" y="2092.8857">parentCategory: Category</text><line style="stroke:#181818;stroke-width:0.5;" x1="650.5" x2="852.5" y1="2100.1875" y2="2100.1875"/><ellipse cx="660.5" cy="2113.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="669.5" y="2117.1826">updateName()</text><ellipse cx="660.5" cy="2130.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="669.5" y="2133.4795">updateDescription()</text></g><!--MD5=[6b24b675326c5aa4af09b00078df21e6]
+class ReturnRequest--><g id="elem_ReturnRequest"><rect codeLine="359" fill="#F1F1F1" height="162.0781" id="ReturnRequest" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="155" x="1319" y="1451"/><ellipse cx="1341.65" cy="1467" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1344.6188,1472.6406 Q1344.0406,1472.9375 1343.4,1473.0781 Q1342.7594,1473.2344 1342.0563,1473.2344 Q1339.5563,1473.2344 1338.2281,1471.5938 Q1336.9156,1469.9375 1336.9156,1466.8125 Q1336.9156,1463.6875 1338.2281,1462.0313 Q1339.5563,1460.375 1342.0563,1460.375 Q1342.7594,1460.375 1343.4,1460.5313 Q1344.0563,1460.6875 1344.6188,1460.9844 L1344.6188,1463.7031 Q1343.9938,1463.125 1343.4,1462.8594 Q1342.8063,1462.5781 1342.1813,1462.5781 Q1340.8375,1462.5781 1340.15,1463.6563 Q1339.4625,1464.7188 1339.4625,1466.8125 Q1339.4625,1468.9063 1340.15,1469.9844 Q1340.8375,1471.0469 1342.1813,1471.0469 Q1342.8063,1471.0469 1343.4,1470.7813 Q1343.9938,1470.5 1344.6188,1469.9219 L1344.6188,1472.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="1357.35" y="1471.8467">ReturnRequest</text><line style="stroke:#181818;stroke-width:0.5;" x1="1320" x2="1473" y1="1483" y2="1483"/><ellipse cx="1330" cy="1496.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="1339" y="1499.9951">id: String</text><ellipse cx="1330" cy="1512.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="1339" y="1516.292">reason: String</text><ellipse cx="1330" cy="1529.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="1339" y="1532.5889">status: Enum</text><ellipse cx="1330" cy="1545.5391" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129" x="1339" y="1548.8857">requestDate: Date</text><line style="stroke:#181818;stroke-width:0.5;" x1="1320" x2="1473" y1="1556.1875" y2="1556.1875"/><ellipse cx="1330" cy="1569.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="1339" y="1573.1826">processReturn()</text><ellipse cx="1330" cy="1586.1328" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="1339" y="1589.4795">approveReturn()</text><ellipse cx="1330" cy="1602.4297" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96" x="1339" y="1605.7764">rejectReturn()</text></g><!--MD5=[a605f9a646bac91c0f1ec4bed5c60b13]
+reverse link User to Client--><g id="link_User_Client"><path codeLine="370" d="M1030.68,140.12 C1174.86,169.27 1426.41,230.73 1465.5,311 C1536.26,456.29 1533.44,646.2 1520.87,770.43 " fill="none" id="User-backto-Client" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="1028.9,146.91,1010.65,136.14,1031.63,133.18,1028.9,146.91" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[25a93103c5d0393c478aa0f88ab41b1f]
+reverse link User to BoutiqueOwner--><g id="link_User_BoutiqueOwner"><path codeLine="371" d="M994.57,252.18 C1009.34,281.83 1025.1,313.49 1040.15,343.7 " fill="none" id="User-backto-BoutiqueOwner" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="988.17,255.03,985.53,234.01,1000.71,248.79,988.17,255.03" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[cb41e893288fff84e2ef98b894b347e3]
+reverse link User to DeliveryPerson--><g id="link_User_DeliveryPerson"><path codeLine="372" d="M1030.48,138.34 C1138.86,158.79 1314.34,198.89 1454.5,264 C1487.82,279.48 1501.73,280.7 1522.5,311 C1615.02,445.97 1507.44,540.3 1608.5,669 C1687.44,769.52 1822.22,830.39 1923.38,864.12 " fill="none" id="User-backto-DeliveryPerson" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="1029.11,145.2,1010.72,134.68,1031.65,131.44,1029.11,145.2" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[933987b91d2b08b1b4941f3221fa6cec]
+reverse link User to Admin--><g id="link_User_Admin"><path codeLine="373" d="M835.94,241.03 C817.85,264.22 799.06,288.35 781.5,311 C775.65,318.55 769.66,326.29 763.61,334.1 " fill="none" id="User-backto-Admin" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="830.5,236.62,848.33,225.16,841.54,245.23,830.5,236.62" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[68c231545c57c8a13311bf8185d1291e]
+reverse link User to DeliveryManager--><g id="link_User_DeliveryManager"><path codeLine="374" d="M1030.94,122.82 C1168.91,128.91 1419.06,155.55 1598.5,264 C1626.21,280.75 1651.72,303.11 1674.4,327.25 " fill="none" id="User-backto-DeliveryManager" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="1030.32,129.8,1010.6,122.04,1030.86,115.81,1030.32,129.8" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[051557cd519893ca72eaf3c342d48dc9]
+reverse link User to AllBoutiquesManager--><g id="link_User_AllBoutiquesManager"><path codeLine="375" d="M829.3,152.94 C739.57,184.12 607.15,237.81 507.5,311 C497.34,318.46 487.36,326.67 477.66,335.34 " fill="none" id="User-backto-AllBoutiquesManager" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="827.14,146.28,848.33,146.44,831.67,159.53,827.14,146.28" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[6cb56ad2db0e14266f83041296b08dce]
+link User to Address--><g id="link_User_Address"><path codeLine="378" d="M848.21,131.48 C675.82,154.3 281.9,215.79 191.5,311 C135.92,369.53 155.5,408.29 155.5,489 C155.5,489 155.5,489 155.5,1222 C155.5,1496.46 609.7,1529.37 788.45,1531.7 " fill="none" id="User-Address" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="832.6139" y="128.8509">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="757.582" y="1528.0261">1..*</text></g><!--MD5=[879bec428a80d843af24dc47845bf14c]
+link Client to Order--><g id="link_Client_Order"><path codeLine="381" d="M1434.63,1030.59 C1417.03,1064.56 1398.44,1100.43 1382.24,1131.71 " fill="none" id="Client-Order" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1422.5328" y="1050.6192">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1361.9685" y="1121.0543">0..*</text></g><!--MD5=[21ac1e674ffa00cb5fcd6cc073dbc52c]
+link Client to Cart--><g id="link_Client_Cart"><path codeLine="382" d="M1545.68,1030.59 C1559.37,1070.59 1573.96,1113.23 1585.83,1147.91 " fill="none" id="Client-Cart" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1540.0029" y="1050.6192">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="1558.0484" y="1136.6842">0..1</text></g><!--MD5=[984432226ea29266253563148d8390f8]
+link Client to ProductReview--><g id="link_Client_ProductReview"><path codeLine="383" d="M1604.21,999.16 C1702.37,1100.87 1842.46,1270.36 1891.5,1451 C1910.67,1521.61 1926.93,1863.22 1890.5,1934 C1867.6,1978.49 1822.16,2011.49 1782.05,2033.49 " fill="none" id="Client-ProductReview" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1612.0465" y="1002.9315">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1789.892" y="2026.831">0..*</text></g><!--MD5=[29bba9dba9b76fd2bcc3e520af06e9eb]
+link Client to BoutiqueReview--><g id="link_Client_BoutiqueReview"><path codeLine="384" d="M1398.69,986.01 C1346.85,1029.12 1283.3,1082.73 1227.5,1132 C1221.52,1137.28 1215.37,1142.79 1209.21,1148.36 " fill="none" id="Client-BoutiqueReview" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1382.8461" y="988.8158">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1217.0662" y="1138.3051">0..*</text></g><!--MD5=[00116170f314697b1299e0aa130488a3]
+reverse link Cart to CartItem--><g id="link_Cart_CartItem"><path codeLine="387" d="M1602.52,1307.02 C1597.49,1360.65 1591.13,1428.4 1586.73,1475.27 " fill="none" id="Cart-backto-CartItem" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1603.74,1294.06,1599.1909,1299.6552,1602.606,1306.0063,1607.1551,1300.4111,1603.74,1294.06" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1594.7144" y="1313.822">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1562.9658" y="1464.5055">0..*</text></g><!--MD5=[b05a6c0e609b4fce27e5fb84e8f8e115]
+link CartItem to Product--><g id="link_CartItem_Product"><path codeLine="388" d="M1526.99,1588.67 C1515.92,1597.81 1503.87,1606.42 1491.5,1613 C1273.26,1729.12 980.57,1776.87 837.51,1794.25 " fill="none" id="CartItem-Product" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1495.945" y="1608.5543">0..*</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="845.5265" y="1789.7927">1</text></g><!--MD5=[70e14b1cd40d7243b4acb67c6187b174]
+link BoutiqueOwner to Boutique--><g id="link_BoutiqueOwner_Boutique"><path codeLine="391" d="M984.56,636.17 C946.06,679.86 904.09,727.49 866.55,770.08 " fill="none" id="BoutiqueOwner-Boutique" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="969.3445" y="656.632">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="874.593" y="758.3046">0..*</text></g><!--MD5=[d208ee0f7112689f0d38d895cc85a04b]
+link Boutique to Product--><g id="link_Boutique_Product"><path codeLine="394" d="M638.44,933.14 C544.23,965.98 416.57,1027.52 356.5,1132 C317.07,1200.58 333.32,1234.36 356.5,1310 C410.98,1487.74 566.48,1646.24 665.34,1733.06 " fill="none" id="Boutique-Product" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="622.5078" y="931.8889">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="634.5577" y="1723.8871">0..*</text></g><!--MD5=[23dbf62922b538f53b8830e15a030bc9]
+link Boutique to Order--><g id="link_Boutique_Order"><path codeLine="395" d="M866.87,948.55 C965.3,991.02 1109.51,1058.05 1226.5,1132 C1232.39,1135.72 1238.34,1139.71 1244.25,1143.85 " fill="none" id="Boutique-Order" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="874.4531" y="948.2079">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1216.9598" y="1148.1122">0..*</text></g><!--MD5=[ccbf98d7b9b08eaced24ff7163271c3f]
+link Boutique to Promotion--><g id="link_Boutique_Promotion"><path codeLine="396" d="M638.41,1008 C598.86,1048.24 555.67,1093.54 520.32,1131.9 " fill="none" id="Boutique-Promotion" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="622.4758" y="1011.7786">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="502.3981" y="1120.9572">0..*</text></g><!--MD5=[293127995d96c2908c220c535c59c725]
+link Promotion to Boutique--><g id="link_Promotion_Boutique"><path codeLine="425" d="M521.26,1154.62 C556.4,1119.99 599.11,1076.15 638.26,1034.73 " fill="none" id="Promotion-Boutique" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="528.9145" y="1144.4024">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="622.3158" y="1040.3045">1</text></g><!--MD5=[cca3ffdfc023c26f3c83f3591d8540c5]
+link Boutique to BoutiqueReview--><g id="link_Boutique_BoutiqueReview"><path codeLine="397" d="M866.61,977.48 C916.84,1012.84 975.44,1056.8 1024.5,1101 C1040.46,1115.38 1056.59,1131.87 1071.34,1147.91 " fill="none" id="Boutique-BoutiqueReview" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="874.5455" y="979.208">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1040.8469" y="1136.6842">0..*</text></g><!--MD5=[9e6d2cddc2ed479f5cb15ecdc7550f1f]
+link Boutique to Branding--><g id="link_Boutique_Branding"><path codeLine="398" d="M809.45,1071.01 C817.48,1094.93 825.41,1118.53 832.51,1139.66 " fill="none" id="Boutique-Branding" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="803.8493" y="1091.1382">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="821.75" y="1128.817">1</text></g><!--MD5=[3f086737d2861144bd8a3a48df208d77]
+link Boutique to SubscriptionPlan--><g id="link_Boutique_SubscriptionPlan"><path codeLine="399" d="M695.55,1071.01 C688.52,1091.95 681.56,1112.66 675.17,1131.68 " fill="none" id="Boutique-SubscriptionPlan" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="684.7882" y="1091.1382">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="669.2156" y="1121.0219">1</text></g><!--MD5=[424ab87fd37557bfff7d448dbb7ac0a4]
+reverse link Boutique to ProductStock--><g id="link_Boutique_ProductStock"><path codeLine="400" d="M625.55,938.42 C528.44,970.81 394.63,1024.72 294.5,1101 C204.76,1169.37 129.17,1280.78 92.77,1339.84 " fill="none" id="Boutique-backto-ProductStock" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="638.1,934.28,631.149,932.3609,626.704,938.0391,633.655,939.9582,638.1,934.28" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="622.515" y="948.9846">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="71.7194" y="1328.975">0..*</text></g><!--MD5=[d5d712878c93d8d643fd4ba68af9421d]
+link Boutique to Address--><g id="link_Boutique_Address"><path codeLine="401" d="M866.72,992.33 C906.16,1030.73 945.64,1078.89 966.5,1132 C1008.64,1239.31 955.66,1369.18 910.41,1450.96 " fill="none" id="Boutique-Address" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="874.6629" y="995.0557">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="891.0431" y="1439.8671">1..*</text></g><!--MD5=[d0735bc79fef481e5a12954dad99bb99]
+link Product to ProductReview--><g id="link_Product_ProductReview"><path codeLine="404" d="M837.84,1828.71 C1022.46,1879.41 1453.02,1997.66 1628.75,2045.92 " fill="none" id="Product-ProductReview" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="845.6036" y="1827.2676">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1597.8902" y="2040.3681">0..*</text></g><!--MD5=[41043388d0f8d1cf0966079386e80353]
+link Product to Category--><g id="link_Product_Category"><path codeLine="405" d="M751.5,1934.08 C751.5,1955.01 751.5,1976 751.5,1994.92 " fill="none" id="Product-Category" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="743.2688" y="1954.1086">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="743.0875" y="1983.6952">1</text></g><!--MD5=[c7094af273b01b2c8ed1137ff938a78a]
+link ProductStock to Product--><g id="link_ProductStock_Product"><path codeLine="406" d="M93.62,1421.08 C130.26,1478.08 205.24,1583.13 294.5,1644 C410.06,1722.8 568.61,1766.36 665.36,1787.18 " fill="none" id="ProductStock-Product" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="88.7009" y="1440.5504">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="649.6136" y="1782.1686">1</text></g><!--MD5=[ab24261687246172a5e73b125d43b3a9]
+reverse link Order to OrderItem--><g id="link_Order_OrderItem"><path codeLine="409" d="M1255.71,1320.35 C1227.67,1353.14 1195.48,1389.36 1164.5,1421 C1150.43,1435.37 1134.86,1450.16 1119.68,1464.06 " fill="none" id="Order-backto-OrderItem" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1264.27,1310.29,1257.3348,1312.2655,1256.4909,1319.4271,1263.4262,1317.4516,1264.27,1310.29" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1249.9572" y="1330.3623">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1123.9339" y="1450.7028">1..*</text></g><!--MD5=[663c18ce459b41abc4dbff87433befbf]
+link OrderItem to Product--><g id="link_OrderItem_Product"><path codeLine="410" d="M965.28,1604.65 C925.96,1641.13 878.05,1685.59 837.55,1723.16 " fill="none" id="OrderItem-Product" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="938.5623" y="1610.9738">0..*</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="845.5701" y="1712.3713">1</text></g><!--MD5=[e851f94bc71457f9038687d54ae4bfa1]
+link Order to Delivery--><g id="link_Order_Delivery"><path codeLine="411" d="M1428.71,1283.97 C1496.28,1329.65 1590.03,1393.55 1671.5,1451 C1677.29,1455.08 1683.23,1459.31 1689.21,1463.58 " fill="none" id="Order-Delivery" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1436.3767" y="1285.4475">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1673.5369" y="1454.5992">1</text></g><!--MD5=[2dd35b9e342a33989aa9b5490e0b19cd]
+link Order to Payment--><g id="link_Order_Payment"><path codeLine="412" d="M1303.13,1310.13 C1286.34,1354.46 1266.15,1407.79 1249.81,1450.94 " fill="none" id="Order-Payment" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1291.9185" y="1330.4906">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1244.2355" y="1439.8453">1</text></g><!--MD5=[dd2bca8e69277b6dcf04d6bf8fed5dca]
+link Order to Address--><g id="link_Order_Address"><path codeLine="413" d="M1244.37,1300.76 C1238.49,1304.17 1232.52,1307.29 1226.5,1310 C1155.35,1342.05 1114.03,1290.74 1053.5,1340 C1023.48,1364.43 1048.68,1393.44 1021.5,1421 C996.87,1445.97 978.2,1432.34 948.5,1451 C942.52,1454.76 936.56,1458.93 930.71,1463.34 " fill="none" id="Order-Address" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="101" x="1054.5" y="1385.0669">deliveryAddress</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1217.0466" y="1306.3953">0..*</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="938.466" y="1452.5557">1</text></g><!--MD5=[a93f935c51d003ee4a7996f10d9b2102]
+link Delivery to Incident--><g id="link_Delivery_Incident"><path codeLine="416" d="M1714.21,1613.15 C1697.82,1632.94 1680.42,1654.15 1664.5,1674 C1649.87,1692.24 1634.29,1712.12 1619.88,1730.69 " fill="none" id="Delivery-Incident" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1699.8607" y="1633.1147">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1601.1994" y="1719.8195">0..*</text></g><!--MD5=[084b5f300199ea822f0f84440ad469b9]
+link Delivery to Route--><g id="link_Delivery_Route"><path codeLine="417" d="M1780.31,1613.28 C1779.8,1647.79 1779.2,1688.04 1778.69,1722.57 " fill="none" id="Delivery-Route" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1771.8478" y="1633.2563">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1770.4485" y="1711.9968">1</text></g><!--MD5=[9434a5c735f8c10b628eca2378028b58]
+link DeliveryPerson to Delivery--><g id="link_DeliveryPerson_Delivery"><path codeLine="418" d="M2000.02,1030.79 C1944.93,1156.9 1862.86,1344.77 1816.56,1450.73 " fill="none" id="DeliveryPerson-Delivery" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1988.7125" y="1050.3998">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1795.6583" y="1439.8933">0..*</text></g><!--MD5=[5d11ea831d8fa864759933ed6043ac98]
+link DeliveryManager to DeliveryPerson--><g id="link_DeliveryManager_DeliveryPerson"><path codeLine="421" d="M1892.8,652.74 C1918.68,691.75 1945.99,732.92 1970.73,770.21 " fill="none" id="DeliveryManager-DeliveryPerson" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1889.4808" y="672.5228">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1942.1066" y="759.3188">0..*</text></g><!--MD5=[4bdfe919ef7ea6a6ed0f687b100ed64d]
+link AllBoutiquesManager to Boutique--><g id="link_AllBoutiquesManager_Boutique"><path codeLine="422" d="M484.38,644.74 C492.13,653.01 499.87,661.15 507.5,669 C549.01,711.73 596.33,757 638.25,796 " fill="none" id="AllBoutiquesManager-Boutique" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="482.3105" y="664.1671">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="607.5871" y="786.2355">0..*</text></g><!--MD5=[36aebdd7356f674a73ff3897f619bf7b]
+link Promotion to Product--><g id="link_Promotion_Product"><path codeLine="426" d="M493.67,1310.24 C544.33,1407.06 626.13,1563.39 683.99,1673.97 " fill="none" id="Promotion-Product" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="473.5411" y="1330.3081">0..*</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="656.4222" y="1663.0938">0..*</text></g><!--MD5=[e6142d88eff6fb75b7703db286d8bb4f]
+link DeliveryPerson to Schedule--><g id="link_DeliveryPerson_Schedule"><path codeLine="429" d="M2058.93,1030.59 C2059.75,1073.87 2060.62,1120.24 2061.3,1156.26 " fill="none" id="DeliveryPerson-Schedule" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="2050.8392" y="1050.6192">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="2035.8563" y="1145.4064">0..1</text></g><!--MD5=[4757df350b521b0700a73b56d4835232]
+reverse link Schedule to Shift--><g id="link_Schedule_Shift"><path codeLine="430" d="M2062.75,1298.83 C2062.92,1350.77 2063.14,1418.53 2063.29,1467.43 " fill="none" id="Schedule-backto-Shift" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="2062.71,1285.65,2058.7298,1291.6632,2062.7496,1297.6499,2066.7298,1291.6368,2062.71,1285.65" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="2054.2718" y="1306.0389">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="2039.0092" y="1456.595">0..*</text></g><!--MD5=[44ee44ed3563cbd0f7f61cc91b289837]
+link Report to Boutique--><g id="link_Report_Boutique"><path codeLine="433" d="M1336.97,571.22 C1320.98,604.85 1298.58,642.26 1269.5,669 C1153.57,775.59 980.2,839.06 866.72,871.62 " fill="none" id="Report-Boutique" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1325.8947" y="591.191">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="874.4115" y="866.4636">0..1</text></g><!--MD5=[59043de1d9dcb61d35e0c3faf1f00045]
+link Report to Order--><g id="link_Report_Order"><path codeLine="434" d="M1364.09,571.1 C1358.24,708.69 1346.33,988.9 1340.25,1131.84 " fill="none" id="Report-Order" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1355.43" y="591.0603">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="1315.5668" y="1120.8922">0..1</text></g><!--MD5=[2e2e530a658308b38e0151c4d25adf6b]
+link User to Notification--><g id="link_User_Notification"><path codeLine="437" d="M910.82,234.01 C901.44,290.57 890.28,357.78 881.78,409 " fill="none" id="User-Notification" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="901.2962" y="254.2028">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="858.9441" y="397.9108">0..*</text></g><!--MD5=[9ef8c367ac58d0d41029b30dbd2577c4]
+link Order to ReturnRequest--><g id="link_Order_ReturnRequest"><path codeLine="440" d="M1353.61,1310.13 C1362.22,1354.46 1372.58,1407.79 1380.95,1450.94 " fill="none" id="Order-ReturnRequest" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1346.7366" y="1330.4906">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="1354.4102" y="1439.8453">0..1</text></g><!--MD5=[c4510dea35b9933c2ea7fa265f6c8ec2]
+link Client to ReturnRequest--><g id="link_Client_ReturnRequest"><path codeLine="441" d="M1487.07,1030.75 C1477.34,1111.33 1463.24,1217.04 1446.5,1310 C1438.05,1356.94 1426.38,1408.99 1416.45,1450.78 " fill="none" id="Client-ReturnRequest" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="1478.0621" y="1050.3576">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="1394.2026" y="1439.9477">0..*</text></g><!--MD5=[a5725b0440277e7b298212d4ab098951]
+link Category to Category--><g id="link_Category_Category"><path codeLine="444" d="M853.67,2049.66 C874,2051.73 888.5,2057.84 888.5,2068 C888.5,2078.16 874,2084.27 853.67,2086.34 " fill="none" id="Category-Category" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="894.5" y="2072.5669">subcategories</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="861.3408" y="2045.0026">0..1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="861.6624" y="2084.1814">0..*</text></g><!--MD5=[5a48614d1b7b4367a14819db45e09c9e]
+link Visitor to Client--><g id="link_Visitor_Client"><path codeLine="447" d="M2012.16,201.63 C2005.59,344.39 1989.33,631.36 1963.5,669 C1920.47,731.71 1731.49,812.56 1608.96,859.95 " fill="none" id="Visitor-to-Client" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="1604.26,861.76,1614.0963,862.2565,1608.9256,859.9622,1611.2199,854.7915,1604.26,861.76" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="64" x="2006.5" y="494.5669">«creates»</text></g><!--MD5=[1978a986bc118f69c213bbc1522cbeec]
+link Visitor to BoutiqueOwner--><g id="link_Visitor_BoutiqueOwner"><path codeLine="448" d="M1889.93,130.69 C1734.19,146.96 1465.35,191.36 1269.5,311 C1255.64,319.47 1242.32,329.55 1229.71,340.55 " fill="none" id="Visitor-to-BoutiqueOwner" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="1225.82,343.99,1235.2098,341.0182,1229.5633,340.6753,1229.9062,335.0288,1225.82,343.99" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="61" x="1342.5" y="277.0669">«applies»</text></g><!--MD5=[6c28af76799c2c682adefb473196f95e]
+link Visitor to DeliveryPerson--><g id="link_Visitor_DeliveryPerson"><path codeLine="449" d="M2054.42,201.62 C2068.43,234.66 2082.51,273.86 2089.5,311 C2118.5,464.99 2101,645.32 2082.25,765.38 " fill="none" id="Visitor-to-DeliveryPerson" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="2081.47,770.34,2086.81,762.0645,2082.241,765.3998,2078.9057,760.8308,2081.47,770.34" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="61" x="2105.5" y="494.5669">«applies»</text></g><!--MD5=[4255e281f0d8e1828a1f0632ea9e343d]
+@startuml
+' Base User class and inheritance
+class User {
+  +id: String
+  +name: String
+  +email: String
+  +password: String
+  +phone: String
+  +role: Enum
+  +login()
+  +logout()
+  +updateProfile()
+  +changePassword()
+  +receiveNotification()
+}
+
+class Client {
+  +wishlist: List<Product>
+  +orderHistory: List<Order>
+  +loyaltyPoints: Integer
+  +browseProducts()
+  +searchProducts()
+  +addToCart()
+  +placeOrder()
+  +trackOrder()
+  +rateProduct()
+  +addToWishlist()
+  +viewOrderHistory()
+  +requestReturn()
+  +applyPromoCode()
+}
+
+class BoutiqueOwner {
+  +boutiqueList: List<Boutique>
+  +subscriptionStatus: SubscriptionPlan
+  +createBoutique()
+  +manageBoutique()
+  +addProduct()
+  +editProduct()
+  +removeProduct()
+  +viewOrders()
+  +updateOrderStatus()
+  +viewSalesAnalytics()
+  +managePromotions()
+  +respondToReview()
+  +manageInventory()
+  +scheduleProductLaunch()
+  +requestSupport()
+}
+
+class DeliveryPerson {
+  +availability: Boolean
+  +assignedDeliveries: List<Delivery>
+  +earnings: Float
+  +applicationStatus: Enum
+  +viewAssignedDeliveries()
+  +updateDeliveryStatus()
+  +viewDeliveryHistory()
+  +setAvailability()
+  +contactSupport()
+  +viewEarnings()
+  +reportIncident()
+  +accessTrainingMaterials()
+  +applyForPosition()
+}
+
+class Admin {
+  +permissions: List<String>
+  +activityLogs: List<String>
+  +manageUsers()
+  +approveBoutiqueRegistration()
+  +rejectBoutiqueRegistration()
+  +manageSubscriptions()
+  +viewReports()
+  +managePlatformSettings()
+  +moderateContent()
+  +sendAnnouncement()
+  +monitorSystemHealth()
+  +exportData()
+  +reviewFeedback()
+  +setCommissionRates()
+  +manageTaxSettings()
+  +handleRefundRequest()
+  +impersonateUser()
+  +manageLocalizationSettings()
+  +integrateThirdPartyService()
+}
+
+class DeliveryManager {
+  +managedDeliveries: List<Delivery>
+  +managedPersonnel: List<DeliveryPerson>
+  +assignDelivery()
+  +trackDeliveryStatus()
+  +manageDeliveryPersonnel()
+  +viewDeliveryAnalytics()
+  +receiveOrderNotification()
+  +manageDeliveryZones()
+  +optimizeRoutes()
+  +manageSchedules()
+  +handleDeliveryIssue()
+  +communicateWithPersonnel()
+  +approveDeliveryPersonApplication()
+  +monitorRealTimeLocation()
+  +generatePerformanceReport()
+  +setDeliveryPolicy()
+  +accessSupport()
+}
+
+class AllBoutiquesManager {
+  +managedBoutiques: List<Boutique>
+  +complianceReports: List<Report>
+  +overseeBoutiques()
+  +approveBoutique()
+  +manageCompliance()
+  +viewPlatformAnalytics()
+  +communicateWithBoutiqueOwner()
+  +receiveBoutiqueNotification()
+  +moderateDispute()
+  +setPlatformPromotion()
+  +generateBoutiqueReport()
+  +monitorSubscriptionStatus()
+  +provideSupport()
+  +reviewBoutiqueFeedback()
+  +scheduleAudit()
+  +accessHelpCenter()
+}
+
+class Visitor {
+  +sessionId: String
+  +applicationStatus: Enum
+  +browseProducts()
+  +registerAsClient()
+  +applyToCreateBoutique()
+  +applyToBecomeDeliveryPerson()
+  +accessHelpCenter()
+}
+
+class Boutique {
+  +id: String
+  +name: String
+  +description: String
+  +status: Enum
+  +workingHours: String
+  +deliveryOptions: List<String>
+  +addProduct()
+  +removeProduct()
+  +updateProduct()
+  +manageOrders()
+  +viewAnalytics()
+  +managePromotions()
+  +updateBranding()
+  +setWorkingHours()
+  +setDeliveryOptions()
+  +respondToReview()
+  +manageInventory()
+  +scheduleProductLaunch()
+}
+
+class Product {
+  +id: String
+  +name: String
+  +description: String
+  +price: Float
+  +stock: Integer
+  +images: List<String>
+  +status: Enum
+  +updateStock()
+  +updatePrice()
+  +addImage()
+  +removeImage()
+  +addReview()
+  +updateStatus()
+}
+
+class Order {
+  +id: String
+  +totalAmount: Float
+  +status: Enum
+  +orderDate: Date
+  +updateStatus()
+  +assignDeliveryPerson()
+  +processPayment()
+  +requestReturn()
+}
+
+class OrderItem {
+  +id: String
+  +quantity: Integer
+  +price: Float
+  +subtotal: Float
+  +updateQuantity()
+  +calculateSubtotal()
+}
+
+class Delivery {
+  +id: String
+  +status: Enum
+  +deliveryDate: Date
+  +updateStatus()
+  +reportIncident()
+  +updateRoute()
+  +assignDeliveryPerson()
+}
+
+class SubscriptionPlan {
+  +id: String
+  +name: String
+  +price: Float
+  +features: List<String>
+  +duration: Integer
+  +updateFeatures()
+  +updatePrice()
+  +updateDuration()
+}
+
+class ProductReview {
+  +id: String
+  +rating: Integer
+  +comment: String
+  +date: Date
+  +updateRating()
+  +updateComment()
+}
+
+class BoutiqueReview {
+  +id: String
+  +rating: Integer
+  +comment: String
+  +date: Date
+  +updateRating()
+  +updateComment()
+}
+
+class Notification {
+  +id: String
+  +message: String
+  +type: String
+  +date: Date
+  +status: Enum
+  +markAsRead()
+  +send()
+}
+
+class Promotion {
+  +id: String
+  +discount: Float
+  +startDate: Date
+  +endDate: Date
+  +updateDiscount()
+  +updateDates()
+  +addProduct()
+  +removeProduct()
+}
+
+class Cart {
+  +id: String
+  +totalAmount: Float
+  +addProduct()
+  +removeProduct()
+  +updateTotal()
+  +clearCart()
+}
+
+class CartItem {
+  +id: String
+  +quantity: Integer
+  +addQuantity()
+  +removeQuantity()
+}
+
+class Payment {
+  +id: String
+  +amount: Float
+  +method: String
+  +status: Enum
+  +date: Date
+  +process()
+  +refund()
+}
+
+class Branding {
+  +logo: String
+  +description: String
+  +banners: List<String>
+  +updateLogo()
+  +updateDescription()
+  +addBanner()
+  +removeBanner()
+}
+
+class Incident {
+  +id: String
+  +description: String
+  +date: Date
+  +status: Enum
+  +updateStatus()
+  +updateDescription()
+}
+
+class Route {
+  +id: String
+  +startLocation: String
+  +endLocation: String
+  +waypoints: List<String>
+  +estimatedTime: Float
+  +updateWaypoints()
+  +updateEstimatedTime()
+}
+
+class ProductStock {
+  +stock: Integer
+  +updateStock()
+}
+
+class Report {
+  +id: String
+  +type: String
+  +content: String
+  +date: Date
+  +relatedEntity: String
+  +updateContent()
+  +updateType()
+}
+
+class Schedule {
+  +id: String
+  +shifts: List<Shift>
+  +addShift()
+  +removeShift()
+  +updateShift()
+}
+
+class Shift {
+  +id: String
+  +startTime: DateTime
+  +endTime: DateTime
+  +updateStartTime()
+  +updateEndTime()
+}
+
+class Address {
+  +id: String
+  +street: String
+  +city: String
+  +state: String
+  +zipCode: String
+  +country: String
+  +updateAddress()
+}
+
+class Category {
+  +id: String
+  +name: String
+  +description: String
+  +parentCategory: Category
+  +updateName()
+  +updateDescription()
+}
+
+class ReturnRequest {
+  +id: String
+  +reason: String
+  +status: Enum
+  +requestDate: Date
+  +processReturn()
+  +approveReturn()
+  +rejectReturn()
+}
+
+' Inheritance
+User <|- - Client
+User <|- - BoutiqueOwner
+User <|- - DeliveryPerson
+User <|- - Admin
+User <|- - DeliveryManager
+User <|- - AllBoutiquesManager
+
+' User and Address
+User "1" - - "1..*" Address
+
+' Client Associations
+Client "1" - - "0..*" Order
+Client "1" - - "0..1" Cart
+Client "1" - - "0..*" ProductReview
+Client "1" - - "0..*" BoutiqueReview
+
+' Cart and CartItem
+Cart "1" *- - "0..*" CartItem
+CartItem "0..*" - - "1" Product
+
+' BoutiqueOwner Associations
+BoutiqueOwner "1" - - "0..*" Boutique
+
+' Boutique Associations
+Boutique "1" - - "0..*" Product
+Boutique "1" - - "0..*" Order
+Boutique "1" - - "0..*" Promotion
+Boutique "1" - - "0..*" BoutiqueReview
+Boutique "1" - - "1" Branding
+Boutique "1" - - "1" SubscriptionPlan
+Boutique "1" *- - "0..*" ProductStock
+Boutique "1" - - "1..*" Address
+
+' Product Associations
+Product "1" - - "0..*" ProductReview
+Product "1" - - "1" Category
+ProductStock "1" - - "1" Product
+
+' Order and OrderItem (Many-to-Many with attributes)
+Order "1" *- - "1..*" OrderItem
+OrderItem "0..*" - - "1" Product
+Order "1" - - "1" Delivery
+Order "1" - - "1" Payment
+Order "0..*" - - "1" Address : deliveryAddress
+
+' Delivery Associations
+Delivery "1" - - "0..*" Incident
+Delivery "1" - - "1" Route
+DeliveryPerson "1" - - "0..*" Delivery
+
+' Manager Associations
+DeliveryManager "1" - - "0..*" DeliveryPerson
+AllBoutiquesManager "1" - - "0..*" Boutique
+
+' Promotion Associations
+Promotion "1" - - "1" Boutique
+Promotion "0..*" - - "0..*" Product
+
+' Schedule and Shift
+DeliveryPerson "1" - - "0..1" Schedule
+Schedule "1" *- - "0..*" Shift
+
+' Report Associations
+Report "1" - - "0..1" Boutique
+Report "1" - - "0..1" Order
+
+' Notification
+User "1" - - "0..*" Notification
+
+' ReturnRequest
+Order "1" - - "0..1" ReturnRequest
+Client "1" - - "0..*" ReturnRequest
+
+' Category hierarchy
+Category "0..1" - - "0..*" Category : subcategories
+
+' Visitor transitions (dotted lines for conceptual flow)
+Visitor ..> Client : <<creates>>
+Visitor ..> BoutiqueOwner : <<applies>>
+Visitor ..> DeliveryPerson : <<applies>>
+@enduml
+
+@startuml
+class User {
+  +id: String
+  +name: String
+  +email: String
+  +password: String
+  +phone: String
+  +role: Enum
+  +login()
+  +logout()
+  +updateProfile()
+  +changePassword()
+  +receiveNotification()
+}
+
+class Client {
+  +wishlist: List<Product>
+  +orderHistory: List<Order>
+  +loyaltyPoints: Integer
+  +browseProducts()
+  +searchProducts()
+  +addToCart()
+  +placeOrder()
+  +trackOrder()
+  +rateProduct()
+  +addToWishlist()
+  +viewOrderHistory()
+  +requestReturn()
+  +applyPromoCode()
+}
+
+class BoutiqueOwner {
+  +boutiqueList: List<Boutique>
+  +subscriptionStatus: SubscriptionPlan
+  +createBoutique()
+  +manageBoutique()
+  +addProduct()
+  +editProduct()
+  +removeProduct()
+  +viewOrders()
+  +updateOrderStatus()
+  +viewSalesAnalytics()
+  +managePromotions()
+  +respondToReview()
+  +manageInventory()
+  +scheduleProductLaunch()
+  +requestSupport()
+}
+
+class DeliveryPerson {
+  +availability: Boolean
+  +assignedDeliveries: List<Delivery>
+  +earnings: Float
+  +applicationStatus: Enum
+  +viewAssignedDeliveries()
+  +updateDeliveryStatus()
+  +viewDeliveryHistory()
+  +setAvailability()
+  +contactSupport()
+  +viewEarnings()
+  +reportIncident()
+  +accessTrainingMaterials()
+  +applyForPosition()
+}
+
+class Admin {
+  +permissions: List<String>
+  +activityLogs: List<String>
+  +manageUsers()
+  +approveBoutiqueRegistration()
+  +rejectBoutiqueRegistration()
+  +manageSubscriptions()
+  +viewReports()
+  +managePlatformSettings()
+  +moderateContent()
+  +sendAnnouncement()
+  +monitorSystemHealth()
+  +exportData()
+  +reviewFeedback()
+  +setCommissionRates()
+  +manageTaxSettings()
+  +handleRefundRequest()
+  +impersonateUser()
+  +manageLocalizationSettings()
+  +integrateThirdPartyService()
+}
+
+class DeliveryManager {
+  +managedDeliveries: List<Delivery>
+  +managedPersonnel: List<DeliveryPerson>
+  +assignDelivery()
+  +trackDeliveryStatus()
+  +manageDeliveryPersonnel()
+  +viewDeliveryAnalytics()
+  +receiveOrderNotification()
+  +manageDeliveryZones()
+  +optimizeRoutes()
+  +manageSchedules()
+  +handleDeliveryIssue()
+  +communicateWithPersonnel()
+  +approveDeliveryPersonApplication()
+  +monitorRealTimeLocation()
+  +generatePerformanceReport()
+  +setDeliveryPolicy()
+  +accessSupport()
+}
+
+class AllBoutiquesManager {
+  +managedBoutiques: List<Boutique>
+  +complianceReports: List<Report>
+  +overseeBoutiques()
+  +approveBoutique()
+  +manageCompliance()
+  +viewPlatformAnalytics()
+  +communicateWithBoutiqueOwner()
+  +receiveBoutiqueNotification()
+  +moderateDispute()
+  +setPlatformPromotion()
+  +generateBoutiqueReport()
+  +monitorSubscriptionStatus()
+  +provideSupport()
+  +reviewBoutiqueFeedback()
+  +scheduleAudit()
+  +accessHelpCenter()
+}
+
+class Visitor {
+  +sessionId: String
+  +applicationStatus: Enum
+  +browseProducts()
+  +registerAsClient()
+  +applyToCreateBoutique()
+  +applyToBecomeDeliveryPerson()
+  +accessHelpCenter()
+}
+
+class Boutique {
+  +id: String
+  +name: String
+  +description: String
+  +status: Enum
+  +workingHours: String
+  +deliveryOptions: List<String>
+  +addProduct()
+  +removeProduct()
+  +updateProduct()
+  +manageOrders()
+  +viewAnalytics()
+  +managePromotions()
+  +updateBranding()
+  +setWorkingHours()
+  +setDeliveryOptions()
+  +respondToReview()
+  +manageInventory()
+  +scheduleProductLaunch()
+}
+
+class Product {
+  +id: String
+  +name: String
+  +description: String
+  +price: Float
+  +stock: Integer
+  +images: List<String>
+  +status: Enum
+  +updateStock()
+  +updatePrice()
+  +addImage()
+  +removeImage()
+  +addReview()
+  +updateStatus()
+}
+
+class Order {
+  +id: String
+  +totalAmount: Float
+  +status: Enum
+  +orderDate: Date
+  +updateStatus()
+  +assignDeliveryPerson()
+  +processPayment()
+  +requestReturn()
+}
+
+class OrderItem {
+  +id: String
+  +quantity: Integer
+  +price: Float
+  +subtotal: Float
+  +updateQuantity()
+  +calculateSubtotal()
+}
+
+class Delivery {
+  +id: String
+  +status: Enum
+  +deliveryDate: Date
+  +updateStatus()
+  +reportIncident()
+  +updateRoute()
+  +assignDeliveryPerson()
+}
+
+class SubscriptionPlan {
+  +id: String
+  +name: String
+  +price: Float
+  +features: List<String>
+  +duration: Integer
+  +updateFeatures()
+  +updatePrice()
+  +updateDuration()
+}
+
+class ProductReview {
+  +id: String
+  +rating: Integer
+  +comment: String
+  +date: Date
+  +updateRating()
+  +updateComment()
+}
+
+class BoutiqueReview {
+  +id: String
+  +rating: Integer
+  +comment: String
+  +date: Date
+  +updateRating()
+  +updateComment()
+}
+
+class Notification {
+  +id: String
+  +message: String
+  +type: String
+  +date: Date
+  +status: Enum
+  +markAsRead()
+  +send()
+}
+
+class Promotion {
+  +id: String
+  +discount: Float
+  +startDate: Date
+  +endDate: Date
+  +updateDiscount()
+  +updateDates()
+  +addProduct()
+  +removeProduct()
+}
+
+class Cart {
+  +id: String
+  +totalAmount: Float
+  +addProduct()
+  +removeProduct()
+  +updateTotal()
+  +clearCart()
+}
+
+class CartItem {
+  +id: String
+  +quantity: Integer
+  +addQuantity()
+  +removeQuantity()
+}
+
+class Payment {
+  +id: String
+  +amount: Float
+  +method: String
+  +status: Enum
+  +date: Date
+  +process()
+  +refund()
+}
+
+class Branding {
+  +logo: String
+  +description: String
+  +banners: List<String>
+  +updateLogo()
+  +updateDescription()
+  +addBanner()
+  +removeBanner()
+}
+
+class Incident {
+  +id: String
+  +description: String
+  +date: Date
+  +status: Enum
+  +updateStatus()
+  +updateDescription()
+}
+
+class Route {
+  +id: String
+  +startLocation: String
+  +endLocation: String
+  +waypoints: List<String>
+  +estimatedTime: Float
+  +updateWaypoints()
+  +updateEstimatedTime()
+}
+
+class ProductStock {
+  +stock: Integer
+  +updateStock()
+}
+
+class Report {
+  +id: String
+  +type: String
+  +content: String
+  +date: Date
+  +relatedEntity: String
+  +updateContent()
+  +updateType()
+}
+
+class Schedule {
+  +id: String
+  +shifts: List<Shift>
+  +addShift()
+  +removeShift()
+  +updateShift()
+}
+
+class Shift {
+  +id: String
+  +startTime: DateTime
+  +endTime: DateTime
+  +updateStartTime()
+  +updateEndTime()
+}
+
+class Address {
+  +id: String
+  +street: String
+  +city: String
+  +state: String
+  +zipCode: String
+  +country: String
+  +updateAddress()
+}
+
+class Category {
+  +id: String
+  +name: String
+  +description: String
+  +parentCategory: Category
+  +updateName()
+  +updateDescription()
+}
+
+class ReturnRequest {
+  +id: String
+  +reason: String
+  +status: Enum
+  +requestDate: Date
+  +processReturn()
+  +approveReturn()
+  +rejectReturn()
+}
+
+User <|- - Client
+User <|- - BoutiqueOwner
+User <|- - DeliveryPerson
+User <|- - Admin
+User <|- - DeliveryManager
+User <|- - AllBoutiquesManager
+
+User "1" - - "1..*" Address
+
+Client "1" - - "0..*" Order
+Client "1" - - "0..1" Cart
+Client "1" - - "0..*" ProductReview
+Client "1" - - "0..*" BoutiqueReview
+
+Cart "1" *- - "0..*" CartItem
+CartItem "0..*" - - "1" Product
+
+BoutiqueOwner "1" - - "0..*" Boutique
+
+Boutique "1" - - "0..*" Product
+Boutique "1" - - "0..*" Order
+Boutique "1" - - "0..*" Promotion
+Boutique "1" - - "0..*" BoutiqueReview
+Boutique "1" - - "1" Branding
+Boutique "1" - - "1" SubscriptionPlan
+Boutique "1" *- - "0..*" ProductStock
+Boutique "1" - - "1..*" Address
+
+Product "1" - - "0..*" ProductReview
+Product "1" - - "1" Category
+ProductStock "1" - - "1" Product
+
+Order "1" *- - "1..*" OrderItem
+OrderItem "0..*" - - "1" Product
+Order "1" - - "1" Delivery
+Order "1" - - "1" Payment
+Order "0..*" - - "1" Address : deliveryAddress
+
+Delivery "1" - - "0..*" Incident
+Delivery "1" - - "1" Route
+DeliveryPerson "1" - - "0..*" Delivery
+
+DeliveryManager "1" - - "0..*" DeliveryPerson
+AllBoutiquesManager "1" - - "0..*" Boutique
+
+Promotion "1" - - "1" Boutique
+Promotion "0..*" - - "0..*" Product
+
+DeliveryPerson "1" - - "0..1" Schedule
+Schedule "1" *- - "0..*" Shift
+
+Report "1" - - "0..1" Boutique
+Report "1" - - "0..1" Order
+
+User "1" - - "0..*" Notification
+
+Order "1" - - "0..1" ReturnRequest
+Client "1" - - "0..*" ReturnRequest
+
+Category "0..1" - - "0..*" Category : subcategories
+
+Visitor ..> Client : <<creates>>
+Visitor ..> BoutiqueOwner : <<applies>>
+Visitor ..> DeliveryPerson : <<applies>>
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

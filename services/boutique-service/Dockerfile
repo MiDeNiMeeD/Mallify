@@ -2,22 +2,17 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy shared utilities
-COPY shared/ ./shared/
+COPY package*.json ./
+COPY tsconfig.json ./
 
-# Copy service files
-COPY boutique-service/package*.json ./
-RUN npm install --production
+RUN npm ci --only=production
 
-COPY boutique-service/ ./
-RUN mkdir -p logs
+COPY --from=shared /app/dist ./node_modules/@mallify/shared
 
-EXPOSE 3002
+COPY src ./src
 
-# Set NODE_PATH so shared folder can find node_modules
-ENV NODE_PATH=/app/node_modules
+RUN npm run build
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3002/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+EXPOSE 3003
 
-CMD ["node", "src/index.js"]
+CMD ["node", "dist/index.js"]
