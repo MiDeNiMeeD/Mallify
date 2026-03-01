@@ -1,14 +1,11 @@
-name: Dev workflow test
-
+name: Dev Workflow
 on:
   push:
     branches:
-         - dev
-
-
+      - dev
 jobs:
   hello:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Hello
-      run: echo "github workflow in action --> commit sur la branche dev"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello
+        run: echo "code pushed on dev branch"
