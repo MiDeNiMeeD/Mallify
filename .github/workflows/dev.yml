@@ -2,7 +2,7 @@ name: Dev Workflow
 on:
   push:
     branches:
-      - dev
+      - mallify-dev
 jobs:
   hello:
     runs-on: ubuntu-latest
