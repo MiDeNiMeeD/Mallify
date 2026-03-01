@@ -36,7 +36,7 @@ jobs:
         run: docker exec mallify-rabbitmq rabbitmq-diagnostics -q ping
 
       - name: All services are up
-        run: echo "MongoDB, Redis, RabbitMQ are running ✅"
+        run: echo "MongoDB, Redis, RabbitMQ are running"
 
       - name: Stop all services
         run: docker compose -f services/docker-compose.yml down
