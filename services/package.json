@@ -20,6 +20,7 @@
     "analytics-service",
     "audit-service",
     "dispute-service",
+    "message-broker-service",
     "shared"
   ],
   "scripts": {

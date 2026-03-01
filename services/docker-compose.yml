@@ -467,6 +467,25 @@ services:
       - mongodb
       - rabbitmq
 
+  # Message Broker Service - RabbitMQ Wrapper & Message Queue Management
+  message-broker-service:
+    build:
+      context: .
+      dockerfile: ./message-broker-service/Dockerfile
+    container_name: mallify-message-broker-service
+    restart: always
+    ports:
+      - "3016:3016"
+    environment:
+      PORT: 3016
+      NODE_ENV: production
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
 # ============================================
 # Networks
 # ============================================
