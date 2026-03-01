@@ -1,5 +1,3 @@
-version: "3.8"
-
 # Mallify Services - Local Development Environment
 # This docker-compose file sets up all required infrastructure services
 # Run: docker-compose up -d
@@ -112,6 +110,362 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+
+  # ============================================
+  # MICROSERVICES - Application Layer
+  # ============================================
+  
+  # API Gateway - Entry Point for All Requests
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api-gateway/Dockerfile
+    container_name: mallify-api-gateway
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: mallify_redis_password
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+
+  # User Service - Authentication & User Management
+  user-service:
+    build:
+      context: .
+      dockerfile: ./user-service/Dockerfile
+    container_name: mallify-user-service
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: mallify_redis_password
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+
+  # Product Service - Product Catalog Management
+  product-service:
+    build:
+      context: .
+      dockerfile: ./product-service/Dockerfile
+    container_name: mallify-product-service
+    restart: always
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Boutique Service - Store Management
+  boutique-service:
+    build:
+      context: .
+      dockerfile: ./boutique-service/Dockerfile
+    container_name: mallify-boutique-service
+    restart: always
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Order Service - Order Processing
+  order-service:
+    build:
+      context: .
+      dockerfile: ./order-service/Dockerfile
+    container_name: mallify-order-service
+    restart: always
+    ports:
+      - "3004:3004"
+    environment:
+      PORT: 3004
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Payment Service - Payment Processing
+  payment-service:
+    build:
+      context: .
+      dockerfile: ./payment-service/Dockerfile
+    container_name: mallify-payment-service
+    restart: always
+    ports:
+      - "3005:3005"
+    environment:
+      PORT: 3005
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID}
+      PAYPAL_CLIENT_SECRET: ${PAYPAL_CLIENT_SECRET}
+      PAYPAL_MODE: ${PAYPAL_MODE}
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Delivery Service - Delivery Management
+  delivery-service:
+    build:
+      context: .
+      dockerfile: ./delivery-service/Dockerfile
+    container_name: mallify-delivery-service
+    restart: always
+    ports:
+      - "3006:3006"
+    environment:
+      PORT: 3006
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Driver Service - Driver Management
+  driver-service:
+    build:
+      context: .
+      dockerfile: ./driver-service/Dockerfile
+    container_name: mallify-driver-service
+    restart: always
+    ports:
+      - "3007:3007"
+    environment:
+      PORT: 3007
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Notification Service - Email, SMS, Push Notifications
+  notification-service:
+    build:
+      context: .
+      dockerfile: ./notification-service/Dockerfile
+    container_name: mallify-notification-service
+    restart: always
+    ports:
+      - "3008:3008"
+    environment:
+      PORT: 3008
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      FROM_EMAIL: ${FROM_EMAIL}
+      FROM_NAME: ${FROM_NAME}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+      EXPO_ACCESS_TOKEN: ${EXPO_ACCESS_TOKEN}
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Chat Service - Real-time Messaging
+  chat-service:
+    build:
+      context: .
+      dockerfile: ./chat-service/Dockerfile
+    container_name: mallify-chat-service
+    restart: always
+    ports:
+      - "3009:3009"
+    environment:
+      PORT: 3009
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: mallify_redis_password
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+
+  # Review Service - Reviews & Ratings
+  review-service:
+    build:
+      context: .
+      dockerfile: ./review-service/Dockerfile
+    container_name: mallify-review-service
+    restart: always
+    ports:
+      - "3010:3010"
+    environment:
+      PORT: 3010
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Promotion Service - Discounts & Promotions
+  promotion-service:
+    build:
+      context: .
+      dockerfile: ./promotion-service/Dockerfile
+    container_name: mallify-promotion-service
+    restart: always
+    ports:
+      - "3011:3011"
+    environment:
+      PORT: 3011
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Wishlist Service - User Wishlists
+  wishlist-service:
+    build:
+      context: .
+      dockerfile: ./wishlist-service/Dockerfile
+    container_name: mallify-wishlist-service
+    restart: always
+    ports:
+      - "3012:3012"
+    environment:
+      PORT: 3012
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Analytics Service - Analytics & Reporting
+  analytics-service:
+    build:
+      context: .
+      dockerfile: ./analytics-service/Dockerfile
+    container_name: mallify-analytics-service
+    restart: always
+    ports:
+      - "3013:3013"
+    environment:
+      PORT: 3013
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Audit Service - Audit Logging
+  audit-service:
+    build:
+      context: .
+      dockerfile: ./audit-service/Dockerfile
+    container_name: mallify-audit-service
+    restart: always
+    ports:
+      - "3014:3014"
+    environment:
+      PORT: 3014
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  # Dispute Service - Dispute Management
+  dispute-service:
+    build:
+      context: .
+      dockerfile: ./dispute-service/Dockerfile
+    container_name: mallify-dispute-service
+    restart: always
+    ports:
+      - "3015:3015"
+    environment:
+      PORT: 3015
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
 
 # ============================================
 # Networks

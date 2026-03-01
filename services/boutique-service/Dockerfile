@@ -2,17 +2,29 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy workspace package files
 COPY package*.json ./
-COPY tsconfig.json ./
 
-RUN npm ci --only=production
+# Copy shared package
+COPY shared ./shared
 
-COPY --from=shared /app/dist ./node_modules/@mallify/shared
+# Copy service files
+COPY boutique-service/package*.json ./boutique-service/
+COPY boutique-service/tsconfig.json ./boutique-service/
 
-COPY src ./src
+# Install dependencies (will link workspace packages)
+RUN npm install --workspaces=false
+RUN cd shared && npm install && npm run build
+RUN cd boutique-service && npm install
 
-RUN npm run build
+# Copy service source
+COPY boutique-service/src ./boutique-service/src
+
+# Build service
+RUN cd boutique-service && npm run build
+
+WORKDIR /app/boutique-service
 
 EXPOSE 3003
 
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start"]

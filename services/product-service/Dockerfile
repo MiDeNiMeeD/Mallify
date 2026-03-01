@@ -2,24 +2,29 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Copy workspace package files
 COPY package*.json ./
-COPY tsconfig.json ./
-
-# Install dependencies
-RUN npm ci --only=production
 
 # Copy shared package
-COPY --from=shared /app/dist ./node_modules/@mallify/shared
+COPY shared ./shared
 
-# Copy source
-COPY src ./src
+# Copy service files
+COPY product-service/package*.json ./product-service/
+COPY product-service/tsconfig.json ./product-service/
 
-# Build
-RUN npm run build
+# Install dependencies (will link workspace packages)
+RUN npm install --workspaces=false
+RUN cd shared && npm install && npm run build
+RUN cd product-service && npm install
 
-# Expose port
+# Copy service source
+COPY product-service/src ./product-service/src
+
+# Build service
+RUN cd product-service && npm run build
+
+WORKDIR /app/product-service
+
 EXPOSE 3002
 
-# Start service
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start"]

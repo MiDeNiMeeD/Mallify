@@ -9,22 +9,22 @@ COPY package*.json ./
 COPY shared ./shared
 
 # Copy service files
-COPY dispute-service/package*.json ./dispute-service/
-COPY dispute-service/tsconfig.json ./dispute-service/
+COPY order-service/package*.json ./order-service/
+COPY order-service/tsconfig.json ./order-service/
 
 # Install dependencies (will link workspace packages)
 RUN npm install --workspaces=false
 RUN cd shared && npm install && npm run build
-RUN cd dispute-service && npm install
+RUN cd order-service && npm install
 
 # Copy service source
-COPY dispute-service/src ./dispute-service/src
+COPY order-service/src ./order-service/src
 
 # Build service
-RUN cd dispute-service && npm run build
+RUN cd order-service && npm run build
 
-WORKDIR /app/dispute-service
+WORKDIR /app/order-service
 
-EXPOSE 3015
+EXPOSE 3004
 
 CMD ["npm", "start"]
