@@ -1,11 +1,42 @@
 name: Dev Workflow
+
 on:
   push:
     branches:
-      - mallify-dev
+      - dev
+
 jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
       - name: Hello
         run: echo "code pushed on dev branch"
+
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Start infrastructure services
+        run: docker compose -f services/docker-compose.yml up -d
+
+      - name: Wait for MongoDB
+        run: |
+          echo "Waiting for MongoDB..."
+          sleep 15
+
+      - name: Check MongoDB
+        run: docker exec mallify-mongodb mongosh --eval "db.runCommand('ping')" --quiet
+
+      - name: Check Redis
+        run: docker exec mallify-redis redis-cli -a mallify_redis_password ping
+
+      - name: Check RabbitMQ
+        run: docker exec mallify-rabbitmq rabbitmq-diagnostics -q ping
+
+      - name: All services are up
+        run: echo "MongoDB, Redis, RabbitMQ are running ✅"
+
+      - name: Stop all services
+        run: docker compose -f services/docker-compose.yml down
