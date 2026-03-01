@@ -1,0 +1,14 @@
+name: Dev workflow test
+
+on:
+  push:
+    branches:
+         - dev
+
+
+jobs:
+  hello:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Hello
+      run: echo "github workflow in action --> commit sur la branche dev"
