@@ -1,0 +1,13 @@
+name: Dev Workflow
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello Khalil
+        run: echo "code pushed on dev branch !"
