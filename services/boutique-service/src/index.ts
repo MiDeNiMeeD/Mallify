@@ -5,6 +5,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import path from 'path';
 import { createLogger, errorHandler, notFoundHandler } from '@mallify/shared';
 import { connectDatabase } from './config/database';
 import boutiqueRoutes from './routes/boutique.routes';
@@ -14,11 +15,16 @@ const app: Application = express();
 const PORT = process.env.PORT || 3003;
 const logger = createLogger('boutique-service');
 
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(compression());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use((req: Request, _res: Response, next) => {
   logger.info(`${req.method} ${req.path}`, {
@@ -37,8 +43,9 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
-app.use('/api/boutiques', boutiqueRoutes);
+// Register applicationRoutes BEFORE boutiqueRoutes to prevent /:id from catching /applications
 app.use('/api/boutiques', applicationRoutes);
+app.use('/api/boutiques', boutiqueRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

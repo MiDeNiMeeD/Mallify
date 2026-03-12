@@ -23,6 +23,7 @@ export const publicRoutes = [
   '/promotions/active', // View active promotions
   '/drivers/applications', // Submit driver application
   '/boutiques/applications', // Submit boutique application
+  '/notifications/send-otp', // Send OTP for email verification
 ];
 
 // Routes that allow optional authentication (public but enhanced with auth)

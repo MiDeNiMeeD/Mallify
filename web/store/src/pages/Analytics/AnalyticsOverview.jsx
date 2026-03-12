@@ -29,8 +29,26 @@ function AnalyticsOverview() {
           apiClient.getProductsByBoutique(boutiqueId)
         ]);
         
-        if (ordersRes.success) setOrders(ordersRes.data || []);
-        if (productsRes.success) setProducts(productsRes.data || []);
+        if (ordersRes.success) {
+          const ordersData = ordersRes.data;
+          if (Array.isArray(ordersData)) {
+            setOrders(ordersData);
+          } else if (ordersData?.orders && Array.isArray(ordersData.orders)) {
+            setOrders(ordersData.orders);
+          } else {
+            setOrders([]);
+          }
+        }
+        if (productsRes.success) {
+          const productsData = productsRes.data;
+          if (Array.isArray(productsData)) {
+            setProducts(productsData);
+          } else if (productsData?.products && Array.isArray(productsData.products)) {
+            setProducts(productsData.products);
+          } else {
+            setProducts([]);
+          }
+        }
       } catch (err) {
         console.error('Error fetching analytics:', err);
         setError(err.message);

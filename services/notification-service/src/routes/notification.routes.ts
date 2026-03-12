@@ -6,7 +6,10 @@ import {
   createNotification,
   updateNotificationStatus,
   markAsRead,
-  getUserNotifications
+  getUserNotifications,
+  sendOTP,
+  sendApprovalEmail,
+  sendRejectionEmail
 } from '../controllers/notification.controller';
 
 const router = Router();
@@ -55,5 +58,39 @@ router.patch(
 
 // Mark notification as read
 router.patch('/:id/read', markAsRead);
+
+// Send OTP email
+router.post(
+  '/send-otp',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('otp').notEmpty().withMessage('OTP is required'),
+    validateRequest
+  ],
+  sendOTP
+);
+
+// Send approval email
+router.post(
+  '/send-approval',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('boutiqueName').notEmpty().withMessage('Boutique name is required'),
+    validateRequest
+  ],
+  sendApprovalEmail
+);
+
+// Send rejection email
+router.post(
+  '/send-rejection',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('boutiqueName').notEmpty().withMessage('Boutique name is required'),
+    body('reason').notEmpty().withMessage('Rejection reason is required'),
+    validateRequest
+  ],
+  sendRejectionEmail
+);
 
 export default router;

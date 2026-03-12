@@ -29,7 +29,14 @@ function AllProducts() {
         const response = await apiClient.getProductsByBoutique(boutiqueId);
         
         if (response.success) {
-          setProducts(response.data || []);
+          const productsData = response.data;
+          if (Array.isArray(productsData)) {
+            setProducts(productsData);
+          } else if (productsData?.products && Array.isArray(productsData.products)) {
+            setProducts(productsData.products);
+          } else {
+            setProducts([]);
+          }
         } else {
           setError(response.message || 'Failed to fetch products');
         }

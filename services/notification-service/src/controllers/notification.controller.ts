@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Notification from '../models/Notification';
+import emailService from '../services/email.service';
 
 export const getNotifications = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -163,6 +164,129 @@ export const getUserNotifications = async (req: Request, res: Response): Promise
     return;
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch user notifications' });
+    return;
+  }
+};
+
+export const sendOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, otp } = req.body;
+    
+    if (!email || !otp) {
+      res.status(400).json({ error: 'Email and OTP are required' });
+      return;
+    }
+
+    // Send OTP email
+    const emailSent = await emailService.sendOTPEmail(email, otp);
+    
+    if (!emailSent) {
+      res.status(500).json({ error: 'Failed to send OTP email' });
+      return;
+    }
+
+    // Optionally, save notification record
+    const notification = new Notification({
+      type: 'email',
+      channel: 'email',
+      recipientEmail: email,
+      subject: 'Email Verification - OTP Code',
+      message: `Your OTP code is: ${otp}`,
+      status: 'sent',
+      sentAt: new Date()
+    });
+    await notification.save();
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'OTP sent successfully' 
+    });
+    return;
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    res.status(500).json({ error: 'Failed to send OTP' });
+    return;
+  }
+};
+
+export const sendApprovalEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, boutiqueName } = req.body;
+    
+    if (!email || !boutiqueName) {
+      res.status(400).json({ error: 'Email and boutique name are required' });
+      return;
+    }
+
+    // Send approval email
+    const emailSent = await emailService.sendApprovalEmail(email, boutiqueName);
+    
+    if (!emailSent) {
+      res.status(500).json({ error: 'Failed to send approval email' });
+      return;
+    }
+
+    // Optionally, save notification record
+    const notification = new Notification({
+      type: 'email',
+      channel: 'email',
+      recipientEmail: email,
+      subject: 'Boutique Application Approved',
+      message: `Your boutique application for "${boutiqueName}" has been approved!`,
+      status: 'sent',
+      sentAt: new Date()
+    });
+    await notification.save();
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'Approval email sent successfully' 
+    });
+    return;
+  } catch (error) {
+    console.error('Error sending approval email:', error);
+    res.status(500).json({ error: 'Failed to send approval email' });
+    return;
+  }
+};
+
+export const sendRejectionEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, boutiqueName, reason } = req.body;
+    
+    if (!email || !boutiqueName || !reason) {
+      res.status(400).json({ error: 'Email, boutique name, and rejection reason are required' });
+      return;
+    }
+
+    // Send rejection email
+    const emailSent = await emailService.sendRejectionEmail(email, boutiqueName, reason);
+    
+    if (!emailSent) {
+      res.status(500).json({ error: 'Failed to send rejection email' });
+      return;
+    }
+
+    // Optionally, save notification record
+    const notification = new Notification({
+      type: 'email',
+      channel: 'email',
+      recipientEmail: email,
+      subject: 'Boutique Application Decision',
+      message: `Your boutique application for "${boutiqueName}" has been rejected. Reason: ${reason}`,
+      status: 'sent',
+      sentAt: new Date()
+    });
+    await notification.save();
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'Rejection email sent successfully' 
+    });
+    return;
+  } catch (error) {
+    console.error('Error sending rejection email:', error);
+    res.status(500).json({ error: 'Failed to send rejection email' });
     return;
   }
 };

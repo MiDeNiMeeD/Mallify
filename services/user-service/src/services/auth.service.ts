@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 import { User, IUser, Client, BoutiqueOwner, DeliveryPerson } from '../models/user.model';
 import { OTPCode } from '../models/otp.model';
 import { RefreshToken } from '../models/refreshToken.model';
@@ -19,6 +20,7 @@ interface RegisterData {
   password: string;
   phone?: string;
   role: UserRole;
+  skipEmailVerification?: boolean; // For service-to-service calls
 }
 
 interface LoginResponse {
@@ -92,13 +94,37 @@ export class AuthService {
         user = await User.create(data);
     }
 
-    // Generate and send OTP for email verification
-    await this.sendVerificationOTP(user.email);
+    // Skip email verification if requested (for service-to-service calls)
+    if (data.skipEmailVerification) {
+      user.isEmailVerified = true;
+      await user.save();
+      return {
+        user: this.sanitizeUser(user),
+        message: 'Registration successful.',
+      };
+    }
 
-    return {
-      user: this.sanitizeUser(user),
-      message: 'Registration successful. Please verify your email with the OTP sent.',
-    };
+    // Generate and send OTP for email verification
+    try {
+      await this.sendVerificationOTP(user.email);
+      return {
+        user: this.sanitizeUser(user),
+        message: 'Registration successful. Please verify your email with the OTP sent.',
+      };
+    } catch (emailError: any) {
+      // If email sending fails, mark as verified for boutique owners (they verified during application)
+      if (data.role === UserRole.BOUTIQUE_OWNER) {
+        console.warn('⚠️  Email verification failed, marking boutique owner as verified:', emailError.message);
+        user.isEmailVerified = true;
+        await user.save();
+        return {
+          user: this.sanitizeUser(user),
+          message: 'Registration successful.',
+        };
+      }
+      // For other roles, throw the error
+      throw emailError;
+    }
   }
 
   async login(email: string, password: string): Promise<LoginResponse> {
@@ -118,6 +144,44 @@ export class AuthService {
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       throw new AuthenticationError('Invalid email or password');
+    }
+
+    // If user is a boutique owner, verify their application is approved
+    if (user.role === 'boutique_owner') {
+      try {
+        const boutiqueServiceUrl = process.env.BOUTIQUE_SERVICE_URL || 'http://localhost:3003';
+        const response = await axios.get(`${boutiqueServiceUrl}/api/boutiques/applications`, {
+          params: { email: user.email, limit: 1 }
+        });
+
+        if (response.data.success && response.data.data.applications.length > 0) {
+          const application = response.data.data.applications[0];
+          
+          if (application.status === 'pending') {
+            throw new AuthenticationError('Your boutique application is pending review. You will be able to login once it is approved.');
+          }
+          
+          if (application.status === 'rejected') {
+            throw new AuthenticationError('Your boutique application has been rejected. Please contact support for more information.');
+          }
+          
+          // Only 'approved' status can proceed to login
+          if (application.status !== 'approved') {
+            throw new AuthenticationError('Your boutique application is under review. Please wait for approval.');
+          }
+        } else {
+          // No application found
+          throw new AuthenticationError('No boutique application found for this account. Please submit an application first.');
+        }
+      } catch (error: any) {
+        // If it's already an AuthenticationError, re-throw it
+        if (error instanceof AuthenticationError) {
+          throw error;
+        }
+        // If boutique service is down or other error, log it but allow login
+        console.error('⚠️  Warning: Failed to verify boutique application status:', error.message);
+        // In production, you might want to be more strict here
+      }
     }
 
     // Generate tokens

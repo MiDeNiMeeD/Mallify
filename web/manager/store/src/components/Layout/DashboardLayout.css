@@ -293,7 +293,7 @@
   position: absolute;
   left: 0;
   top: calc(100% + 4px);
-  width: 72px;
+  width:62px;
   background: #1E293B;
   border: 1px solid rgba(59, 130, 246, 0.2);
   border-radius: 8px;
@@ -674,7 +674,7 @@
 
 .content-area {
   flex: 1;
-  padding: 32px;
+  padding: 0px;
   overflow-y: auto;
 }
 

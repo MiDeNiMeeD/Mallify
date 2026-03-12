@@ -5,3 +5,7 @@ logs/
 .DS_Store
 dist/
 build/
+
+# Email configuration (contains credentials)
+.email-config.json
+DeGango/.email-config.json

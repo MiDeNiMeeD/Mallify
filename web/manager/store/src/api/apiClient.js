@@ -22,6 +22,11 @@ export const API_ENDPOINTS = {
   // Boutiques
   BOUTIQUES: `${API_BASE_URL}/api/boutiques`,
   BOUTIQUE_BY_ID: (id) => `${API_BASE_URL}/api/boutiques/${id}`,
+  BOUTIQUE_APPLICATIONS: `${API_BASE_URL}/api/boutiques/applications`,
+  
+  // Notifications
+  SEND_APPROVAL_EMAIL: `${API_BASE_URL}/api/notifications/send-approval`,
+  SEND_REJECTION_EMAIL: `${API_BASE_URL}/api/notifications/send-rejection`,
   
   // Orders
   ORDERS: `${API_BASE_URL}/api/orders`,
@@ -149,10 +154,47 @@ class ApiClient {
     return await this.request(API_ENDPOINTS.BOUTIQUE_BY_ID(id));
   }
 
+  async getBoutiqueApplications(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString ? `${API_ENDPOINTS.BOUTIQUE_APPLICATIONS}?${queryString}` : API_ENDPOINTS.BOUTIQUE_APPLICATIONS;
+    return await this.request(url);
+  }
+
+  async getBoutiqueApplicationById(id) {
+    return await this.request(`${API_ENDPOINTS.BOUTIQUE_APPLICATIONS}/${id}`);
+  }
+
+  async updateBoutiqueApplicationStatus(id, status) {
+    return await this.request(`${API_ENDPOINTS.BOUTIQUE_APPLICATIONS}/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  }
+
   async updateBoutique(id, updates) {
     return await this.request(API_ENDPOINTS.BOUTIQUE_BY_ID(id), {
       method: 'PUT',
       body: JSON.stringify(updates),
+    });
+  }
+
+  async deleteBoutiqueApplication(id) {
+    return await this.request(`${API_ENDPOINTS.BOUTIQUE_APPLICATIONS}/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async sendApprovalEmail(email, boutiqueName) {
+    return await this.request(API_ENDPOINTS.SEND_APPROVAL_EMAIL, {
+      method: 'POST',
+      body: JSON.stringify({ email, boutiqueName }),
+    });
+  }
+
+  async sendRejectionEmail(email, boutiqueName, reason) {
+    return await this.request(API_ENDPOINTS.SEND_REJECTION_EMAIL, {
+      method: 'POST',
+      body: JSON.stringify({ email, boutiqueName, reason }),
     });
   }
 

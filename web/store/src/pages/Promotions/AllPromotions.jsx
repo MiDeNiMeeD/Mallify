@@ -24,7 +24,14 @@ function AllPromotions() {
         setLoading(true);
         const response = await apiClient.getPromotions({ boutiqueId: user.boutiqueList[0] });
         if (response.success) {
-          setPromotions(response.data || []);
+          const promotionsData = response.data;
+          if (Array.isArray(promotionsData)) {
+            setPromotions(promotionsData);
+          } else if (promotionsData?.promotions && Array.isArray(promotionsData.promotions)) {
+            setPromotions(promotionsData.promotions);
+          } else {
+            setPromotions([]);
+          }
         }
       } catch (err) {
         console.error('Error fetching promotions:', err);

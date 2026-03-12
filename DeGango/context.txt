@@ -1,0 +1,312 @@
+================================================================================
+DEGANGO - MALLIFY EMAIL NOTIFICATION SYSTEM CONTEXT
+================================================================================
+
+Project: Mallify Virtual Mall - E-commerce Platform
+Date Created: March 1, 2026
+Purpose: Automated email notifications for git events and project updates
+
+================================================================================
+SYSTEM OVERVIEW
+================================================================================
+
+This folder contains a complete email notification system that sends automated
+emails for various project events (commits, pushes, merges, builds, errors, tests).
+
+The system uses PowerShell scripts and SMTP (Gmail) to send notifications to
+the project team members.
+
+================================================================================
+TEAM MEMBERS & ROLES
+================================================================================
+
+1. Benromdhane Khalil (BenromdhaneKhalil387@gmail.com)
+   - Role: DevOps & Deployment Specialist
+   - Responsibilities:
+     * Docker environment management
+     * CI/CD pipeline setup
+     * Infrastructure planning (cloud deployment, Kubernetes)
+     * Monitoring & logging systems
+
+2. Mohamed Amine Mideni (mohamedamine.mideni@gmail.com)
+   - Role: Software Developer
+   - Responsibilities:
+     * Service integration testing
+     * Feature development (client/driver apps)
+     * Code quality & unit testing
+     * API documentation
+
+================================================================================
+EMAIL CONFIGURATION
+================================================================================
+
+SMTP Provider: Gmail
+Email Account: mallify.tn@gmail.com
+App Password: abbm bypn ksbn iutc
+SMTP Server: smtp.gmail.com
+Port: 587
+SSL/TLS: Enabled
+
+Recipients (Both receive all notifications):
+- BenromdhaneKhalil387@gmail.com
+- mohamedamine.mideni@gmail.com
+
+Notification Types Enabled:
+- Commit: true
+- Push: true
+- Merge: true
+- Build: true
+- Error: true
+- Test: true
+
+================================================================================
+FILES IN THIS FOLDER
+================================================================================
+
+1. .email-config.json
+   - Active email configuration file
+   - Contains SMTP credentials and settings
+   - NOT tracked in git (.gitignore protected)
+   - KEEP THIS FILE SECURE - contains password
+
+2. .email-config.template.json
+   - Template for email configuration
+   - Safe to share (no real credentials)
+   - Used to recreate config if needed
+
+3. send-notification.ps1
+   - Core email sending script
+   - Usage: .\send-notification.ps1 -Subject "Title" -Body "Message" -EventType "Type"
+   - Parameters:
+     * Subject: Email subject line
+     * Body: Email message content
+     * EventType: Commit|Push|Merge|Build|Error|Test
+   - Automatically adds git information (branch, commit, author)
+
+4. setup-email-notifications.ps1
+   - Interactive setup wizard
+   - Guides through configuration process
+   - Creates .email-config.json file
+   - Run this if config needs to be recreated
+
+5. notify.ps1
+   - Quick notification menu interface
+   - Interactive menu with common notification types
+   - Easier than manual command parameters
+
+6. EMAIL_NOTIFICATION_SETUP.md
+   - Complete documentation
+   - Setup instructions
+   - SMTP provider configurations
+   - Troubleshooting guide
+   - Usage examples
+
+7. context.txt (this file)
+   - System context and documentation
+   - Read this to understand the complete setup
+   - Contains all configuration details
+
+================================================================================
+GIT HOOKS (Optional)
+================================================================================
+
+Location: .git/hooks/
+Files: post-commit.ps1, post-push.ps1
+
+These scripts can automatically send emails after git commits and pushes.
+To enable them, you need to create Git hook wrappers:
+
+1. Create .git/hooks/post-commit (no extension):
+   #!/bin/sh
+   powershell.exe -ExecutionPolicy Bypass -File .git/hooks/post-commit.ps1
+
+2. Create .git/hooks/post-push (no extension):
+   #!/bin/sh
+   powershell.exe -ExecutionPolicy Bypass -File .git/hooks/post-push.ps1
+
+Note: Currently hooks are in PowerShell only. Git hooks require shell scripts.
+
+================================================================================
+HOW TO USE THE SYSTEM
+================================================================================
+
+METHOD 1: Quick Menu (Easiest)
+------------------------------
+cd DeGango
+.\notify.ps1
+[Choose from menu options]
+
+METHOD 2: Direct Command
+------------------------
+cd DeGango
+.\send-notification.ps1 -Subject "Your Title" -Body "Your message" -EventType "Build"
+
+METHOD 3: Send to Specific Person
+----------------------------------
+Use the direct PowerShell Send-MailMessage command with single recipient.
+See examples in previous email sends.
+
+================================================================================
+COMMON USE CASES
+================================================================================
+
+1. Send Build Success Notification:
+   .\send-notification.ps1 -Subject "Build Successful" -Body "All services built successfully" -EventType "Build"
+
+2. Send Error Notification:
+   .\send-notification.ps1 -Subject "Error in Production" -Body "Service XYZ is down" -EventType "Error"
+
+3. Send Test Results:
+   .\send-notification.ps1 -Subject "Tests Passed" -Body "All unit tests completed successfully" -EventType "Test"
+
+4. Send Custom Message to Khalil:
+   $config = Get-Content '.\.email-config.json' -Raw | ConvertFrom-Json
+   Send-MailMessage -SmtpServer $config.smtp.server -Port $config.smtp.port -To "BenromdhaneKhalil387@gmail.com" -From "$($config.from.email)" -Subject "Your Subject" -Body "Your message" -Credential (New-Object PSCredential($config.smtp.username, (ConvertTo-SecureString $config.smtp.password -AsPlainText -Force))) -UseSsl
+
+5. Send Custom Message to Mohamed:
+   [Same as above, change -To to "mohamedamine.mideni@gmail.com"]
+
+================================================================================
+IMPORTANT SECURITY NOTES
+================================================================================
+
+1. .email-config.json is protected by .gitignore - NEVER commit this file
+2. App password is stored in plain text in config file - keep file secure
+3. Don't share config file or app password publicly
+4. If password is compromised, revoke it at: https://myaccount.google.com/apppasswords
+5. Template file is safe to share - it has no real credentials
+
+================================================================================
+PROJECT CONTEXT - MALLIFY
+================================================================================
+
+Mallify is a virtual mall e-commerce platform with microservices architecture:
+
+Services (17 total):
+1. user-service (port 3001)
+2. product-service (port 3002)
+3. order-service (port 3003)
+4. payment-service (port 3004)
+5. boutique-service (port 3005)
+6. review-service (port 3006)
+7. wishlist-service (port 3007)
+8. chat-service (port 3008)
+9. notification-service (port 3009)
+10. delivery-service (port 3010)
+11. driver-service (port 3011)
+12. promotion-service (port 3012)
+13. analytics-service (port 3013)
+14. audit-service (port 3014)
+15. dispute-service (port 3015)
+16. message-broker-service (port 3016) - RabbitMQ management
+17. api-gateway (port 3000)
+
+Infrastructure:
+- MongoDB (port 27017)
+- Redis (port 6379)
+- RabbitMQ (port 5672, management 15672)
+
+All services are containerized with Docker and managed via docker-compose.yml
+
+Technology Stack:
+- Node.js 18-alpine
+- TypeScript 5.3.3
+- Express.js
+- MongoDB 7.0
+- Redis 7-alpine
+- RabbitMQ 3.12-management-alpine
+- Docker & Docker Compose
+
+Shared Package:
+- @mallify/shared - Common utilities used across all services
+- Includes: logger, error handlers, validators, types
+
+Git Repository:
+- GitHub: MiDeNiMeeD/Mallify
+- Main Branch: main
+- Development Branch: mallify-dev
+
+Recent Milestones:
+- ✅ Docker setup for all 17 microservices (commit 9b252bb)
+- ✅ Message broker service implementation (commit bd3f511)
+- ✅ Pull request merged: mallify-dev → main
+- ✅ Email notification system created
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: "Email config not found"
+Solution: Run .\setup-email-notifications.ps1 or copy template to .email-config.json
+
+Problem: "Failed to send email: Authentication failed"
+Solution: Check app password is correct, verify Gmail allows app passwords
+
+Problem: "Script cannot be loaded - execution policy"
+Solution: Run: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
+
+Problem: Emails not arriving
+Solution: 
+- Check spam folder
+- Verify recipient emails are correct
+- Test with .\notify.ps1 menu option 8 (Test Configuration)
+- Check Gmail account is not locked
+
+Problem: Unicode/emoji errors in PowerShell
+Solution: All emojis removed from send-notification.ps1 to prevent encoding issues
+
+================================================================================
+NEXT STEPS / TODO
+================================================================================
+
+Optional Enhancements:
+- [ ] Create Git hook wrappers for automatic notifications
+- [ ] Integrate with GitHub Actions for CI/CD notifications
+- [ ] Add email templates for different notification types
+- [ ] Create HTML email templates for better formatting
+- [ ] Add attachment support for reports/logs
+- [ ] Create separate notification preferences per team member
+- [ ] Add Slack/Teams integration as alternative to email
+
+================================================================================
+AI ASSISTANT INSTRUCTIONS
+================================================================================
+
+When reading this context in a new session:
+
+1. The email system is FULLY CONFIGURED and WORKING
+2. Do NOT recreate or modify existing files unless explicitly asked
+3. To send emails, use: cd DeGango; .\send-notification.ps1 [params]
+4. Recipients are Khalil (DevOps) and Mohamed (Developer)
+5. Never commit or push code unless user explicitly says "push the code"
+6. Email config contains sensitive data - handle with care
+7. System tested and verified working on March 1, 2026
+8. All files use plain ASCII - no emojis in PowerShell scripts
+
+Quick Reference Commands:
+- Send general notification: cd DeGango; .\notify.ps1
+- Send custom email: cd DeGango; .\send-notification.ps1 -Subject "X" -Body "Y" -EventType "Z"
+- Test config: cd DeGango; .\notify.ps1 [select option 8]
+- Reconfigure: cd DeGango; .\setup-email-notifications.ps1
+
+================================================================================
+CHANGELOG
+================================================================================
+
+March 1, 2026:
+- Created email notification system
+- Configured Gmail SMTP with app password
+- Set up two recipients (Khalil & Mohamed)
+- Created all PowerShell scripts and documentation
+- Tested successfully - 5 emails sent and delivered
+- Moved all files to DeGango folder
+- Created this context file for future reference
+
+================================================================================
+END OF CONTEXT
+================================================================================
+
+Last Updated: March 1, 2026
+System Status: ✅ OPERATIONAL
+Configuration Status: ✅ COMPLETE
+Testing Status: ✅ VERIFIED

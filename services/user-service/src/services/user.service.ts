@@ -1,5 +1,6 @@
+import mongoose from 'mongoose';
 import { User, IUser, DeliveryPerson } from '../models/user.model';
-import { NotFoundError } from '@mallify/shared';
+import { NotFoundError, BadRequestError } from '@mallify/shared';
 import { setCache, getCache, deleteCache } from '../config/redis';
 
 export class UserService {
@@ -183,6 +184,47 @@ export class UserService {
 
     user.documents[documentType] = documentUrl;
     await user.save();
+
+    // Clear cache
+    await deleteCache(`user:${userId}`);
+
+    return user;
+  }
+
+  async deleteUserByEmail(email: string): Promise<void> {
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      throw new NotFoundError('User');
+    }
+
+    // Clear cache
+    await deleteCache(`user:${user._id}`);
+
+    // Delete the user
+    await User.findByIdAndDelete(user._id);
+  }
+
+  async addBoutiqueToBoutiqueOwner(userId: string, boutiqueId: string): Promise<IUser> {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new NotFoundError('User');
+    }
+
+    if (user.role !== 'boutique_owner') {
+      throw new BadRequestError('User is not a boutique owner');
+    }
+
+    // Add boutique to the user's boutiqueList if not already present
+    const boutiqueOwner = user as any;
+    if (!boutiqueOwner.boutiqueList) {
+      boutiqueOwner.boutiqueList = [];
+    }
+
+    const boutiqueObjectId = new mongoose.Types.ObjectId(boutiqueId);
+    if (!boutiqueOwner.boutiqueList.some((id: any) => id.toString() === boutiqueId)) {
+      boutiqueOwner.boutiqueList.push(boutiqueObjectId);
+      await user.save();
+    }
 
     // Clear cache
     await deleteCache(`user:${userId}`);

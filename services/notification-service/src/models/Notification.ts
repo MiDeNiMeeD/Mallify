@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface INotification extends Document {
-  userId: mongoose.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId;
   type: 'email' | 'sms' | 'push' | 'in_app';
   channel: string;
   subject?: string;
@@ -28,7 +28,7 @@ const NotificationSchema: Schema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
       index: true
     },
     type: {

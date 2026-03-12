@@ -28,7 +28,14 @@ function AllOrders() {
         const response = await apiClient.getOrders({ boutiqueId });
         
         if (response.success) {
-          setOrders(response.data || []);
+          const ordersData = response.data;
+          if (Array.isArray(ordersData)) {
+            setOrders(ordersData);
+          } else if (ordersData?.orders && Array.isArray(ordersData.orders)) {
+            setOrders(ordersData.orders);
+          } else {
+            setOrders([]);
+          }
         } else {
           setError(response.message || 'Failed to fetch orders');
         }

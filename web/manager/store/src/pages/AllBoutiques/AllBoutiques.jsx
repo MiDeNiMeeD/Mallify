@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiShoppingBag, FiCheckCircle, FiClock, FiXCircle, FiEye } from 'react-icons/fi';
 import apiClient from '../../api/apiClient';
 import '../../styles/Dashboard.css';
 
 const AllBoutiques = () => {
+  const navigate = useNavigate();
   const [boutiques, setBoutiques] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,8 +18,35 @@ const AllBoutiques = () => {
   const fetchBoutiques = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.getBoutiques({ limit: 100 });
-      setBoutiques(response.data?.boutiques || []);
+      
+      // Fetch both boutiques and applications
+      const [boutiquesResponse, applicationsResponse] = await Promise.all([
+        apiClient.getBoutiques({ limit: 100 }),
+        apiClient.getBoutiqueApplications({ limit: 100 })
+      ]);
+      
+      const boutiquesData = boutiquesResponse.data?.boutiques || [];
+      const applications = applicationsResponse.data?.applications || [];
+      
+      // Map applications to match boutique structure
+      const mappedApplications = applications.map(app => ({
+        _id: app._id,
+        name: app.boutiqueName,
+        email: app.email,
+        status: app.status,
+        createdAt: app.submittedAt || app.createdAt,
+        productCount: 0,
+        totalSales: 0,
+        totalOrders: 0,
+        isApplication: true,
+        ownerName: app.ownerName,
+        phone: app.phone,
+        description: app.description
+      }));
+      
+      // Combine boutiques and applications
+      const allItems = [...boutiquesData, ...mappedApplications];
+      setBoutiques(allItems);
     } catch (error) {
       console.error('Error fetching boutiques:', error);
     } finally {
@@ -184,7 +213,22 @@ const AllBoutiques = () => {
                           />
                         )}
                         <div>
-                          <div style={{ fontWeight: 600 }}>{boutique.name}</div>
+                          <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            {boutique.name}
+                            {boutique.isApplication && (
+                              <span style={{ 
+                                fontSize: '0.65rem', 
+                                padding: '0.15rem 0.4rem', 
+                                background: 'var(--warning-color)',
+                                color: 'white',
+                                borderRadius: '4px',
+                                fontWeight: 500,
+                                whiteSpace: 'nowrap'
+                              }}>
+                                NEW APPLICATION
+                              </span>
+                            )}
+                          </div>
                           {boutique.description && (
                             <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                               {boutique.description.substring(0, 50)}...
@@ -199,12 +243,20 @@ const AllBoutiques = () => {
                         {boutique.status}
                       </span>
                     </td>
-                    <td>{boutique.productCount || 0}</td>
-                    <td style={{ fontWeight: 600 }}>{formatCurrency(boutique.totalSales || 0)}</td>
-                    <td>{boutique.totalOrders || 0}</td>
+                    <td>{boutique.status === 'pending' ? '—' : (boutique.productCount || 0)}</td>
+                    <td style={{ fontWeight: 600, color: boutique.status === 'pending' ? 'var(--warning-color)' : 'inherit' }}>
+                      {boutique.status === 'pending' ? 'Pending' : formatCurrency(boutique.totalSales || 0)}
+                    </td>
+                    <td style={{ color: boutique.status === 'pending' ? 'var(--warning-color)' : 'inherit' }}>
+                      {boutique.status === 'pending' ? 'Pending' : (boutique.totalOrders || 0)}
+                    </td>
                     <td>{new Date(boutique.createdAt).toLocaleDateString()}</td>
                     <td>
-                      <button className="btn btn-secondary" style={{ fontSize: '0.75rem', padding: '0.375rem 0.75rem' }}>
+                      <button 
+                        className="btn btn-secondary" 
+                        style={{ fontSize: '0.75rem', padding: '0.375rem 0.75rem' }}
+                        onClick={() => navigate(`/boutiques/${boutique._id}`)}
+                      >
                         <FiEye size={14} />
                         View
                       </button>

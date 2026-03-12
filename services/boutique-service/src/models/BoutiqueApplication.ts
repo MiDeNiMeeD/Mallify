@@ -5,12 +5,13 @@ export interface IBoutiqueApplication extends Document {
   ownerName: string;
   email: string;
   phone: string;
+  password: string; // Hashed password for boutique owner account
   address: string;
   city: string;
   description: string;
   category: string;
-  businessLicense: string; // URL to uploaded business license
-  taxCertificate: string; // URL to uploaded tax certificate
+  cinDocument: string; // URL to uploaded CIN document
+  emailVerified: boolean; // Email verification status
   status: 'pending' | 'approved' | 'rejected' | 'under_review';
   submittedAt: Date;
   reviewedAt?: Date;
@@ -42,6 +43,10 @@ const BoutiqueApplicationSchema: Schema = new Schema(
       required: true,
       trim: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
     address: {
       type: String,
       required: true,
@@ -72,13 +77,13 @@ const BoutiqueApplicationSchema: Schema = new Schema(
         'Other',
       ],
     },
-    businessLicense: {
+    cinDocument: {
       type: String,
       required: true,
     },
-    taxCertificate: {
-      type: String,
-      required: true,
+    emailVerified: {
+      type: Boolean,
+      default: true, // Must be verified before submission
     },
     status: {
       type: String,

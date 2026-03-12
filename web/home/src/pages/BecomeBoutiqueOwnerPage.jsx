@@ -22,17 +22,23 @@ const BecomeBoutiqueOwnerPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
   const [formData, setFormData] = useState({
     boutiqueName: "",
     ownerName: "",
     email: "",
+    password: "",
+    confirmPassword: "",
     phone: "",
     address: "",
     city: "",
     description: "",
     category: "",
-    businessLicense: null,
-    taxCertificate: null,
+    cinFile: null,
   });
 
   const steps = [
@@ -81,6 +87,51 @@ const BecomeBoutiqueOwnerPage = () => {
     });
   };
 
+  const sendOtpEmail = async () => {
+    console.log("sendOtpEmail called with email:", formData.email);
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      showToast("Please enter a valid email address.");
+      return;
+    }
+
+    setSendingOtp(true);
+    try {
+      // Generate 6-digit OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      setGeneratedOtp(otp);
+      
+      // Call API to send the email
+      console.log("Calling API to send OTP:", otp);
+      const response = await homeApiClient.sendOTP(formData.email, otp);
+      
+      if (response.success) {
+        showToast(`Verification code sent to ${formData.email}`, "success");
+        console.log("Setting showOtpModal to true");
+        setShowOtpModal(true);
+      } else {
+        showToast("Failed to send verification code. Please try again.", "error");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      showToast("Failed to send verification code. Please try again.", "error");
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const verifyOtp = () => {
+    if (otpCode === generatedOtp) {
+      setEmailVerified(true);
+      setShowOtpModal(false);
+      showToast("Email verified successfully!", "success");
+      setOtpCode("");
+    } else {
+      showToast("Invalid verification code. Please try again.", "error");
+    }
+  };
+
   const validateStep = () => {
     if (currentStep === 1) {
       if (!formData.boutiqueName || !formData.category || !formData.description) {
@@ -88,7 +139,7 @@ const BecomeBoutiqueOwnerPage = () => {
         return false;
       }
     } else if (currentStep === 2) {
-      if (!formData.ownerName || !formData.email || !formData.phone) {
+      if (!formData.ownerName || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
         showToast("Please fill in all required fields before proceeding.");
         return false;
       }
@@ -97,14 +148,32 @@ const BecomeBoutiqueOwnerPage = () => {
         showToast("Please enter a valid email address.");
         return false;
       }
+      if (!emailVerified) {
+        showToast("Please verify your email address before proceeding.");
+        return false;
+      }
+      if (formData.password.length < 8) {
+        showToast("Password must be at least 8 characters long.");
+        return false;
+      }
+      // Password complexity validation
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+      if (!passwordRegex.test(formData.password)) {
+        showToast("Password must contain at least one uppercase letter, one lowercase letter, and one number.");
+        return false;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        showToast("Passwords do not match.");
+        return false;
+      }
     } else if (currentStep === 3) {
       if (!formData.address || !formData.city) {
         showToast("Please fill in all required fields before proceeding.");
         return false;
       }
     } else if (currentStep === 4) {
-      if (!formData.businessLicense || !formData.taxCertificate) {
-        showToast("Please upload all required documents before proceeding.");
+      if (!formData.cinFile) {
+        showToast("Please upload your CIN document before proceeding.");
         return false;
       }
     }
@@ -167,14 +236,16 @@ const BecomeBoutiqueOwnerPage = () => {
             <div className="success-icon">
               <CheckCircle size={48} />
             </div>
-            <h2>Application Submitted!</h2>
+            <h2>Account Created Successfully!</h2>
             <p>
-              Thank you for applying to open a boutique on Mallify. We'll review
-              your application and get back to you within 2-3 business days.
+              Your boutique owner account has been created successfully. 
+              You can now log in to the manager dashboard using your email and password.
             </p>
-            <button className="btn-primary" onClick={() => navigate("/")}>
-              Return to Home <ArrowRight size={18} />
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button className="btn-primary" onClick={() => window.location.href = "http://192.168.56.1:3335"}>
+                Login <ArrowRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -326,13 +397,59 @@ const BecomeBoutiqueOwnerPage = () => {
 
                 <div className="form-group">
                   <label htmlFor="email">Email address</label>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="your.email@example.com"
+                      required
+                      disabled={emailVerified}
+                      style={{ flex: 1 }}
+                    />
+                    {!emailVerified ? (
+                      <button
+                        type="button"
+                        onClick={sendOtpEmail}
+                        disabled={sendingOtp || !formData.email}
+                        className="btn-secondary"
+                        style={{ whiteSpace: 'nowrap', padding: '12px 24px' }}
+                      >
+                        {sendingOtp ? "Sending..." : "Verify Email"}
+                      </button>
+                    ) : (
+                      <span style={{ color: 'var(--shopify-green)', fontWeight: 600, padding: '12px' }}>✓ Verified</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
                     onChange={handleChange}
-                    placeholder="your.email@example.com"
+                    placeholder="Enter password"
+                    required
+                  />
+                  <small style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem', display: 'block' }}>
+                    Must be at least 8 characters with uppercase, lowercase, and number
+                  </small>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Re-enter your password"
                     required
                   />
                 </div>
@@ -391,17 +508,17 @@ const BecomeBoutiqueOwnerPage = () => {
                 <h3 className="form-section-title">Required Documents</h3>
                 
                 <div className="form-group">
-                  <label>Business License</label>
+                  <label>National ID (CIN)</label>
                   <div className="file-upload">
                     <input
                       type="file"
-                      id="businessLicense"
-                      name="businessLicense"
+                      id="cinFile"
+                      name="cinFile"
                       onChange={handleFileChange}
                       accept=".jpg,.jpeg,.png,.pdf"
                       required
                     />
-                    <label htmlFor="businessLicense" className="file-upload-label">
+                    <label htmlFor="cinFile" className="file-upload-label">
                       <Upload size={32} />
                       <div className="file-upload-text">
                         <strong>Click to upload</strong> or drag and drop
@@ -411,35 +528,8 @@ const BecomeBoutiqueOwnerPage = () => {
                         </span>
                       </div>
                     </label>
-                    {formData.businessLicense && (
-                      <div className="file-name">✓ {formData.businessLicense.name}</div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Tax Certificate</label>
-                  <div className="file-upload">
-                    <input
-                      type="file"
-                      id="taxCertificate"
-                      name="taxCertificate"
-                      onChange={handleFileChange}
-                      accept=".jpg,.jpeg,.png,.pdf"
-                      required
-                    />
-                    <label htmlFor="taxCertificate" className="file-upload-label">
-                      <Upload size={32} />
-                      <div className="file-upload-text">
-                        <strong>Click to upload</strong> or drag and drop
-                        <br />
-                        <span style={{ fontSize: '13px', color: '#8c9196' }}>
-                          PDF, JPG or PNG (max. 10MB)
-                        </span>
-                      </div>
-                    </label>
-                    {formData.taxCertificate && (
-                      <div className="file-name">✓ {formData.taxCertificate.name}</div>
+                    {formData.cinFile && (
+                      <div className="file-name">✓ {formData.cinFile.name}</div>
                     )}
                   </div>
                 </div>
@@ -502,6 +592,51 @@ const BecomeBoutiqueOwnerPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* OTP Modal */}
+      {showOtpModal && (
+        <div className="modal-overlay" onClick={() => setShowOtpModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Verify Your Email</h3>
+            <p>We've sent a verification code to <strong>{formData.email}</strong></p>
+            <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '20px' }}>Enter the 6-digit code below:</p>
+            <input
+              type="text"
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              placeholder="000000"
+              maxLength="6"
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontSize: '24px',
+                textAlign: 'center',
+                letterSpacing: '8px',
+                border: '2px solid #e5e7eb',
+                borderRadius: '8px',
+                marginBottom: '20px'
+              }}
+            />
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={() => setShowOtpModal(false)}
+                className="btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={verifyOtp}
+                disabled={otpCode.length !== 6}
+                className="btn-primary"
+              >
+                Verify
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ToastContainer />
     </div>

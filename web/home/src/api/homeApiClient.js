@@ -9,6 +9,9 @@ export const API_ENDPOINTS = {
   // Boutique Applications  
   BOUTIQUE_APPLICATION: `${API_BASE_URL}/api/boutiques/applications`,
   
+  // Notifications
+  SEND_OTP: `${API_BASE_URL}/api/notifications/send-otp`,
+  
   // Public endpoints
   PRODUCTS: `${API_BASE_URL}/api/products`,
   BOUTIQUES: `${API_BASE_URL}/api/boutiques`,
@@ -72,20 +75,18 @@ class HomeApiClient {
   // Boutique Application
   async submitBoutiqueApplication(formData) {
     const data = new FormData();
-    data.append('name', formData.boutiqueName);
+    data.append('boutiqueName', formData.boutiqueName);
     data.append('ownerName', formData.ownerName);
     data.append('email', formData.email);
     data.append('phone', formData.phone);
+    data.append('password', formData.password); // Send password to be hashed on backend
     data.append('address', formData.address);
     data.append('city', formData.city);
     data.append('description', formData.description);
     data.append('category', formData.category);
     
-    if (formData.businessLicense) {
-      data.append('businessLicense', formData.businessLicense);
-    }
-    if (formData.taxCertificate) {
-      data.append('taxCertificate', formData.taxCertificate);
+    if (formData.cinFile) {
+      data.append('cinDocument', formData.cinFile);
     }
 
     return await this.request(API_ENDPOINTS.BOUTIQUE_APPLICATION, {
@@ -111,6 +112,14 @@ class HomeApiClient {
   // Get active promotions
   async getPromotions() {
     return await this.request(API_ENDPOINTS.PROMOTIONS);
+  }
+
+  // Send OTP email
+  async sendOTP(email, otp) {
+    return await this.request(API_ENDPOINTS.SEND_OTP, {
+      method: 'POST',
+      body: JSON.stringify({ email, otp }),
+    });
   }
 }
 

@@ -190,9 +190,8 @@ const BoutiqueSchema = new Schema<IBoutique>(
   }
 );
 
-// Indexes
+// Indexes (slug index already created by unique: true)
 BoutiqueSchema.index({ ownerId: 1, status: 1 });
-BoutiqueSchema.index({ slug: 1 });
 BoutiqueSchema.index({ status: 1, featured: 1 });
 BoutiqueSchema.index({ 'address.city': 1, 'address.country': 1 });
 BoutiqueSchema.index({ name: 'text', description: 'text' });

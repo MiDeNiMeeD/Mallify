@@ -53,6 +53,25 @@ export class UserController {
     const user = await userService.updateDeliveryPersonApplication(userId, status);
     return ResponseFormatter.success(res, user, 'Application status updated successfully');
   });
+
+  deleteUserByEmail = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const { email } = req.params;
+    await userService.deleteUserByEmail(email);
+    return ResponseFormatter.success(res, null, 'User deleted successfully');
+  });
+
+  getUserByEmail = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const { email } = req.params;
+    const user = await userService.getUserByEmail(email);
+    return ResponseFormatter.success(res, user, 'User retrieved successfully');
+  });
+
+  addBoutique = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const { userId } = req.params;
+    const { boutiqueId } = req.body;
+    const user = await userService.addBoutiqueToBoutiqueOwner(userId, boutiqueId);
+    return ResponseFormatter.success(res, user, 'Boutique added to user successfully');
+  });
 }
 
 export default new UserController();

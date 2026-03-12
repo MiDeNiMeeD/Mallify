@@ -368,11 +368,34 @@ class ApiClient {
     try {
       // Fetch orders for boutique
       const ordersResponse = await this.getOrders({ boutiqueId });
-      const orders = ordersResponse.data || [];
+      
+      // Handle different response structures
+      let orders = [];
+      if (ordersResponse.data) {
+        if (Array.isArray(ordersResponse.data)) {
+          orders = ordersResponse.data;
+        } else if (ordersResponse.data.orders && Array.isArray(ordersResponse.data.orders)) {
+          orders = ordersResponse.data.orders;
+        } else if (typeof ordersResponse.data === 'object') {
+          // If data is an object but not an array, it might be empty or have different structure
+          orders = [];
+        }
+      }
       
       // Fetch products for boutique
       const productsResponse = await this.getProductsByBoutique(boutiqueId);
-      const products = productsResponse.data || [];
+      
+      // Handle different response structures for products
+      let products = [];
+      if (productsResponse.data) {
+        if (Array.isArray(productsResponse.data)) {
+          products = productsResponse.data;
+        } else if (productsResponse.data.products && Array.isArray(productsResponse.data.products)) {
+          products = productsResponse.data.products;
+        } else if (typeof productsResponse.data === 'object') {
+          products = [];
+        }
+      }
       
       // Calculate stats
       const totalOrders = orders.length;

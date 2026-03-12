@@ -24,7 +24,14 @@ function CustomerMessages() {
         setLoading(true);
         const response = await apiClient.getMessages({ boutiqueId: user.boutiqueList[0] });
         if (response.success) {
-          setMessages(response.data || []);
+          const messagesData = response.data;
+          if (Array.isArray(messagesData)) {
+            setMessages(messagesData);
+          } else if (messagesData?.messages && Array.isArray(messagesData.messages)) {
+            setMessages(messagesData.messages);
+          } else {
+            setMessages([]);
+          }
         }
       } catch (err) {
         console.error('Error fetching messages:', err);

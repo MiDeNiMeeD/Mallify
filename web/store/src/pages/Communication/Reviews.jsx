@@ -24,7 +24,14 @@ function Reviews() {
         setLoading(true);
         const response = await apiClient.getReviews({ boutiqueId: user.boutiqueList[0] });
         if (response.success) {
-          setReviews(response.data || []);
+          const reviewsData = response.data;
+          if (Array.isArray(reviewsData)) {
+            setReviews(reviewsData);
+          } else if (reviewsData?.reviews && Array.isArray(reviewsData.reviews)) {
+            setReviews(reviewsData.reviews);
+          } else {
+            setReviews([]);
+          }
         }
       } catch (err) {
         console.error('Error fetching reviews:', err);

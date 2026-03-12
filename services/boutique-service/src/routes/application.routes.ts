@@ -1,5 +1,5 @@
 import express from 'express';
-import { submitApplication, getAllApplications, getApplicationById, updateApplicationStatus, upload } from '../controllers/application.controller';
+import { submitApplication, getAllApplications, getApplicationById, updateApplicationStatus, deleteApplication, upload } from '../controllers/application.controller';
 
 const router = express.Router();
 
@@ -7,8 +7,7 @@ const router = express.Router();
 router.post(
   '/applications',
   upload.fields([
-    { name: 'businessLicense', maxCount: 1 },
-    { name: 'taxCertificate', maxCount: 1 }
+    { name: 'cinDocument', maxCount: 1 }
   ]),
   submitApplication
 );
@@ -17,5 +16,6 @@ router.post(
 router.get('/applications', getAllApplications);
 router.get('/applications/:id', getApplicationById);
 router.patch('/applications/:id/status', updateApplicationStatus);
+router.delete('/applications/:id', deleteApplication);
 
 export default router;

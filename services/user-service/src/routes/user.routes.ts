@@ -78,4 +78,25 @@ router.put(
   userController.updateApplicationStatus
 );
 
+/**
+ * @route   DELETE /api/users/email/:email
+ * @desc    Delete user by email (for cleanup after application rejection)
+ * @access  Service to Service (no auth required for internal services)
+ */
+router.delete('/email/:email', userController.deleteUserByEmail);
+
+/**
+ * @route   GET /api/users/by-email/:email
+ * @desc    Get user by email (for service-to-service calls)
+ * @access  Service to Service (no auth required for internal services)
+ */
+router.get('/by-email/:email', userController.getUserByEmail);
+
+/**
+ * @route   PUT /api/users/:userId/boutiques
+ * @desc    Add boutique to user's boutiqueList (for service-to-service calls)
+ * @access  Service to Service (no auth required for internal services)
+ */
+router.put('/:userId/boutiques', userController.addBoutique);
+
 export default router;

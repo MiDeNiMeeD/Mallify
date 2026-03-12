@@ -6,8 +6,7 @@ import DashboardLayout from "./components/Layout/DashboardLayout";
 import DashboardOverview from "./pages/DashboardOverview/DashboardOverview";
 import AllBoutiques from "./pages/AllBoutiques/AllBoutiques";
 import PendingBoutiques from "./pages/Boutiques/PendingBoutiques";
-import VerifiedBoutiques from "./pages/Boutiques/VerifiedBoutiques";
-import BoutiqueApprovals from "./pages/BoutiqueApprovals/BoutiqueApprovals";
+import VerifiedBoutiques from "./pages/Boutiques/VerifiedBoutiques";import BoutiqueDetail from './pages/Boutiques/BoutiqueDetail';import BoutiqueApprovals from "./pages/BoutiqueApprovals/BoutiqueApprovals";
 import Analytics from "./pages/Analytics/Analytics";
 import AnalyticsReports from "./pages/Analytics/AnalyticsReports";
 import AnalyticsInsights from "./pages/Analytics/AnalyticsInsights";
@@ -76,6 +75,17 @@ function AppRoutes() {
           <ProtectedRoute>
             <DashboardLayout>
               <VerifiedBoutiques />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/boutiques/:id" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <BoutiqueDetail />
             </DashboardLayout>
           </ProtectedRoute>
         } 
