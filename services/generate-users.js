@@ -120,7 +120,7 @@ async function main() {
   
   console.log('Copy and paste this into MongoDB Compass Shell:\n');
   console.log('========================================\n');
-  console.log('use mallify_users\n');
+  console.log('use mallify\n');
   console.log('db.users.insertMany(');
   console.log(JSON.stringify(users, null, 2));
   console.log(')\n');

@@ -18,6 +18,8 @@ export const API_ENDPOINTS = {
   // Products
   PRODUCTS: `${API_BASE_URL}/api/products`,
   PRODUCT_BY_ID: (id) => `${API_BASE_URL}/api/products/${id}`,
+  PRODUCTS_BY_BOUTIQUE: (boutiqueId) => `${API_BASE_URL}/api/products/boutique/${boutiqueId}`,
+  PRODUCT_STOCK: (id) => `${API_BASE_URL}/api/products/${id}/stock`,
   
   // Boutiques
   BOUTIQUES: `${API_BASE_URL}/api/boutiques`,
@@ -141,6 +143,41 @@ class ApiClient {
 
   async getProductById(id) {
     return await this.request(API_ENDPOINTS.PRODUCT_BY_ID(id));
+  }
+
+  async getProductsByBoutique(boutiqueId, params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString
+      ? `${API_ENDPOINTS.PRODUCTS_BY_BOUTIQUE(boutiqueId)}?${queryString}`
+      : API_ENDPOINTS.PRODUCTS_BY_BOUTIQUE(boutiqueId);
+    return await this.request(url);
+  }
+
+  async createProduct(productData) {
+    return await this.request(API_ENDPOINTS.PRODUCTS, {
+      method: 'POST',
+      body: JSON.stringify(productData),
+    });
+  }
+
+  async updateProduct(id, productData) {
+    return await this.request(API_ENDPOINTS.PRODUCT_BY_ID(id), {
+      method: 'PUT',
+      body: JSON.stringify(productData),
+    });
+  }
+
+  async updateProductStock(id, quantity) {
+    return await this.request(API_ENDPOINTS.PRODUCT_STOCK(id), {
+      method: 'PATCH',
+      body: JSON.stringify({ quantity }),
+    });
+  }
+
+  async deleteProduct(id) {
+    return await this.request(API_ENDPOINTS.PRODUCT_BY_ID(id), {
+      method: 'DELETE',
+    });
   }
 
   // Boutique methods

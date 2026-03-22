@@ -143,7 +143,7 @@ echo 3. Paste the connection string above
 echo 4. Click "Connect"
 echo.
 echo Available Databases:
-echo - mallify_users
+echo - mallify
 echo - mallify_boutiques
 echo - mallify_products
 echo - mallify_orders

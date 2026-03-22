@@ -12,6 +12,7 @@ import productRoutes from './routes/product.routes';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3002;
+const BODY_LIMIT = process.env.BODY_LIMIT || '10mb';
 const logger = createLogger('product-service');
 
 // ============================================
@@ -21,8 +22,8 @@ const logger = createLogger('product-service');
 app.use(helmet());
 app.use(compression());
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: BODY_LIMIT }));
+app.use(express.urlencoded({ extended: true, limit: BODY_LIMIT }));
 
 // Request logging
 app.use((req: Request, _res: Response, next) => {

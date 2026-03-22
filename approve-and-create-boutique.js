@@ -19,11 +19,10 @@ async function approveApplicationAndCreateBoutique() {
     console.log('✅ Connected to MongoDB\n');
 
     const mallifyDb = client.db('mallify');
-    const usersDb = client.db('mallify_users');
     
     const applicationsCollection = mallifyDb.collection('boutiqueapplications');
     const boutiquesCollection = mallifyDb.collection('boutiques');
-    const usersCollection = usersDb.collection('users');
+    const usersCollection = mallifyDb.collection('users');
 
     // Find the application
     console.log(`🔍 Finding application for: ${EMAIL_TO_APPROVE}`);

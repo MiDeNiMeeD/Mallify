@@ -21,8 +21,8 @@ async function createBoutiqueUser() {
     console.log('✅ Connected to MongoDB');
 
     // Get boutique application data
-    const boutiqueDb = client.db('mallify');
-    const applicationsCollection = boutiqueDb.collection('boutiqueapplications');
+    const mallifyDb = client.db('mallify');
+    const applicationsCollection = mallifyDb.collection('boutiqueapplications');
     
     const application = await applicationsCollection.findOne({ email: EMAIL.toLowerCase() });
     
@@ -37,10 +37,9 @@ async function createBoutiqueUser() {
     console.log('\n🔐 Hashing password...');
     const hashedPassword = await bcrypt.hash(PASSWORD, 10);
 
-    // Create user in mallify_users database
+    // Create user in mallify database
     console.log('\n📝 Creating user account...');
-    const usersDb = client.db('mallify_users');
-    const usersCollection = usersDb.collection('users');
+    const usersCollection = mallifyDb.collection('users');
     
     // Check if user already exists
     const existingUser = await usersCollection.findOne({ email: EMAIL.toLowerCase() });

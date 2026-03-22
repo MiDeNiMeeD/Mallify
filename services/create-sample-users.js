@@ -1,8 +1,8 @@
 // MongoDB Script to Create Sample Users
 // Run this in MongoDB Compass Shell (mongosh) or MongoDB Shell
 
-// Switch to mallify_users database
-use mallify_users
+// Switch to mallify database
+use mallify
 
 // Helper function to hash passwords (bcrypt simulation for manual entry)
 // Note: In production, passwords are hashed by the User Service

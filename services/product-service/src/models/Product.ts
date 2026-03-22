@@ -161,7 +161,7 @@ const ProductSchema = new Schema<IProduct>(
     },
     status: {
       type: String,
-      enum: ['draft', 'active', 'archived'],
+      enum: ['draft', 'active', 'archived', 'suspended'],
       default: 'draft',
     },
     featured: {

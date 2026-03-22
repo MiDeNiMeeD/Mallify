@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import apiClient from '../api/apiClient';
 
 const AuthContext = createContext(null);
@@ -7,19 +7,54 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [applicationInfo, setApplicationInfo] = useState(null);
+  const [applicationLoading, setApplicationLoading] = useState(false);
+
+  const loadApplicationInfo = useCallback(async (email) => {
+    if (!email) {
+      setApplicationInfo(null);
+      return null;
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      setApplicationInfo(null);
+      return null;
+    }
+
+    try {
+      setApplicationLoading(true);
+      const response = await apiClient.getBoutiqueApplicationStatus(normalizedEmail);
+      const application = response?.data?.applications?.[0] || null;
+      setApplicationInfo(application);
+      return application;
+    } catch (error) {
+      console.error('Failed to fetch boutique application status', error);
+      setApplicationInfo(null);
+      return null;
+    } finally {
+      setApplicationLoading(false);
+    }
+  }, []);
 
   // Check if user is logged in on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('accessToken');
-    
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
-    
-    setLoading(false);
-  }, []);
+    const initializeAuth = async () => {
+      const storedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('accessToken');
+
+      if (storedUser && token) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+        await loadApplicationInfo(parsedUser.email);
+      }
+
+      setLoading(false);
+    };
+
+    initializeAuth();
+  }, [loadApplicationInfo]);
 
   const login = async (email, password) => {
     try {
@@ -43,6 +78,7 @@ export const AuthProvider = ({ children }) => {
         
         setUser(user);
         setIsAuthenticated(true);
+        await loadApplicationInfo(user.email);
         return { success: true, user };
       }
       
@@ -78,6 +114,7 @@ export const AuthProvider = ({ children }) => {
     apiClient.logout();
     setUser(null);
     setIsAuthenticated(false);
+    setApplicationInfo(null);
   };
 
   const updateUser = (updatedUser) => {
@@ -89,10 +126,13 @@ export const AuthProvider = ({ children }) => {
     user,
     isAuthenticated,
     loading,
+    applicationInfo,
+    applicationLoading,
     login,
     register,
     logout,
     updateUser,
+    refreshApplicationStatus: () => loadApplicationInfo(user?.email),
   };
 
   return (

@@ -255,18 +255,7 @@ const DashboardOverview = () => {
                           <div>
                             <div style={{ fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                               {boutique.name || 'Unnamed Boutique'}
-                              {boutique.isApplication && (
-                                <span style={{ 
-                                  fontSize: '0.65rem', 
-                                  padding: '0.15rem 0.4rem', 
-                                  background: 'var(--warning-color)',
-                                  color: 'white',
-                                  borderRadius: '4px',
-                                  fontWeight: 500
-                                }}>
-                                  NEW APPLICATION
-                                </span>
-                              )}
+                             
                             </div>
                             <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                               {boutique.email || 'N/A'}

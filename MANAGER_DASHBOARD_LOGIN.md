@@ -141,7 +141,7 @@ if (parsedUser.role === 'boutiques_manager') {
 ### "Invalid email or password"
 - Verify MongoDB has users (run `run-create-users.cmd` if needed)
 - Check MongoDB Compass at `mongodb://localhost:27017`
-- Database: `mallify_users`, Collection: `users`
+- Database: `mallify`, Collection: `users`
 
 ### "Access denied" for boutiques.manager@mallify.com
 - This should not happen - contact developer

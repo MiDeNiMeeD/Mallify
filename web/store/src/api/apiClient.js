@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
   BOUTIQUES: `${API_BASE_URL}/api/boutiques`,
   BOUTIQUE_BY_ID: (id) => `${API_BASE_URL}/api/boutiques/${id}`,
   BOUTIQUE_BY_SLUG: (slug) => `${API_BASE_URL}/api/boutiques/slug/${slug}`,
+  BOUTIQUE_APPLICATIONS: `${API_BASE_URL}/api/boutiques/applications`,
   
   // Orders
   ORDERS: `${API_BASE_URL}/api/orders`,
@@ -176,6 +177,12 @@ class ApiClient {
 
   async getBoutiqueById(id) {
     return await this.request(API_ENDPOINTS.BOUTIQUE_BY_ID(id));
+  }
+
+  async getBoutiqueApplicationStatus(email) {
+    const params = new URLSearchParams({ email, limit: 1 }).toString();
+    const url = `${API_ENDPOINTS.BOUTIQUE_APPLICATIONS}?${params}`;
+    return await this.request(url, { method: 'GET' });
   }
 
   // Order methods

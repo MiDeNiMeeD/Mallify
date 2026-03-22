@@ -1,317 +1,426 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
+import {
+  FiArrowRight,
+  FiCheckCircle,
+  FiClock,
+  FiGift,
+  FiLayers,
+  FiSettings,
+  FiShield,
+  FiTrendingUp,
+  FiZap
+} from 'react-icons/fi';
 import '../../styles/Dashboard.css';
+import './Promotions.css';
+
+const initialPlanTiers = [
+  {
+    id: 'launch',
+    name: 'Launch Pass',
+    badge: 'Starter',
+    price: 39,
+    cadence: 'per month',
+    tagline: 'Everything a new boutique needs to ship its first orders.',
+    bestFor: 'Solo founders and first boutiques',
+    limits: ['Up to 80 products', 'Unlimited orders', 'Standard support'],
+    features: [
+      'Set up branded boutique vitrine and working hours',
+      'Manage products, inventory alerts, and low-stock warnings',
+      'Receive notifications for new orders and customer chats',
+      'Schedule basic promotions and discounts'
+    ]
+  },
+  {
+    id: 'growth',
+    name: 'Growth Studio',
+    badge: 'Most popular',
+    price: 79,
+    cadence: 'per month',
+    tagline: 'Automation and AI guidance for scaling boutiques.',
+    bestFor: 'Growing multi-channel teams',
+    limits: ['Up to 300 products', 'Priority routing on orders', 'Same-day support'],
+    highlighted: true,
+    features: [
+      'AI-driven inventory forecasting and auto re-order signals',
+      'Dynamic pricing suggestions and segmented promotions',
+      'Advanced analytics with retention and revenue breakdowns',
+      'Customer review management and loyalty nudges'
+    ]
+  },
+  {
+    id: 'elite',
+    name: 'Elite Commerce',
+    badge: 'Enterprise',
+    price: 149,
+    cadence: 'per month',
+    tagline: 'Full-service control room for multi-boutique groups.',
+    bestFor: 'Boutiques with regional teams',
+    limits: ['Unlimited products', 'Dedicated success partner', '24/7 support'],
+    features: [
+      'Custom promotions, flash sales, and bundled campaigns',
+      'Team permissions, workflow automation, and SLA tracking',
+      'AI-powered customer segmentation for hyper-targeted outreach',
+      'White-glove onboarding plus quarterly strategy reviews'
+    ]
+  }
+];
+
+const createInitialPlans = () =>
+  initialPlanTiers.map((plan) => ({
+    ...plan,
+    limits: [...plan.limits],
+    features: [...plan.features]
+  }));
+
+const featureMatrix = [
+  { label: 'Boutique vitrine & branding', launch: true, growth: true, elite: true },
+  { label: 'Inventory alerts & stock analytics', launch: true, growth: true, elite: true },
+  { label: 'AI inventory forecasting', launch: false, growth: true, elite: true },
+  { label: 'Dynamic pricing and coupons', launch: true, growth: true, elite: true },
+  { label: 'Advanced sales & retention analytics', launch: false, growth: true, elite: true },
+  { label: 'Customer review management', launch: true, growth: true, elite: true },
+  { label: 'Dedicated success partner', launch: false, growth: false, elite: true },
+  { label: 'Automation & workflow rules', launch: false, growth: true, elite: true }
+];
+
+const onboardingFlow = [
+  {
+    title: 'Subscribe to a plan',
+    detail: 'Pick the abonnement level that matches your boutique roadmap.',
+    icon: FiCheckCircle
+  },
+  {
+    title: 'Configure your vitrine',
+    detail: 'Upload branding, set working hours, delivery zones, and policies.',
+    icon: FiSettings
+  },
+  {
+    title: 'Connect inventory + catalog',
+    detail: 'Import products, enable stock alerts, and draft launch promotions.',
+    icon: FiLayers
+  },
+  {
+    title: 'Go live & monitor',
+    detail: 'Track orders, respond to customers, and optimize with AI signals.',
+    icon: FiTrendingUp
+  }
+];
+
+const valueHighlights = [
+  {
+    title: 'Set up & manage boutiques',
+    description: 'Handle vitrine design, branding assets, and working hours from one workspace.',
+    icon: FiZap
+  },
+  {
+    title: 'Run promotions and coupons',
+    description: 'Plan flash sales, loyalty incentives, and targeted discount codes.',
+    icon: FiGift
+  },
+  {
+    title: 'Stay in control of orders',
+    description: 'View, approve, and prepare orders while syncing with delivery teams.',
+    icon: FiClock
+  },
+  {
+    title: 'Protect operations',
+    description: 'Manage returns, refunds, and compliance with audit-ready logs.',
+    icon: FiShield
+  }
+];
 
 const Promotions = () => {
-  const [loading, setLoading] = useState(false);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [promotions, setPromotions] = useState([
-    {
-      id: 1,
-      name: 'Summer Sale 2024',
-      type: 'percentage',
-      value: 20,
-      status: 'active',
-      startDate: '2024-06-01',
-      endDate: '2024-08-31',
-      usageCount: 156,
-      maxUsage: 1000,
-      appliedTo: 'All boutiques'
-    },
-    {
-      id: 2,
-      name: 'New Customer Discount',
-      type: 'fixed',
-      value: 10,
-      status: 'active',
-      startDate: '2024-01-01',
-      endDate: '2024-12-31',
-      usageCount: 423,
-      maxUsage: null,
-      appliedTo: 'New customers'
-    },
-    {
-      id: 3,
-      name: 'Black Friday',
-      type: 'percentage',
-      value: 30,
-      status: 'scheduled',
-      startDate: '2024-11-24',
-      endDate: '2024-11-30',
-      usageCount: 0,
-      maxUsage: 5000,
-      appliedTo: 'All boutiques'
-    },
-    {
-      id: 4,
-      name: 'Spring Clearance',
-      type: 'percentage',
-      value: 25,
-      status: 'expired',
-      startDate: '2024-03-01',
-      endDate: '2024-05-31',
-      usageCount: 892,
-      maxUsage: 1000,
-      appliedTo: 'All boutiques'
-    }
-  ]);
+  const [plans, setPlans] = useState(createInitialPlans);
+  const [selectedPlanId, setSelectedPlanId] = useState(initialPlanTiers[1]?.id ?? initialPlanTiers[0].id);
+  const [editingPlanId, setEditingPlanId] = useState(initialPlanTiers[0].id);
 
-  const [newPromotion, setNewPromotion] = useState({
-    name: '',
-    type: 'percentage',
-    value: '',
-    startDate: '',
-    endDate: '',
-    maxUsage: '',
-    appliedTo: 'all'
-  });
+  const selectedPlan = useMemo(
+    () => plans.find((plan) => plan.id === selectedPlanId) ?? plans[0],
+    [plans, selectedPlanId]
+  );
 
-  const stats = {
-    active: promotions.filter(p => p.status === 'active').length,
-    scheduled: promotions.filter(p => p.status === 'scheduled').length,
-    expired: promotions.filter(p => p.status === 'expired').length,
-    total: promotions.length
+  const editingPlan = useMemo(
+    () => plans.find((plan) => plan.id === editingPlanId) ?? plans[0],
+    [plans, editingPlanId]
+  );
+
+  const featureColumns = useMemo(
+    () => {
+      const focusedId = selectedPlan ? selectedPlan.id : '';
+      return {
+        launch: focusedId === 'launch',
+        growth: focusedId === 'growth',
+        elite: focusedId === 'elite'
+      };
+    },
+    [selectedPlan]
+  );
+
+  const handlePlanFieldChange = (field, value) => {
+    setPlans((prev) => prev.map((plan) => (plan.id === editingPlanId ? { ...plan, [field]: value } : plan)));
   };
 
-  const handleCreatePromotion = (e) => {
-    e.preventDefault();
-    const newPromo = {
-      id: promotions.length + 1,
-      ...newPromotion,
-      status: 'scheduled',
-      usageCount: 0,
-      maxUsage: newPromotion.maxUsage ? parseInt(newPromotion.maxUsage) : null,
-      value: parseInt(newPromotion.value),
-      appliedTo: newPromotion.appliedTo === 'all' ? 'All boutiques' : 'Selected boutiques'
-    };
-    setPromotions([newPromo, ...promotions]);
-    setShowCreateForm(false);
-    setNewPromotion({
-      name: '',
-      type: 'percentage',
-      value: '',
-      startDate: '',
-      endDate: '',
-      maxUsage: '',
-      appliedTo: 'all'
-    });
+  const handleListFieldChange = (field, rawValue) => {
+    const list = rawValue
+      .split('\n')
+      .map((item) => item.trim())
+      .filter(Boolean);
+    handlePlanFieldChange(field, list);
   };
 
-  const getStatusBadge = (status) => {
-    const badges = {
-      active: <span className="promo-badge active">Active</span>,
-      scheduled: <span className="promo-badge scheduled">Scheduled</span>,
-      expired: <span className="promo-badge expired">Expired</span>
-    };
-    return badges[status];
-  };
-
-  const formatValue = (type, value) => {
-    return type === 'percentage' ? `${value}%` : `$${value}`;
+  const handleResetPlans = () => {
+    setPlans(createInitialPlans());
   };
 
   return (
-    <div className="promotions">
-      {/* Stats Overview */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon active">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/>
-            </svg>
-          </div>
-          <div className="stat-info">
-            <div className="stat-value">{stats.active}</div>
-            <div className="stat-label">Active Promotions</div>
-          </div>
+    <div className="promotions subscription-plans">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Boutique Abonnement Plans</h1>
+          <p className="page-subtitle">
+            Pick the plan that keeps your boutique launching, scaling, and delivering premium service.
+          </p>
         </div>
-
-        <div className="stat-card">
-          <div className="stat-icon scheduled">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
-            </svg>
-          </div>
-          <div className="stat-info">
-            <div className="stat-value">{stats.scheduled}</div>
-            <div className="stat-label">Scheduled</div>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon expired">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </div>
-          <div className="stat-info">
-            <div className="stat-value">{stats.expired}</div>
-            <div className="stat-label">Expired</div>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon total">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
-            </svg>
-          </div>
-          <div className="stat-info">
-            <div className="stat-value">{stats.total}</div>
-            <div className="stat-label">Total Promotions</div>
-          </div>
+        <div className="page-actions">
+          <button type="button" className="btn btn-secondary">
+            Download brochure
+          </button>
+          <button type="button" className="btn btn-primary">
+            Talk to success team
+          </button>
         </div>
       </div>
 
-      {/* Action Bar */}
-      <div className="action-bar">
-        <button className="btn-create" onClick={() => setShowCreateForm(!showCreateForm)}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          Create New Promotion
-        </button>
-      </div>
-
-      {/* Create Form */}
-      {showCreateForm && (
-        <div className="create-form-card">
-          <h3>Create New Promotion</h3>
-          <form onSubmit={handleCreatePromotion}>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Promotion Name</label>
-                <input
-                  type="text"
-                  value={newPromotion.name}
-                  onChange={(e) => setNewPromotion({...newPromotion, name: e.target.value})}
-                  required
-                  placeholder="e.g., Summer Sale 2024"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Discount Type</label>
-                <select
-                  value={newPromotion.type}
-                  onChange={(e) => setNewPromotion({...newPromotion, type: e.target.value})}
-                >
-                  <option value="percentage">Percentage</option>
-                  <option value="fixed">Fixed Amount</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Discount Value</label>
-                <input
-                  type="number"
-                  value={newPromotion.value}
-                  onChange={(e) => setNewPromotion({...newPromotion, value: e.target.value})}
-                  required
-                  placeholder={newPromotion.type === 'percentage' ? '20' : '10'}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Apply To</label>
-                <select
-                  value={newPromotion.appliedTo}
-                  onChange={(e) => setNewPromotion({...newPromotion, appliedTo: e.target.value})}
-                >
-                  <option value="all">All Boutiques</option>
-                  <option value="selected">Selected Boutiques</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Start Date</label>
-                <input
-                  type="date"
-                  value={newPromotion.startDate}
-                  onChange={(e) => setNewPromotion({...newPromotion, startDate: e.target.value})}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>End Date</label>
-                <input
-                  type="date"
-                  value={newPromotion.endDate}
-                  onChange={(e) => setNewPromotion({...newPromotion, endDate: e.target.value})}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Max Usage (Optional)</label>
-                <input
-                  type="number"
-                  value={newPromotion.maxUsage}
-                  onChange={(e) => setNewPromotion({...newPromotion, maxUsage: e.target.value})}
-                  placeholder="Leave empty for unlimited"
-                />
-              </div>
-            </div>
-
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={() => setShowCreateForm(false)}>
-                Cancel
-              </button>
-              <button type="submit" className="btn-submit">
-                Create Promotion
-              </button>
-            </div>
-          </form>
+      <section className="plan-hero">
+        <div>
+          <p className="kicker">Mallify commerce suite</p>
+          <h2>Create, launch, and scale your boutique abonnement</h2>
+          <p>
+            Every plan covers the essentials: boutique branding, catalog management, order orchestration, promotions, and
+            direct communication with customers. Upgrade to unlock AI-assisted forecasting, targeted campaigns, and
+            dedicated success guidance.
+          </p>
         </div>
-      )}
+        <div className="hero-summary">
+          <div>
+            <strong>72%</strong>
+            <span>of boutique owners upgrade within two quarters.</span>
+          </div>
+          <div>
+            <strong>24/7</strong>
+            <span>support available on Elite Commerce.</span>
+          </div>
+        </div>
+      </section>
 
-      {/* Promotions Table */}
-      <div className="table-card">
-        <h3>All Promotions</h3>
-        <div className="table-container">
-          <table className="data-table">
+      <section className="plan-grid">
+        {plans.map((plan) => (
+          <article
+            key={plan.id}
+            className={`plan-card ${plan.highlighted ? 'plan-card--highlighted' : ''}`}
+            onMouseEnter={() => setSelectedPlanId(plan.id)}
+          >
+            <div className="plan-card__header">
+              <span className="plan-badge">{plan.badge}</span>
+              <h3>{plan.name}</h3>
+              <p>{plan.tagline}</p>
+            </div>
+            <div className="plan-card__price">
+              <strong>${plan.price}</strong>
+              <span>{plan.cadence}</span>
+            </div>
+            <ul className="plan-card__limits">
+              {plan.limits.map((limit) => (
+                <li key={limit}>{limit}</li>
+              ))}
+            </ul>
+            <ul className="plan-card__features">
+              {plan.features.map((feature) => (
+                <li key={feature}>
+                  <FiCheckCircle />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <button type="button" className="plan-card__cta">
+              Subscribe <FiArrowRight />
+            </button>
+            <span className="plan-card__footnote">{plan.bestFor}</span>
+          </article>
+        ))}
+      </section>
+
+      <section className="plan-editor content-card">
+        <div className="card-header">
+          <div>
+            <p className="card-kicker">Plan settings</p>
+            <h3 className="card-title">Edit abonnement details</h3>
+          </div>
+          <button type="button" className="btn btn-secondary" onClick={handleResetPlans}>
+            Reset to defaults
+          </button>
+        </div>
+        <div className="plan-editor__controls">
+          <label htmlFor="planSelector">Plan to edit</label>
+          <select id="planSelector" value={editingPlanId} onChange={(e) => setEditingPlanId(e.target.value)}>
+            {plans.map((plan) => (
+              <option key={`edit-${plan.id}`} value={plan.id}>
+                {plan.name}
+              </option>
+            ))}
+          </select>
+          <span className="plan-editor__hint">Changes sync instantly to the cards above.</span>
+        </div>
+        {editingPlan && (
+          <div className="plan-editor__grid">
+            <div className="plan-editor__field">
+              <label htmlFor="planName">Display name</label>
+              <input
+                id="planName"
+                type="text"
+                value={editingPlan?.name ?? ''}
+                onChange={(e) => handlePlanFieldChange('name', e.target.value)}
+              />
+            </div>
+            <div className="plan-editor__field">
+              <label htmlFor="planBadge">Badge</label>
+              <input
+                id="planBadge"
+                type="text"
+                value={editingPlan?.badge ?? ''}
+                onChange={(e) => handlePlanFieldChange('badge', e.target.value)}
+              />
+            </div>
+            <div className="plan-editor__field">
+              <label htmlFor="planPrice">Price (USD)</label>
+              <input
+                id="planPrice"
+                type="number"
+                min="0"
+                value={editingPlan?.price ?? 0}
+                onChange={(e) => handlePlanFieldChange('price', Number(e.target.value) || 0)}
+              />
+            </div>
+            <div className="plan-editor__field">
+              <label htmlFor="planCadence">Cadence</label>
+              <input
+                id="planCadence"
+                type="text"
+                value={editingPlan?.cadence ?? ''}
+                onChange={(e) => handlePlanFieldChange('cadence', e.target.value)}
+              />
+            </div>
+            <div className="plan-editor__field plan-editor__field--full">
+              <label htmlFor="planTagline">Tagline</label>
+              <input
+                id="planTagline"
+                type="text"
+                value={editingPlan?.tagline ?? ''}
+                onChange={(e) => handlePlanFieldChange('tagline', e.target.value)}
+              />
+            </div>
+            <div className="plan-editor__field plan-editor__field--full">
+              <label htmlFor="planBestFor">Best for</label>
+              <input
+                id="planBestFor"
+                type="text"
+                value={editingPlan?.bestFor ?? ''}
+                onChange={(e) => handlePlanFieldChange('bestFor', e.target.value)}
+              />
+            </div>
+            <div className="plan-editor__field plan-editor__field--full">
+              <label htmlFor="planLimits">Limits (one per line)</label>
+              <textarea
+                id="planLimits"
+                rows={3}
+                value={(editingPlan?.limits ?? []).join('\n')}
+                onChange={(e) => handleListFieldChange('limits', e.target.value)}
+              />
+            </div>
+            <div className="plan-editor__field plan-editor__field--full">
+              <label htmlFor="planFeatures">Key features (one per line)</label>
+              <textarea
+                id="planFeatures"
+                rows={4}
+                value={(editingPlan?.features ?? []).join('\n')}
+                onChange={(e) => handleListFieldChange('features', e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+      </section>
+
+      <section className="value-grid">
+        {valueHighlights.map((item) => (
+          <article key={item.title} className="value-card">
+            <div className="value-icon">
+              <item.icon />
+            </div>
+            <h4>{item.title}</h4>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="feature-matrix content-card">
+        <div className="card-header">
+          <div>
+            <p className="card-kicker">Plan comparison</p>
+            <h3 className="card-title">Capabilities per abonnement</h3>
+          </div>
+          <span className="report-count">Hover cards to preview column highlight</span>
+        </div>
+        <div className="card-body">
+          <table>
             <thead>
               <tr>
-                <th>Promotion Name</th>
-                <th>Discount</th>
-                <th>Status</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Usage</th>
-                <th>Applied To</th>
-                <th>Actions</th>
+                <th>Capability</th>
+                {plans.map((plan) => (
+                  <th
+                    key={`matrix-${plan.id}`}
+                    className={featureColumns[plan.id] ? 'active-column' : ''}
+                  >
+                    {plan.name}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {promotions.map(promo => (
-                <tr key={promo.id}>
-                  <td>
-                    <div className="promo-name">{promo.name}</div>
-                  </td>
-                  <td className="discount-cell">{formatValue(promo.type, promo.value)}</td>
-                  <td>{getStatusBadge(promo.status)}</td>
-                  <td>{new Date(promo.startDate).toLocaleDateString()}</td>
-                  <td>{new Date(promo.endDate).toLocaleDateString()}</td>
-                  <td>
-                    <div className="usage-info">
-                      {promo.usageCount} {promo.maxUsage ? `/ ${promo.maxUsage}` : ''}
-                    </div>
-                  </td>
-                  <td>{promo.appliedTo}</td>
-                  <td>
-                    <div className="action-buttons">
-                      <button className="btn-edit">Edit</button>
-                      {promo.status === 'active' && (
-                        <button className="btn-pause">Pause</button>
-                      )}
-                    </div>
-                  </td>
+              {featureMatrix.map((row) => (
+                <tr key={row.label}>
+                  <td>{row.label}</td>
+                  <td className={featureColumns.launch ? 'active-column' : ''}>{row.launch ? 'Yes' : 'No'}</td>
+                  <td className={featureColumns.growth ? 'active-column' : ''}>{row.growth ? 'Yes' : 'No'}</td>
+                  <td className={featureColumns.elite ? 'active-column' : ''}>{row.elite ? 'Yes' : 'No'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
+
+      <section className="onboarding content-card">
+        <div className="card-header">
+          <div>
+            <p className="card-kicker">Activation path</p>
+            <h3 className="card-title">How boutique owners get onboarded</h3>
+          </div>
+        </div>
+        <div className="card-body onboarding-steps">
+          {onboardingFlow.map((step, index) => (
+            <div key={step.title} className="onboarding-step">
+              <div className="step-icon">
+                <step.icon />
+              </div>
+              <div>
+                <span className="step-count">Step {index + 1}</span>
+                <strong>{step.title}</strong>
+                <p>{step.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };

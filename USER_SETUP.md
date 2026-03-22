@@ -77,7 +77,7 @@ The script will create 6 sample users and display their credentials.
 
 ### Method 1: Using MongoDB Shell
 ```javascript
-use mallify_users
+use mallify
 
 db.users.insertOne({
   name: "Custom User",
@@ -114,7 +114,7 @@ Content-Type: application/json
 
 ### Users not showing in Compass?
 1. Refresh the database list in Compass
-2. Click on `mallify_users` database
+2. Click on `mallify` database
 3. Click on `users` collection
 
 ### Can't login with credentials?
@@ -125,7 +125,7 @@ Content-Type: application/json
 
 ### Need to reset users?
 ```javascript
-use mallify_users
+use mallify
 db.users.deleteMany({})  // Delete all users
 // Then run CREATE_USERS.js again
 ```

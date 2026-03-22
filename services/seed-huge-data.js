@@ -1,9 +1,9 @@
 const { MongoClient, ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
 
-const MONGO_URI = 'mongodb://localhost:27017';
+const MONGO_URI = 'mongodb://mallify:mallify_password@localhost:27017/?authSource=admin';
 const DB_MALLIFY = 'mallify';
-const DB_USERS = 'mallify_users';
+const DB_USERS = DB_MALLIFY;
 
 // Sample data arrays
 const firstNames = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Avery', 'Quinn', 'Skyler', 'Dakota', 'Cameron', 'Finley', 'Reese', 'Drew', 'Sage', 'Phoenix', 'River', 'Kai', 'Logan', 'Harper', 'Brooklyn', 'Madison', 'Olivia', 'Emma', 'Sophia', 'Isabella', 'Mia', 'Charlotte', 'Amelia', 'Evelyn', 'Noah', 'Liam', 'William', 'James', 'Oliver', 'Benjamin', 'Elijah', 'Lucas', 'Mason', 'Logan'];
@@ -508,6 +508,7 @@ async function seedDatabase() {
         deliveries.push({
           _id: new ObjectId(),
           orderId,
+          order: orderId,
           userId: client._id,
           driverId: driver ? driver._id : undefined,
           trackingNumber: generateTrackingNumber(),

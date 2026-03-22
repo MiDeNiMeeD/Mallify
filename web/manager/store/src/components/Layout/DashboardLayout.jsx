@@ -20,7 +20,9 @@ import {
   FiSearch,
   FiTrendingUp,
   FiFileText,
-  FiAlertTriangle
+  FiAlertTriangle,
+  FiPackage,
+  FiPlusCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { notifications } from '../../utils/mockData';
@@ -119,10 +121,17 @@ const DashboardLayout = ({ children }) => {
       children: [
         { path: '/boutiques', icon: FiShoppingBag, label: 'All Boutiques' },
         { path: '/boutiques/pending', icon: FiClock, label: 'Pending' },
-        { path: '/boutiques/verified', icon: FiUserCheck, label: 'Verified' }
+        { path: '/boutiques/verified', icon: FiCheckCircle, label: 'Approvals' }
       ]
     },
-    { path: '/approvals', icon: FiCheckCircle, label: 'Approvals' },
+    {
+      icon: FiPackage,
+      label: 'Products',
+      children: [
+        { path: '/products', icon: FiPackage, label: 'All Products' },
+        { path: '/products/add', icon: FiPlusCircle, label: 'Create Product' }
+      ]
+    },
     { 
       icon: FiBarChart2, 
       label: 'Analytics',
@@ -132,12 +141,11 @@ const DashboardLayout = ({ children }) => {
         { path: '/analytics/insights', icon: FiTrendingUp, label: 'Insights' }
       ]
     },
-    { path: '/compliance', icon: FiShield, label: 'Compliance' },
     { path: '/promotions', icon: FiTag, label: 'Promotions' },
   ];
 
   return (
-    <div className="dashboard-layout">
+    <div className={`dashboard-layout ${sidebarCollapsed ? 'collapsed' : ''}`}>
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">

@@ -44,10 +44,9 @@ async function resetPassword() {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     console.log('✅ Password hashed');
 
-    // Update in mallify_users database (User collection)
+    // Update user credentials inside mallify database
     console.log('\n📝 Updating user account...');
-    const usersDb = client.db('mallify_users');
-    const usersCollection = usersDb.collection('users');
+    const usersCollection = client.db('mallify').collection('users');
     
     const userResult = await usersCollection.updateOne(
       { email: EMAIL.toLowerCase() },
@@ -62,7 +61,7 @@ async function resetPassword() {
     if (userResult.matchedCount > 0) {
       console.log('✅ User account password updated');
     } else {
-      console.log('⚠️  User account not found in mallify_users database');
+      console.log('⚠️  User account not found in mallify database');
     }
 
     // Update in mallify database (BoutiqueApplications collection)

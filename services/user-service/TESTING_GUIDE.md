@@ -59,7 +59,7 @@ NODE_ENV=development
 PORT=3001
 
 # MongoDB
-MONGODB_URI=mongodb://mallify_user:mallify_pass@localhost:27017/mallify_users?authSource=admin
+MONGODB_URI=mongodb://mallify_user:mallify_pass@localhost:27017/mallify?authSource=admin
 
 # Redis
 REDIS_HOST=localhost

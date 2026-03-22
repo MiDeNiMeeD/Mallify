@@ -121,6 +121,52 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.confirm-modal-input-hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 6px;
+  text-align: left;
+}
+
+.confirm-modal-suggestions {
+  margin-top: 10px;
+  max-height: 210px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.confirm-modal-suggestion {
+  text-align: left;
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: border 0.2s, background 0.2s;
+}
+
+.confirm-modal-suggestion:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.suggestion-title {
+  display: block;
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.suggestion-subtitle {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
 .confirm-modal-actions {
   display: flex;
   gap: 12px;

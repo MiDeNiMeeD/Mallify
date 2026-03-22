@@ -11,7 +11,7 @@
 //
 // ========================================
 
-use mallify_users
+use mallify
 
 db.users.insertMany([
   {

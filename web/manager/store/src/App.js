@@ -6,7 +6,13 @@ import DashboardLayout from "./components/Layout/DashboardLayout";
 import DashboardOverview from "./pages/DashboardOverview/DashboardOverview";
 import AllBoutiques from "./pages/AllBoutiques/AllBoutiques";
 import PendingBoutiques from "./pages/Boutiques/PendingBoutiques";
-import VerifiedBoutiques from "./pages/Boutiques/VerifiedBoutiques";import BoutiqueDetail from './pages/Boutiques/BoutiqueDetail';import BoutiqueApprovals from "./pages/BoutiqueApprovals/BoutiqueApprovals";
+import VerifiedBoutiques from "./pages/Boutiques/VerifiedBoutiques";
+import BoutiqueDetail from "./pages/Boutiques/BoutiqueDetail";
+import BoutiqueApprovals from "./pages/BoutiqueApprovals/BoutiqueApprovals";
+import AllProducts from "./pages/Products/AllProducts";
+import ManageProduct from "./pages/Products/ManageProduct";
+import CreateProduct from "./pages/Products/CreateProduct";
+import EditProduct from "./pages/Products/EditProduct";
 import Analytics from "./pages/Analytics/Analytics";
 import AnalyticsReports from "./pages/Analytics/AnalyticsReports";
 import AnalyticsInsights from "./pages/Analytics/AnalyticsInsights";
@@ -86,6 +92,50 @@ function AppRoutes() {
           <ProtectedRoute>
             <DashboardLayout>
               <BoutiqueDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+
+      <Route 
+        path="/products" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <AllProducts />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+
+      <Route 
+        path="/products/add" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <CreateProduct />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+
+      <Route 
+        path="/products/edit/:id" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <EditProduct />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+
+      <Route 
+        path="/products/:id/manage" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ManageProduct />
             </DashboardLayout>
           </ProtectedRoute>
         } 
