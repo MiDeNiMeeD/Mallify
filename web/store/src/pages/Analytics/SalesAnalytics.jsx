@@ -1,7 +1,9 @@
 import React from 'react';
 import { TrendingUp, DollarSign, ShoppingBag, Users, Calendar } from 'lucide-react';
 import { analyticsData, topProducts, ordersByStatus } from '../../data/mockData';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Analytics.css';
 
 function SalesAnalytics() {
   const formatCurrency = (amount) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, ThumbsUp, Eye, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
 import '../Dashboard/Dashboard.css';
 
 function Reviews() {
@@ -91,12 +92,12 @@ function Reviews() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading reviews...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading reviews"
+        message="Collecting the latest feedback stream."
+        detail="Pulling customer comments and scores…"
+        icon={Star}
+      />
     );
   }
 

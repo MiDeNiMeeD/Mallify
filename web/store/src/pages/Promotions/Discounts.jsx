@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Percent, Plus, Copy } from 'lucide-react';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Promotions.css';
 
 function Discounts() {
   const [discountCode, setDiscountCode] = useState('');

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Edit, Trash2, Eye, Package, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
 import '../Dashboard/Dashboard.css';
 
 function AllProducts() {
@@ -91,12 +92,12 @@ function AllProducts() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading products...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading products"
+        message="Pulling inventory records and pricing."
+        detail="Syncing catalog details…"
+        icon={Package}
+      />
     );
   }
 

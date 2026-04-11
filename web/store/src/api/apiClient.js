@@ -20,17 +20,20 @@ export const API_ENDPOINTS = {
   PRODUCT_BY_ID: (id) => `${API_BASE_URL}/api/products/${id}`,
   PRODUCTS_BY_BOUTIQUE: (boutiqueId) => `${API_BASE_URL}/api/products/boutique/${boutiqueId}`,
   PRODUCT_STOCK: (id) => `${API_BASE_URL}/api/products/${id}/stock`,
+  PRODUCT_UPLOAD_IMAGES: `${API_BASE_URL}/api/products/upload-images`,
   
   // Boutiques
   BOUTIQUES: `${API_BASE_URL}/api/boutiques`,
   BOUTIQUE_BY_ID: (id) => `${API_BASE_URL}/api/boutiques/${id}`,
   BOUTIQUE_BY_SLUG: (slug) => `${API_BASE_URL}/api/boutiques/slug/${slug}`,
   BOUTIQUE_APPLICATIONS: `${API_BASE_URL}/api/boutiques/applications`,
+  BOUTIQUE_UPLOAD_IMAGES: `${API_BASE_URL}/api/boutiques/upload-images`,
   
   // Orders
   ORDERS: `${API_BASE_URL}/api/orders`,
   ORDER_BY_ID: (id) => `${API_BASE_URL}/api/orders/${id}`,
   ORDER_STATUS: (id) => `${API_BASE_URL}/api/orders/${id}/status`,
+  STORE_ORDER_ACTION: (id) => `${API_BASE_URL}/api/orders/store/${id}/action`,
   
   // Payments
   PAYMENTS: `${API_BASE_URL}/api/payments`,
@@ -83,8 +86,9 @@ class ApiClient {
   }
 
   async request(url, options = {}) {
+    const isFormDataBody = typeof FormData !== 'undefined' && options.body instanceof FormData;
     const headers = {
-      'Content-Type': 'application/json',
+      ...(isFormDataBody ? {} : { 'Content-Type': 'application/json' }),
       ...this.getAuthHeaders(),
       ...options.headers,
     };
@@ -210,6 +214,25 @@ class ApiClient {
     });
   }
 
+  async deleteOrder(id) {
+    return await this.request(API_ENDPOINTS.ORDER_BY_ID(id), {
+      method: 'DELETE',
+    });
+  }
+
+  async getStoreOrders(storeId, params = {}) {
+    const query = new URLSearchParams({ ...params, storeId }).toString();
+    const url = `${API_ENDPOINTS.ORDERS}?${query}`;
+    return await this.request(url);
+  }
+
+  async updateStoreOrderAction(id, action) {
+    return await this.request(API_ENDPOINTS.STORE_ORDER_ACTION(id), {
+      method: 'PATCH',
+      body: JSON.stringify({ action }),
+    });
+  }
+
   // Product methods (extended)
   async getProductsByBoutique(boutiqueId, params = {}) {
     const queryString = new URLSearchParams(params).toString();
@@ -230,6 +253,18 @@ class ApiClient {
     return await this.request(API_ENDPOINTS.PRODUCT_BY_ID(id), {
       method: 'PUT',
       body: JSON.stringify(productData),
+    });
+  }
+
+  async uploadProductImages(files = []) {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    return await this.request(API_ENDPOINTS.PRODUCT_UPLOAD_IMAGES, {
+      method: 'POST',
+      body: formData,
     });
   }
 
@@ -256,6 +291,18 @@ class ApiClient {
 
   async getBoutiqueBySlug(slug) {
     return await this.request(API_ENDPOINTS.BOUTIQUE_BY_SLUG(slug));
+  }
+
+  async uploadBoutiqueImages(files = []) {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    return await this.request(API_ENDPOINTS.BOUTIQUE_UPLOAD_IMAGES, {
+      method: 'POST',
+      body: formData,
+    });
   }
 
   // Promotion methods
@@ -373,8 +420,8 @@ class ApiClient {
   // Dashboard methods (computed from various endpoints)
   async getDashboardStats(boutiqueId) {
     try {
-      // Fetch orders for boutique
-      const ordersResponse = await this.getOrders({ boutiqueId });
+      // Fetch store-segment orders for boutique/store
+      const ordersResponse = await this.getStoreOrders(boutiqueId);
       
       // Handle different response structures
       let orders = [];
@@ -406,11 +453,11 @@ class ApiClient {
       
       // Calculate stats
       const totalOrders = orders.length;
-      const completedOrders = orders.filter(o => o.status === 'completed').length;
+      const completedOrders = orders.filter(o => o.status === 'confirmed' || o.status === 'completed').length;
       const pendingOrders = orders.filter(o => o.status === 'pending').length;
       const totalRevenue = orders
-        .filter(o => o.status === 'completed')
-        .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+        .filter(o => o.status === 'confirmed' || o.status === 'completed')
+        .reduce((sum, order) => sum + Number(order.payableTotal || order.total || order.totalAmount || 0), 0);
       
       const activeProducts = products.filter(p => p.status === 'active').length;
       const lowStockProducts = products.filter(p => p.quantity > 0 && p.quantity <= 10).length;

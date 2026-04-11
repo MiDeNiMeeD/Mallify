@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Truck, Save, Plus, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
-import '../Dashboard/Dashboard.css';
+import LoadingState from '../../components/LoadingState';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Boutique.css';
 
 function DeliveryOptions() {
   const { user } = useAuth();
@@ -72,12 +75,12 @@ function DeliveryOptions() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading delivery options...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading delivery options"
+        message="Fetching shipping methods and rates."
+        detail="Syncing saved logistics preferences…"
+        icon={Truck}
+      />
     );
   }
 

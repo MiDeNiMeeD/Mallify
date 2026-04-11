@@ -1,21 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Truck, Package, Eye } from 'lucide-react';
-import { allOrders } from '../../data/mockData';
+import { useAuth } from '../../context/AuthContext';
+import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
+import {
+  extractPrimaryStoreId,
+  orderAmount,
+  orderCustomerEmail,
+  orderCustomerName,
+  orderItemsCount,
+} from './storeOrderUtils';
 import '../Dashboard/Dashboard.css';
 
 function OrdersProcessing() {
-  const processingOrders = allOrders.filter(order => order.status === 'processing');
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const storeId = extractPrimaryStoreId(user);
+      if (!storeId) {
+        setError('No boutique found for this user');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await apiClient.getStoreOrders(storeId, { status: 'confirmed' });
+        if (response.success) {
+          const data = response.data;
+          if (Array.isArray(data)) setOrders(data);
+          else if (data?.orders && Array.isArray(data.orders)) setOrders(data.orders);
+          else setOrders([]);
+        } else {
+          setError(response.message || 'Failed to fetch processing orders');
+        }
+      } catch (err) {
+        console.error('Error fetching processing orders:', err);
+        setError(err.message || 'Failed to load processing orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [user]);
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
-  const handleMarkAsShipped = (orderId) => {
-    alert(`Order ${orderId} marked as shipped!`);
+  const handleMarkAsShipped = async (orderId) => {
+    try {
+      await apiClient.updateStoreOrderAction(orderId, 'cancel');
+      setOrders((prev) => prev.filter(o => o._id !== orderId));
+    } catch (err) {
+      console.error('Error marking as shipped:', err);
+      alert('Failed to update order');
+    }
   };
+
+  if (loading) {
+    return (
+      <LoadingState
+        title="Loading processing orders"
+        message="Fetching orders currently being prepared."
+        detail="Preparing processing list…"
+        icon={Package}
+      />
+    );
+  }
 
   return (
     <div className="dashboard-page">
@@ -30,11 +87,11 @@ function OrdersProcessing() {
         <div className="card-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Package size={20} style={{ color: 'var(--info-color)' }} />
-            <h2 className="card-title">{processingOrders.length} Orders in Progress</h2>
+            <h2 className="card-title">{orders.length} Orders in Progress</h2>
           </div>
         </div>
         <div className="card-body">
-          {processingOrders.length > 0 ? (
+          {orders.length > 0 ? (
             <table className="data-table">
               <thead>
                 <tr>
@@ -49,15 +106,15 @@ function OrdersProcessing() {
                 </tr>
               </thead>
               <tbody>
-                {processingOrders.map((order) => (
-                  <tr key={order.id}>
-                    <td><strong>{order.id}</strong></td>
-                    <td>{order.customer}</td>
-                    <td>{order.email}</td>
-                    <td>{order.items}</td>
-                    <td><strong>{formatCurrency(order.total)}</strong></td>
-                    <td>{order.payment}</td>
-                    <td>{new Date(order.date).toLocaleString()}</td>
+                {orders.map((order) => (
+                  <tr key={order._id}>
+                    <td><strong>{order.orderNumber}</strong></td>
+                    <td>{orderCustomerName(order)}</td>
+                    <td>{orderCustomerEmail(order)}</td>
+                    <td>{orderItemsCount(order)}</td>
+                    <td><strong>{formatCurrency(orderAmount(order))}</strong></td>
+                    <td>{order.paymentStatus || 'N/A'}</td>
+                    <td>{new Date(order.createdAt).toLocaleString()}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button className="btn-icon" title="View Details">
@@ -65,8 +122,8 @@ function OrdersProcessing() {
                         </button>
                         <button 
                           className="btn-icon" 
-                          title="Mark as Shipped"
-                          onClick={() => handleMarkAsShipped(order.id)}
+                          title="Cancel this store order"
+                          onClick={() => handleMarkAsShipped(order._id)}
                           style={{ color: 'var(--success-color)' }}
                         >
                           <Truck size={16} />

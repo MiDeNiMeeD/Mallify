@@ -32,22 +32,41 @@ export class UserService {
   }
 
   async updateProfile(userId: string, updateData: Partial<IUser>): Promise<IUser> {
-    // Prevent updating sensitive fields
-    delete updateData.password;
-    delete updateData.email;
-    delete updateData.role;
-    delete (updateData as any).isEmailVerified;
-    delete (updateData as any).googleId;
-
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $set: updateData },
-      { new: true, runValidators: true }
-    );
+    const user = await User.findById(userId);
 
     if (!user) {
       throw new NotFoundError('User');
     }
+
+    // Only allow profile-editable fields from client profile screens.
+    const editableFields = [
+      'name',
+      'nickname',
+      'phone',
+      'city',
+      'gender',
+      'dateOfBirth',
+      'profileImage',
+    ] as const;
+
+    editableFields.forEach((field) => {
+      const value = (updateData as any)[field];
+      if (value === undefined) {
+        return;
+      }
+
+      if (field === 'dateOfBirth') {
+        const parsedDate = value instanceof Date ? value : new Date(String(value));
+        if (!Number.isNaN(parsedDate.getTime())) {
+          (user as any)[field] = parsedDate;
+        }
+        return;
+      }
+
+      (user as any)[field] = value;
+    });
+
+    await user.save();
 
     // Clear cache
     await deleteCache(`user:${userId}`);
@@ -61,16 +80,26 @@ export class UserService {
       throw new NotFoundError('User');
     }
 
+    const normalizedAddress = { ...address };
+    const addressName = String(
+      normalizedAddress.name || normalizedAddress.label || normalizedAddress.type || ''
+    ).trim();
+    if (addressName) {
+      normalizedAddress.name = addressName;
+      normalizedAddress.label = addressName;
+      normalizedAddress.type = addressName;
+    }
+
     // If this is the first address or marked as default, set it as default
-    if (user.addresses.length === 0 || address.isDefault) {
+    if (user.addresses.length === 0 || normalizedAddress.isDefault) {
       // Remove default from other addresses
       user.addresses.forEach((addr: any) => {
         addr.isDefault = false;
       });
-      address.isDefault = true;
+      normalizedAddress.isDefault = true;
     }
 
-    user.addresses.push(address);
+    user.addresses.push(normalizedAddress);
     await user.save();
 
     // Clear cache
@@ -90,8 +119,18 @@ export class UserService {
       throw new NotFoundError('Address');
     }
 
+    const normalizedAddressData = { ...addressData };
+    const addressName = String(
+      normalizedAddressData.name || normalizedAddressData.label || normalizedAddressData.type || ''
+    ).trim();
+    if (addressName) {
+      normalizedAddressData.name = addressName;
+      normalizedAddressData.label = addressName;
+      normalizedAddressData.type = addressName;
+    }
+
     // If setting as default, remove default from others
-    if (addressData.isDefault) {
+    if (normalizedAddressData.isDefault) {
       user.addresses.forEach((addr: any) => {
         if (addr._id.toString() !== addressId) {
           addr.isDefault = false;
@@ -99,7 +138,7 @@ export class UserService {
       });
     }
 
-    Object.assign(address, addressData);
+    Object.assign(address, normalizedAddressData);
     await user.save();
 
     // Clear cache

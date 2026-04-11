@@ -1,25 +1,95 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RotateCcw, CheckCircle, XCircle, Eye, AlertTriangle } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
+import { extractPrimaryStoreId, orderAmount, orderCustomerName } from './storeOrderUtils';
 import '../Dashboard/Dashboard.css';
 
 function OrdersReturns() {
-  const returnRequests = [
-    { id: 'RET-001', orderId: 'ORD-004', customer: 'James Wilson', product: 'Casual White Sneakers', reason: 'Wrong size', amount: 79.99, status: 'pending', date: '2026-02-13' },
-    { id: 'RET-002', orderId: 'ORD-008', customer: 'David Brown', product: 'Leather Crossbody Bag', reason: 'Defective item', amount: 65.00, status: 'approved', date: '2026-02-12' },
-    { id: 'RET-003', orderId: 'ORD-003', customer: 'Emily Davis', product: 'Summer Floral Dress', reason: 'Changed mind', amount: 89.99, status: 'rejected', date: '2026-02-11' },
-  ];
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    const fetchReturns = async () => {
+      const storeId = extractPrimaryStoreId(user);
+      if (!storeId) {
+        setError('No boutique found for this user');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const [rejectedRes, cancelledRes] = await Promise.all([
+          apiClient.getStoreOrders(storeId, { status: 'rejected' }),
+          apiClient.getStoreOrders(storeId, { status: 'cancelled' }),
+        ]);
+
+        const rejected = Array.isArray(rejectedRes?.data?.orders)
+          ? rejectedRes.data.orders
+          : Array.isArray(rejectedRes?.data)
+          ? rejectedRes.data
+          : [];
+        const cancelled = Array.isArray(cancelledRes?.data?.orders)
+          ? cancelledRes.data.orders
+          : Array.isArray(cancelledRes?.data)
+          ? cancelledRes.data
+          : [];
+
+        setRequests([...rejected, ...cancelled]);
+      } catch (err) {
+        console.error('Error fetching returns:', err);
+        setError(err.message || 'Failed to load return requests');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReturns();
+  }, [user]);
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
+  const handleApprove = async (requestId) => {
+    try {
+      await apiClient.updateStoreOrderAction(requestId, 'confirm');
+      setRequests(requests.filter(r => r._id !== requestId));
+    } catch (err) {
+      console.error('Error approving return:', err);
+      alert('Failed to approve return');
+    }
+  };
+
+  const handleReject = async (requestId) => {
+    try {
+      await apiClient.updateStoreOrderAction(requestId, 'reject');
+      setRequests(requests.map(r => r._id === requestId ? { ...r, status: 'rejected' } : r));
+    } catch (err) {
+      console.error('Error rejecting return:', err);
+      alert('Failed to reject return');
+    }
+  };
+
+  if (loading) {
+    return (
+      <LoadingState
+        title="Loading returns"
+        message="Fetching customer return requests."
+        detail="Preparing returns list…"
+        icon={RotateCcw}
+      />
+    );
+  }
+
   const stats = {
-    pending: returnRequests.filter(r => r.status === 'pending').length,
-    approved: returnRequests.filter(r => r.status === 'approved').length,
-    rejected: returnRequests.filter(r => r.status === 'rejected').length,
+    pending: requests.filter(r => r.status === 'pending').length,
+    approved: requests.filter(r => r.status === 'approved').length,
+    rejected: requests.filter(r => r.status === 'rejected').length,
   };
 
   return (
@@ -78,15 +148,15 @@ function OrdersReturns() {
               </tr>
             </thead>
             <tbody>
-              {returnRequests.map((request) => (
-                <tr key={request.id}>
-                  <td><strong>{request.id}</strong></td>
-                  <td>{request.orderId}</td>
-                  <td>{request.customer}</td>
-                  <td>{request.product}</td>
-                  <td>{request.reason}</td>
-                  <td><strong>{formatCurrency(request.amount)}</strong></td>
-                  <td>{new Date(request.date).toLocaleDateString()}</td>
+              {requests.map((request) => (
+                <tr key={request._id}>
+                  <td><strong>{request._id}</strong></td>
+                  <td>{request.orderNumber}</td>
+                  <td>{request.customer || orderCustomerName(request) || 'N/A'}</td>
+                  <td>{request.product || (request.items && request.items[0]?.name) || '—'}</td>
+                  <td>{request.reason || '—'}</td>
+                  <td><strong>{formatCurrency(orderAmount(request))}</strong></td>
+                  <td>{new Date(request.createdAt).toLocaleDateString()}</td>
                   <td>
                     <span className={`status-badge ${request.status}`}>
                       {request.status}
@@ -99,10 +169,10 @@ function OrdersReturns() {
                       </button>
                       {request.status === 'pending' && (
                         <>
-                          <button className="btn-icon" title="Approve" style={{ color: 'var(--success-color)' }}>
+                          <button className="btn-icon" title="Approve" style={{ color: 'var(--success-color)' }} onClick={() => handleApprove(request._id)}>
                             <CheckCircle size={16} />
                           </button>
-                          <button className="btn-icon" title="Reject" style={{ color: 'var(--danger-color)' }}>
+                          <button className="btn-icon" title="Reject" style={{ color: 'var(--danger-color)' }} onClick={() => handleReject(request._id)}>
                             <XCircle size={16} />
                           </button>
                         </>

@@ -1,16 +1,71 @@
-import React, { useState } from 'react';
-import { Search, Eye, CheckCircle, XCircle, Filter, Download } from 'lucide-react';
-import { allOrders } from '../../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { Search, Eye, CheckCircle, Filter, Download, AlertCircle } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import apiClient from '../../api/apiClient';
+import { useNavigate } from 'react-router-dom';
+import LoadingState from '../../components/LoadingState';
+import {
+  extractPrimaryStoreId,
+  normalizeStoreOrderStatus,
+  orderAmount,
+  orderCustomerEmail,
+  orderCustomerName,
+  orderItemsCount,
+} from './storeOrderUtils';
 import '../Dashboard/Dashboard.css';
 
 function OrdersList() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  const filteredOrders = allOrders.filter(order => {
-    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          order.customer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const storeId = extractPrimaryStoreId(user);
+      if (!storeId) {
+        setError('No boutique found for this user');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await apiClient.getStoreOrders(storeId);
+        
+        if (response.success) {
+          const ordersData = response.data;
+          if (Array.isArray(ordersData)) {
+            setOrders(ordersData);
+          } else if (ordersData?.orders && Array.isArray(ordersData.orders)) {
+            setOrders(ordersData.orders);
+          } else {
+            setOrders([]);
+          }
+        } else {
+          setError(response.message || 'Failed to fetch orders');
+        }
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+        setError(err.message || 'Failed to load orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [user]);
+
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = 
+      String(order.orderNumber || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(orderCustomerName(order)).toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(orderCustomerEmail(order)).toLowerCase().includes(searchTerm.toLowerCase());
+    const normalizedStatus = normalizeStoreOrderStatus(order.status);
+    const matchesStatus = filterStatus === 'all' || normalizedStatus === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
@@ -22,11 +77,55 @@ function OrdersList() {
   };
 
   const stats = {
-    total: allOrders.length,
-    pending: allOrders.filter(o => o.status === 'pending').length,
-    processing: allOrders.filter(o => o.status === 'processing').length,
-    completed: allOrders.filter(o => o.status === 'completed').length,
+    total: orders.length,
+    pending: orders.filter(o => normalizeStoreOrderStatus(o.status) === 'pending').length,
+    processing: orders.filter(o => normalizeStoreOrderStatus(o.status) === 'confirmed').length,
+    completed: orders.filter(o => normalizeStoreOrderStatus(o.status) === 'confirmed').length,
   };
+
+  const handleStatusChange = async (orderId, action) => {
+    try {
+      await apiClient.updateStoreOrderAction(orderId, action);
+      setOrders(orders.map(o => 
+        o._id === orderId
+          ? {
+              ...o,
+              status:
+                action === 'confirm'
+                  ? 'confirmed'
+                  : action === 'reject'
+                  ? 'rejected'
+                  : 'cancelled',
+            }
+          : o
+      ));
+    } catch (err) {
+      console.error('Error updating order status:', err);
+      alert('Failed to update order status');
+    }
+  };
+
+    const handleCancel = async (orderId) => {
+      if (!window.confirm('Cancel this store order?')) return;
+    try {
+        await apiClient.updateStoreOrderAction(orderId, 'cancel');
+        setOrders(orders.map(o => o._id === orderId ? { ...o, status: 'cancelled' } : o));
+    } catch (err) {
+        console.error('Error cancelling order:', err);
+        alert('Failed to cancel order');
+    }
+  };
+
+  if (loading) {
+    return (
+      <LoadingState
+        title="Loading orders"
+        message="Pulling recent order activity and statuses."
+        detail="Preparing the complete order list…"
+        icon={Filter}
+      />
+    );
+  }
 
   return (
     <div className="dashboard-page">
@@ -40,6 +139,13 @@ function OrdersList() {
           Export Orders
         </button>
       </div>
+
+      {error && (
+        <div className="alert alert-danger">
+          <AlertCircle size={18} />
+          <span>{error}</span>
+        </div>
+      )}
 
       <div className="stats-grid">
         <div className="stat-card">
@@ -103,51 +209,67 @@ function OrdersList() {
 
       <div className="content-card">
         <div className="card-body">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Email</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Payment</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order) => (
-                <tr key={order.id}>
-                  <td><strong>{order.id}</strong></td>
-                  <td>{order.customer}</td>
-                  <td>{order.email}</td>
-                  <td>{order.items}</td>
-                  <td><strong>{formatCurrency(order.total)}</strong></td>
-                  <td>{order.payment}</td>
-                  <td>
-                    <span className={`status-badge ${order.status}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td>{new Date(order.date).toLocaleDateString()}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button className="btn-icon" title="View Details">
-                        <Eye size={16} />
-                      </button>
-                      {order.status === 'pending' && (
-                        <button className="btn-icon" title="Accept">
-                          <CheckCircle size={16} />
-                        </button>
-                      )}
-                    </div>
-                  </td>
+          {filteredOrders.length === 0 ? (
+            <div className="empty-state">
+              <Filter size={48} />
+              <p>No orders found</p>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Email</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredOrders.map((order) => (
+                  <tr key={order._id}>
+                    <td><strong>{order.orderNumber}</strong></td>
+                    <td>{orderCustomerName(order)}</td>
+                    <td>{orderCustomerEmail(order)}</td>
+                    <td>{orderItemsCount(order)}</td>
+                    <td><strong>{formatCurrency(orderAmount(order))}</strong></td>
+                    <td>
+                      <span className={`status-badge ${normalizeStoreOrderStatus(order.status)}`}>
+                        {normalizeStoreOrderStatus(order.status)}
+                      </span>
+                    </td>
+                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button 
+                          className="btn-icon" 
+                          title="View Details"
+                          onClick={() => navigate(`/orders/${order._id}`)}
+                        >
+                          <Eye size={16} />
+                        </button>
+                        {normalizeStoreOrderStatus(order.status) === 'pending' && (
+                          <button 
+                            className="btn-icon" 
+                            title="Accept"
+                            onClick={() => handleStatusChange(order._id, 'confirm')}
+                          >
+                            <CheckCircle size={16} />
+                          </button>
+                        )}
+                          <button className="btn-icon" title="Cancel" onClick={() => handleCancel(order._id)}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M8 6v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M10 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

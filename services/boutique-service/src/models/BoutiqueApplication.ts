@@ -8,6 +8,8 @@ export interface IBoutiqueApplication extends Document {
   password: string; // Hashed password for boutique owner account
   address: string;
   city: string;
+  state?: string;
+  postalCode?: string;
   description: string;
   category: string;
   cinDocument: string; // URL to uploaded CIN document
@@ -54,6 +56,16 @@ const BoutiqueApplicationSchema: Schema = new Schema(
     city: {
       type: String,
       required: true,
+      trim: true,
+    },
+    state: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    postalCode: {
+      type: String,
+      default: '',
       trim: true,
     },
     description: {

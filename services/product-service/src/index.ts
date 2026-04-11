@@ -6,6 +6,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import path from 'path';
 import { createLogger, errorHandler, notFoundHandler } from '@mallify/shared';
 import { connectDatabase } from './config/database';
 import productRoutes from './routes/product.routes';
@@ -47,6 +48,16 @@ app.get('/health', (_req: Request, res: Response) => {
     port: PORT,
   });
 });
+
+// Serve uploaded product images before product routes so /uploads/* is not treated as /:id
+app.use(
+  '/api/products/uploads',
+  express.static(path.join(__dirname, '../uploads/products'), {
+    setHeaders: (res) => {
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    },
+  })
+);
 
 // API routes
 app.use('/api/products', productRoutes);

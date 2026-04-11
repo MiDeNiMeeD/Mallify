@@ -23,6 +23,19 @@ export class AuthController {
       user.name,
       user.profileImage
     );
+
+    const redirectUri = typeof req.query.state === 'string' ? req.query.state : undefined;
+    const isAppRedirect = Boolean(redirectUri && redirectUri.startsWith('mallify://'));
+
+    if (isAppRedirect && redirectUri) {
+      const separator = redirectUri.includes('?') ? '&' : '?';
+      const accessToken = encodeURIComponent(result.accessToken);
+      const refreshToken = encodeURIComponent(result.refreshToken);
+      const email = encodeURIComponent(result.user.email || '');
+      const redirectUrl = `${redirectUri}${separator}accessToken=${accessToken}&refreshToken=${refreshToken}&email=${email}`;
+      return res.redirect(redirectUrl);
+    }
+
     return ResponseFormatter.success(res, result, 'Google login successful');
   });
 

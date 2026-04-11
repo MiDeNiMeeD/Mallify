@@ -4,6 +4,9 @@ import { UserRole } from '@mallify/shared';
 
 // Address subdocument schema
 const AddressSchema = new Schema({
+  name: { type: String, trim: true },
+  label: { type: String, trim: true },
+  type: { type: String, trim: true },
   street: { type: String, required: true },
   city: { type: String, required: true },
   state: { type: String, required: true },
@@ -15,9 +18,13 @@ const AddressSchema = new Schema({
 // Base User interface
 export interface IUser extends Document {
   name: string;
+  nickname?: string;
   email: string;
   password?: string;
   phone?: string;
+  city?: string;
+  gender?: 'Male' | 'Female' | 'Prefer not to say';
+  dateOfBirth?: Date;
   role: UserRole;
   addresses: typeof AddressSchema[];
   isEmailVerified: boolean;
@@ -37,6 +44,10 @@ const UserSchema = new Schema<IUser>(
       required: [true, 'Name is required'],
       trim: true,
     },
+    nickname: {
+      type: String,
+      trim: true,
+    },
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -53,6 +64,17 @@ const UserSchema = new Schema<IUser>(
     phone: {
       type: String,
       trim: true,
+    },
+    city: {
+      type: String,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female', 'Prefer not to say'],
+    },
+    dateOfBirth: {
+      type: Date,
     },
     role: {
       type: String,

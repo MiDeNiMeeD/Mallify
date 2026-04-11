@@ -78,6 +78,12 @@ export const services: Record<string, ServiceConfig> = {
     healthPath: '/health',
     timeout: 30000,
   },
+  cart: {
+    name: 'cart-service',
+    url: process.env.CART_SERVICE_URL || 'http://localhost:3017',
+    healthPath: '/health',
+    timeout: 30000,
+  },
   analytics: {
     name: 'analytics-service',
     url: process.env.ANALYTICS_SERVICE_URL || 'http://localhost:3013',
@@ -113,6 +119,7 @@ export const routeMap: Record<string, string> = {
   '/api/reviews': 'review',
   '/api/promotions': 'promotion',
   '/api/wishlist': 'wishlist',
+  '/api/cart': 'cart',
   '/api/analytics': 'analytics',
   '/api/audit': 'audit',
   '/api/disputes': 'dispute',

@@ -49,7 +49,10 @@ const LoginPage2 = () => {
   };
 
   return (
-    <div className="login-container2" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/loginPicture.jpg)` }}>
+    <div className="login-container2">
+      <video className="bg-video2" autoPlay loop muted playsInline>
+        <source src={`${process.env.PUBLIC_URL}/loginPicture.mp4`} type="video/mp4" />
+      </video>
       <Toast
         show={toast.show}
         message={toast.message}

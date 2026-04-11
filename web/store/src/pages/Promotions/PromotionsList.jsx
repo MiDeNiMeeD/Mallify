@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Tag, Plus, Eye, Edit2, Trash2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
-import '../Dashboard/Dashboard.css';
+import LoadingState from '../../components/LoadingState';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Promotions.css';
 
 function PromotionsList() {
   const { user } = useAuth();
@@ -95,12 +98,12 @@ function PromotionsList() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading promotions...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading promotions"
+        message="Gathering all campaigns across the store."
+        detail="Syncing discount windows and usage data…"
+        icon={Tag}
+      />
     );
   }
 

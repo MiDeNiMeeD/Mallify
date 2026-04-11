@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "clone:boutique": "node clone-boutique-data.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "mongodb": "^7.1.0"

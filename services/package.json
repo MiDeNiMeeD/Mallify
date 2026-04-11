@@ -17,6 +17,7 @@
     "review-service",
     "promotion-service",
     "wishlist-service",
+    "cart-service",
     "analytics-service",
     "audit-service",
     "dispute-service",

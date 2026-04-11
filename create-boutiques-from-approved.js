@@ -1,7 +1,12 @@
 const { MongoClient } = require('mongodb');
+const bcrypt = require('bcryptjs');
 
 // Configuration
 const MONGODB_URI = 'mongodb://mallify:mallify_password@localhost:27017/?authSource=admin';
+const DEFAULT_PASSWORD = process.env.BOUTIQUE_OWNER_PASSWORD || 'boutique123';
+const EMAIL_FILTER = process.env.BOUTIQUE_EMAIL
+  ? process.env.BOUTIQUE_EMAIL.trim().toLowerCase()
+  : null;
 
 async function createBoutiquesFromApproved() {
   let client;
@@ -25,7 +30,13 @@ async function createBoutiquesFromApproved() {
 
     // Get all approved applications
     console.log('\n🔍 Finding approved applications...');
-    const approvedApplications = await applicationsCollection.find({ status: 'approved' }).toArray();
+    const query = { status: 'approved' };
+    if (EMAIL_FILTER) {
+      query.email = EMAIL_FILTER;
+      console.log(`   ➤ Email filter active: ${EMAIL_FILTER}`);
+    }
+
+    const approvedApplications = await applicationsCollection.find(query).toArray();
     
     if (approvedApplications.length === 0) {
       console.log('⚠️  No approved applications found');
@@ -38,15 +49,84 @@ async function createBoutiquesFromApproved() {
       console.log(`\n📝 Processing: ${application.boutiqueName}`);
       console.log(`   Email: ${application.email}`);
 
-      // Find user by email
-      const user = await usersCollection.findOne({ email: application.email.toLowerCase() });
+      // Find or create user by email
+      let user = await usersCollection.findOne({ email: application.email.toLowerCase() });
       
       if (!user) {
-        console.log(`   ❌ User not found for email: ${application.email}`);
-        continue;
-      }
+        console.log('   ⚠️  User not found. Creating boutique owner account...');
+        const hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, 10);
+        const newUser = {
+          name: application.ownerName,
+          email: application.email.toLowerCase(),
+          password: hashedPassword,
+          phone: application.phone,
+          role: 'boutique_owner',
+          addresses: [
+            {
+              street: application.address,
+              city: application.city,
+              state: '',
+              zipCode: application.postalCode || '',
+              country: 'Tunisia',
+              isDefault: true,
+            },
+          ],
+          isEmailVerified: true,
+          isActive: true,
+          profileImage: null,
+          googleId: null,
+          boutiqueList: [],
+          subscriptionStatus: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
 
-      console.log(`   ✅ User found: ${user.name} (${user._id})`);
+        const insertResult = await usersCollection.insertOne(newUser);
+        user = { ...newUser, _id: insertResult.insertedId };
+        console.log(`   ✅ Created user account (${user._id})`);
+        console.log(`   🔑 Temporary password: ${DEFAULT_PASSWORD}`);
+      } else {
+        console.log(`   ✅ User found: ${user.name} (${user._id})`);
+
+        const updates = {};
+        if (user.role !== 'boutique_owner') {
+          updates.role = 'boutique_owner';
+        }
+        if (!user.isEmailVerified) {
+          updates.isEmailVerified = true;
+        }
+        if (user.isActive === false) {
+          updates.isActive = true;
+        }
+
+        if (!Array.isArray(user.addresses) || user.addresses.length === 0) {
+          updates.addresses = [
+            {
+              street: application.address,
+              city: application.city,
+              state: '',
+              zipCode: application.postalCode || '',
+              country: 'Tunisia',
+              isDefault: true,
+            },
+          ];
+        }
+
+        if (Object.keys(updates).length > 0) {
+          updates.updatedAt = new Date();
+          await usersCollection.updateOne({ _id: user._id }, { $set: updates });
+          user = { ...user, ...updates };
+          console.log('   🔄 User metadata updated for boutique access');
+        }
+
+        if (!Array.isArray(user.boutiqueList)) {
+          await usersCollection.updateOne(
+            { _id: user._id },
+            { $set: { boutiqueList: [] } }
+          );
+          user.boutiqueList = [];
+        }
+      }
 
       // Check if boutique already exists
       const existingBoutique = await boutiquesCollection.findOne({
@@ -56,69 +136,84 @@ async function createBoutiquesFromApproved() {
         ]
       });
 
-      if (existingBoutique) {
-        console.log(`   ⚠️  Boutique already exists: ${existingBoutique.name}`);
-        
-        // Update user's boutiqueList if not already included
-        if (!user.boutiqueList || !user.boutiqueList.some(id => id.toString() === existingBoutique._id.toString())) {
-          await usersCollection.updateOne(
-            { _id: user._id },
-            { $addToSet: { boutiqueList: existingBoutique._id } }
-          );
-          console.log(`   ✅ Updated user's boutiqueList`);
-        }
-        continue;
+      let activeBoutique = existingBoutique;
+
+      if (activeBoutique) {
+        console.log(`   ⚠️  Boutique already exists: ${activeBoutique.name}`);
+      } else {
+        // Generate slug from boutique name
+        const slug = application.boutiqueName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+
+        // Create the boutique
+        const newBoutique = {
+          name: application.boutiqueName,
+          description: application.description,
+          ownerId: user._id,
+          email: application.email.toLowerCase(),
+          phone: application.phone,
+          address: {
+            street: application.address,
+            city: application.city,
+            state: '',
+            country: 'Tunisia',
+            postalCode: '',
+          },
+          businessType: 'retail',
+          categories: application.category ? [application.category] : [],
+          tags: [],
+          images: [],
+          hours: {},
+          slug: slug,
+          status: 'active',
+          verified: true,
+          featured: false,
+          rating: 0,
+          reviewCount: 0,
+          totalSales: 0,
+          totalOrders: 0,
+          currency: 'TND',
+          timezone: 'Africa/Tunis',
+          language: 'en',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        const result = await boutiquesCollection.insertOne(newBoutique);
+        activeBoutique = { ...newBoutique, _id: result.insertedId };
+        console.log(`   ✅ Boutique created with ID: ${result.insertedId}`);
       }
 
-      // Generate slug from boutique name
-      const slug = application.boutiqueName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      const validBoutiqueId = activeBoutique._id;
 
-      // Create the boutique
-      const newBoutique = {
-        name: application.boutiqueName,
-        description: application.description,
-        ownerId: user._id,
-        email: application.email.toLowerCase(),
-        phone: application.phone,
-        address: {
-          street: application.address,
-          city: application.city,
-          state: '',
-          country: 'Tunisia',
-          postalCode: '',
-        },
-        businessType: 'retail',
-        categories: application.category ? [application.category] : [],
-        tags: [],
-        images: [],
-        hours: {},
-        slug: slug,
-        status: 'active',
-        verified: true,
-        featured: false,
-        rating: 0,
-        reviewCount: 0,
-        totalSales: 0,
-        totalOrders: 0,
-        currency: 'TND',
-        timezone: 'Africa/Tunis',
-        language: 'en',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const result = await boutiquesCollection.insertOne(newBoutique);
-      console.log(`   ✅ Boutique created with ID: ${result.insertedId}`);
-
-      // Update user's boutiqueList
+      // Replace boutiqueList with the single valid boutique ID
       await usersCollection.updateOne(
         { _id: user._id },
-        { $addToSet: { boutiqueList: result.insertedId } }
+        {
+          $set: {
+            boutiqueList: [validBoutiqueId],
+            role: 'boutique_owner',
+            isApproved: true,
+          },
+        }
       );
-      console.log(`   ✅ Updated user's boutiqueList`);
+      console.log('   ✅ Synced user.boutiqueList with active boutique');
+
+      await applicationsCollection.updateOne(
+        { _id: application._id },
+        {
+          $set: {
+            status: 'approved',
+            reviewedAt: application.reviewedAt || new Date(),
+            lastProvisionedAt: new Date(),
+            updatedAt: new Date(),
+          },
+        }
+      );
+
+      console.log(`   ✅ Owner linked to boutique ${validBoutiqueId}`);
     }
 
     // Show summary

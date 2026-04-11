@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, DollarSign, ShoppingBag, Users, Calendar, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
-import '../Dashboard/Dashboard.css';
+import LoadingState from '../../components/LoadingState';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Analytics.css';
 
 function AnalyticsOverview() {
   const { user } = useAuth();
@@ -78,12 +81,12 @@ function AnalyticsOverview() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading analytics...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading analytics"
+        message="Crunching KPIs and performance charts for your boutique."
+        detail="Fetching orders and product stats…"
+        icon={TrendingUp}
+      />
     );
   }
 

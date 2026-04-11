@@ -10,11 +10,14 @@ import BoutiqueDelivery from "./pages/Boutique/BoutiqueDelivery";
 import MyBoutique from "./pages/Boutique/MyBoutique";
 import ProductsList from "./pages/Products/ProductsList";
 import AddProduct from "./pages/Products/AddProduct";
+import EditProduct from "./pages/Products/EditProduct";
+import ViewProduct from "./pages/Products/ViewProduct";
 import InventoryAlerts from "./pages/Products/InventoryAlerts";
 import OrdersList from "./pages/Orders/OrdersList";
 import OrdersPending from "./pages/Orders/OrdersPending";
 import OrdersProcessing from "./pages/Orders/OrdersProcessing";
 import OrdersReturns from "./pages/Orders/OrdersReturns";
+import OrderDetails from "./pages/Orders/OrderDetails";
 import AnalyticsOverview from "./pages/Analytics/AnalyticsOverview";
 import AnalyticsReports from "./pages/Analytics/AnalyticsReports";
 import PromotionsList from "./pages/Promotions/PromotionsList";
@@ -124,6 +127,28 @@ function AppRoutes() {
       />
 
       <Route
+        path="/products/:productId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <ViewProduct />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/products/:productId/edit"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <EditProduct />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/products/inventory"
         element={
           <ProtectedRoute>
@@ -173,6 +198,17 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <OrdersReturns />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/orders/:orderId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <OrderDetails />
             </Layout>
           </ProtectedRoute>
         }

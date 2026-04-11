@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Zap, Plus, Clock, Edit2, Trash2 } from 'lucide-react';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Promotions.css';
 
 function FlashSales() {
   const flashSales = [

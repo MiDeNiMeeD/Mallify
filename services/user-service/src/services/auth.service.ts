@@ -30,6 +30,19 @@ interface LoginResponse {
 }
 
 export class AuthService {
+  private async createUserByRole(data: RegisterData & { isEmailVerified?: boolean }): Promise<IUser> {
+    switch (data.role) {
+      case UserRole.CLIENT:
+        return Client.create(data);
+      case UserRole.BOUTIQUE_OWNER:
+        return BoutiqueOwner.create(data);
+      case UserRole.DELIVERY_PERSON:
+        return DeliveryPerson.create(data);
+      default:
+        return User.create(data);
+    }
+  }
+
   private generateAccessToken(user: IUser): string {
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) throw new Error('JWT_SECRET not configured');
@@ -71,31 +84,26 @@ export class AuthService {
   }
 
   async register(data: RegisterData): Promise<{ user: Partial<IUser>; message: string }> {
+    const normalizedEmail = data.email.trim().toLowerCase();
+
     // Check if user already exists
-    const existingUser = await User.findOne({ email: data.email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       throw new ConflictError('Email already registered');
     }
 
-    // Create user based on role
-    let user: IUser;
-    
-    switch (data.role) {
-      case UserRole.CLIENT:
-        user = await Client.create(data);
-        break;
-      case UserRole.BOUTIQUE_OWNER:
-        user = await BoutiqueOwner.create(data);
-        break;
-      case UserRole.DELIVERY_PERSON:
-        user = await DeliveryPerson.create(data);
-        break;
-      default:
-        user = await User.create(data);
-    }
+    const registerData: RegisterData = {
+      ...data,
+      email: normalizedEmail,
+    };
 
     // Skip email verification if requested (for service-to-service calls)
-    if (data.skipEmailVerification) {
+    if (registerData.skipEmailVerification) {
+      const user = await this.createUserByRole({
+        ...registerData,
+        isEmailVerified: true,
+      });
+
       user.isEmailVerified = true;
       await user.save();
       return {
@@ -104,25 +112,44 @@ export class AuthService {
       };
     }
 
-    // Generate and send OTP for email verification
+    // Store pending registration + send OTP. User is created only after OTP verification.
     try {
-      await this.sendVerificationOTP(user.email);
+      const code = this.generateOTPCode();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+      await OTPCode.deleteMany({ email: normalizedEmail, type: 'verification' });
+      await OTPCode.create({
+        email: normalizedEmail,
+        code,
+        type: 'verification',
+        expiresAt,
+        pendingRegistration: {
+          name: registerData.name,
+          password: registerData.password,
+          phone: registerData.phone,
+          role: registerData.role,
+        },
+      });
+
+      await sendEmail({
+        to: normalizedEmail,
+        subject: 'Verify your email - Mallify',
+        text: `Your verification code is: ${code}. It expires in 10 minutes.`,
+        html: `<p>Your verification code is: <strong>${code}</strong></p><p>It expires in 10 minutes.</p>`,
+      });
+
       return {
-        user: this.sanitizeUser(user),
+        user: {
+          name: registerData.name,
+          email: normalizedEmail,
+          role: registerData.role,
+          isEmailVerified: false,
+        } as Partial<IUser>,
         message: 'Registration successful. Please verify your email with the OTP sent.',
       };
     } catch (emailError: any) {
-      // If email sending fails, mark as verified for boutique owners (they verified during application)
-      if (data.role === UserRole.BOUTIQUE_OWNER) {
-        console.warn('⚠️  Email verification failed, marking boutique owner as verified:', emailError.message);
-        user.isEmailVerified = true;
-        await user.save();
-        return {
-          user: this.sanitizeUser(user),
-          message: 'Registration successful.',
-        };
-      }
-      // For other roles, throw the error
+      // If email sending fails, remove pending OTP payload so no stale records remain.
+      await OTPCode.deleteMany({ email: normalizedEmail, type: 'verification' });
       throw emailError;
     }
   }
@@ -272,12 +299,18 @@ export class AuthService {
   }
 
   async sendVerificationOTP(email: string): Promise<void> {
-    const user = await User.findOne({ email });
-    if (!user) {
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = (await User.findOne({ email: normalizedEmail })) as IUser | null;
+    const existingPending = await OTPCode.findOne({
+      email: normalizedEmail,
+      type: 'verification',
+    });
+
+    if (!user && !existingPending) {
       throw new NotFoundError('User');
     }
 
-    if (user.isEmailVerified) {
+    if (user && user.isEmailVerified) {
       throw new BadRequestError('Email already verified');
     }
 
@@ -286,19 +319,20 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     // Delete existing OTPs for this email
-    await OTPCode.deleteMany({ email, type: 'verification' });
+    await OTPCode.deleteMany({ email: normalizedEmail, type: 'verification' });
 
     // Save new OTP
     await OTPCode.create({
-      email,
+      email: normalizedEmail,
       code,
       type: 'verification',
       expiresAt,
+      pendingRegistration: existingPending?.pendingRegistration,
     });
 
     // Send email
     await sendEmail({
-      to: email,
+      to: normalizedEmail,
       subject: 'Verify your email - Mallify',
       text: `Your verification code is: ${code}. It expires in 10 minutes.`,
       html: `<p>Your verification code is: <strong>${code}</strong></p><p>It expires in 10 minutes.</p>`,
@@ -306,8 +340,9 @@ export class AuthService {
   }
 
   async verifyEmail(email: string, code: string): Promise<void> {
+    const normalizedEmail = email.trim().toLowerCase();
     const otpDoc = await OTPCode.findOne({
-      email,
+      email: normalizedEmail,
       code,
       type: 'verification',
       expiresAt: { $gt: new Date() },
@@ -317,8 +352,24 @@ export class AuthService {
       throw new BadRequestError('Invalid or expired OTP code');
     }
 
-    // Update user
-    const user = await User.findOne({ email });
+    // Create user at verification time if this is a pending registration.
+    let user = (await User.findOne({ email: normalizedEmail })) as IUser | null;
+    if (!user) {
+      const pending = otpDoc.pendingRegistration;
+      if (!pending?.name || !pending?.password || !pending?.role) {
+        throw new NotFoundError('User');
+      }
+
+      user = await this.createUserByRole({
+        name: pending.name,
+        email: normalizedEmail,
+        password: pending.password,
+        phone: pending.phone,
+        role: pending.role as UserRole,
+        isEmailVerified: true,
+      });
+    }
+
     if (!user) {
       throw new NotFoundError('User');
     }
@@ -326,8 +377,8 @@ export class AuthService {
     user.isEmailVerified = true;
     await user.save();
 
-    // Delete OTP
-    await otpDoc.deleteOne();
+    // Delete all verification OTP records for this email
+    await OTPCode.deleteMany({ email: normalizedEmail, type: 'verification' });
 
     // Clear cache
     await deleteCache(`user:${user._id}`);

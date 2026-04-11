@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FileText, Download, Calendar, Filter } from 'lucide-react';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Analytics.css';
 
 function AnalyticsReports() {
   const [reportType, setReportType] = useState('sales');

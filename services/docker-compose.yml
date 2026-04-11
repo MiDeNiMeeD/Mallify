@@ -407,6 +407,26 @@ services:
       - mongodb
       - rabbitmq
 
+  # Cart Service - User Shopping Carts
+  cart-service:
+    build:
+      context: .
+      dockerfile: ./cart-service/Dockerfile
+    container_name: mallify-cart-service
+    restart: always
+    ports:
+      - "3017:3017"
+    environment:
+      PORT: 3017
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mallify:mallify_password@mongodb:27017/mallify
+      RABBITMQ_URL: amqp://mallify:mallify_password@rabbitmq:5672
+    networks:
+      - mallify-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
   # Analytics Service - Analytics & Reporting
   analytics-service:
     build:

@@ -1,8 +1,92 @@
 import { Request, Response, NextFunction } from 'express';
 import { Boutique } from '../models/Boutique';
 import { createLogger } from '@mallify/shared';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs/promises';
 
 const logger = createLogger('boutique-controller');
+
+const BOUTIQUE_UPLOAD_DIR = path.join(__dirname, '../../uploads/boutiques');
+
+const imageStorage = multer.diskStorage({
+  destination: async (_req, _file, cb) => {
+    try {
+      await fs.mkdir(BOUTIQUE_UPLOAD_DIR, { recursive: true });
+      cb(null, BOUTIQUE_UPLOAD_DIR);
+    } catch (error: any) {
+      cb(error, BOUTIQUE_UPLOAD_DIR);
+    }
+  },
+  filename: (_req, file, cb) => {
+    const safeName = file.originalname
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9._-]/g, '')
+      .toLowerCase();
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${uniqueSuffix}-${safeName}`);
+  },
+});
+
+const imageFileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+    return;
+  }
+  cb(new Error('Only image files are allowed.'));
+};
+
+export const uploadBoutiqueImagesMiddleware = multer({
+  storage: imageStorage,
+  fileFilter: imageFileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 5,
+  },
+}).array('images', 5);
+
+const buildPublicImageUrl = (req: Request, filename: string) => {
+  const forwardedProto = (req.header('x-forwarded-proto') || req.protocol).split(',')[0].trim();
+  const host = req.header('x-forwarded-host') || req.get('host') || 'localhost';
+  return `${forwardedProto}://${host}/api/boutiques/uploads/${filename}`;
+};
+
+export const uploadBoutiqueImages = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const files = (req.files as Express.Multer.File[]) || [];
+
+    if (!files.length) {
+      res.status(400).json({
+        success: false,
+        message: 'No images uploaded',
+      });
+      return;
+    }
+
+    const uploadedImages = files.map((file) => ({
+      filename: file.filename,
+      originalName: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      url: buildPublicImageUrl(req, file.filename),
+    }));
+
+    res.status(201).json({
+      success: true,
+      message: 'Boutique images uploaded successfully',
+      data: {
+        images: uploadedImages,
+      },
+    });
+  } catch (error: any) {
+    logger.error('Error uploading boutique images:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to upload boutique images',
+      error: error.message,
+    });
+  }
+};
 
 export const getBoutiques = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

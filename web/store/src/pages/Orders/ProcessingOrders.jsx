@@ -1,7 +1,9 @@
 import React from 'react';
 import { Truck, Package, Eye } from 'lucide-react';
 import { allOrders } from '../../data/mockData';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Orders.css';
 
 function ProcessingOrders() {
   const processingOrders = allOrders.filter(order => order.status === 'processing');

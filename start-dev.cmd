@@ -30,6 +30,7 @@ wt ^
 ; new-tab --title "User Service" --tabColor "#4A90E2" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\user-service" cmd /k npm run dev ^
 ; new-tab --title "Boutique Service" --tabColor "#9B59B6" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\boutique-service" cmd /k npm run dev ^
 ; new-tab --title "Product Service" --tabColor "#F39C12" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\product-service" cmd /k npm run dev ^
+; new-tab --title "Cart Service" --tabColor "#C0392B" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\cart-service" cmd /k npm run dev ^
 ; new-tab --title "Order Service" --tabColor "#1ABC9C" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\order-service" cmd /k npm run dev ^
 ; new-tab --title "Payment Service" --tabColor "#E67E22" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\payment-service" cmd /k npm run dev ^
 ; new-tab --title "Delivery Service" --tabColor "#16A085" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\delivery-service" cmd /k npm run dev ^

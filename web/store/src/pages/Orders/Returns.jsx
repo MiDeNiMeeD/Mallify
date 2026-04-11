@@ -1,6 +1,8 @@
 import React from 'react';
 import { RotateCcw, CheckCircle, XCircle, Eye, AlertTriangle } from 'lucide-react';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Orders.css';
 
 function Returns() {
   const returnRequests = [

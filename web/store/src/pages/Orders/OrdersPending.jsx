@@ -1,25 +1,88 @@
-import React from 'react';
-import { AlertCircle, CheckCircle, XCircle, Eye } from 'lucide-react';
-import { allOrders } from '../../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { AlertCircle, CheckCircle, XCircle, Eye, Package } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
+import {
+  extractPrimaryStoreId,
+  orderAmount,
+  orderCustomerEmail,
+  orderCustomerName,
+  orderItemsCount,
+} from './storeOrderUtils';
 import '../Dashboard/Dashboard.css';
 
 function OrdersPending() {
-  const pendingOrders = allOrders.filter(order => order.status === 'pending');
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const storeId = extractPrimaryStoreId(user);
+      if (!storeId) {
+        setError('No boutique found for this user');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await apiClient.getStoreOrders(storeId, { status: 'pending' });
+        if (response.success) {
+          const data = response.data;
+          if (Array.isArray(data)) setOrders(data);
+          else if (data?.orders && Array.isArray(data.orders)) setOrders(data.orders);
+          else setOrders([]);
+        } else {
+          setError(response.message || 'Failed to fetch pending orders');
+        }
+      } catch (err) {
+        console.error('Error fetching pending orders:', err);
+        setError(err.message || 'Failed to load pending orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [user]);
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
-  const handleAccept = (orderId) => {
-    alert(`Order ${orderId} accepted!`);
+  const handleAccept = async (orderId) => {
+    try {
+      await apiClient.updateStoreOrderAction(orderId, 'confirm');
+      setOrders((prev) => prev.filter(o => o._id !== orderId));
+    } catch (err) {
+      console.error('Error accepting order:', err);
+      alert('Failed to accept order');
+    }
   };
 
-  const handleReject = (orderId) => {
-    alert(`Order ${orderId} rejected!`);
+  const handleReject = async (orderId) => {
+    try {
+      await apiClient.updateStoreOrderAction(orderId, 'reject');
+      setOrders((prev) => prev.filter(o => o._id !== orderId));
+    } catch (err) {
+      console.error('Error rejecting order:', err);
+      alert('Failed to reject order');
+    }
   };
+
+  if (loading) {
+    return (
+      <LoadingState
+        title="Loading pending orders"
+        message="Fetching orders awaiting confirmation."
+        detail="Preparing pending list…"
+        icon={AlertCircle}
+      />
+    );
+  }
 
   return (
     <div className="dashboard-page">
@@ -34,11 +97,11 @@ function OrdersPending() {
         <div className="card-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <AlertCircle size={20} style={{ color: 'var(--warning-color)' }} />
-            <h2 className="card-title">{pendingOrders.length} Pending Orders</h2>
+            <h2 className="card-title">{orders.length} Pending Orders</h2>
           </div>
         </div>
         <div className="card-body">
-          {pendingOrders.length > 0 ? (
+          {orders.length > 0 ? (
             <table className="data-table">
               <thead>
                 <tr>
@@ -52,14 +115,14 @@ function OrdersPending() {
                 </tr>
               </thead>
               <tbody>
-                {pendingOrders.map((order) => (
-                  <tr key={order.id}>
-                    <td><strong>{order.id}</strong></td>
-                    <td>{order.customer}</td>
-                    <td>{order.email}</td>
-                    <td>{order.items}</td>
-                    <td><strong>{formatCurrency(order.total)}</strong></td>
-                    <td>{new Date(order.date).toLocaleString()}</td>
+                {orders.map((order) => (
+                  <tr key={order._id}>
+                    <td><strong>{order.orderNumber}</strong></td>
+                    <td>{orderCustomerName(order)}</td>
+                    <td>{orderCustomerEmail(order)}</td>
+                    <td>{orderItemsCount(order)}</td>
+                    <td><strong>{formatCurrency(orderAmount(order))}</strong></td>
+                    <td>{new Date(order.createdAt).toLocaleString()}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button className="btn-icon" title="View">
@@ -68,7 +131,7 @@ function OrdersPending() {
                         <button 
                           className="btn-icon" 
                           title="Accept Order"
-                          onClick={() => handleAccept(order.id)}
+                          onClick={() => handleAccept(order._id)}
                           style={{ color: 'var(--success-color)' }}
                         >
                           <CheckCircle size={16} />
@@ -76,7 +139,7 @@ function OrdersPending() {
                         <button 
                           className="btn-icon" 
                           title="Reject Order"
-                          onClick={() => handleReject(order.id)}
+                          onClick={() => handleReject(order._id)}
                           style={{ color: 'var(--danger-color)' }}
                         >
                           <XCircle size={16} />

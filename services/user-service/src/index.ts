@@ -13,10 +13,12 @@ import passport, { configurePassport } from './config/passport.config';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import authController from './controllers/auth.controller';
+import { initializeEmailTransport } from './utils/email';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3001;
 const logger = createLogger('user-service');
+const BODY_LIMIT = process.env.REQUEST_BODY_LIMIT || '5mb';
 
 // Middleware
 app.use(helmet());
@@ -24,8 +26,8 @@ app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
   credentials: true,
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: BODY_LIMIT }));
+app.use(express.urlencoded({ extended: true, limit: BODY_LIMIT }));
 
 // Initialize Passport
 configurePassport();
@@ -52,11 +54,36 @@ app.get('/health', (_req, res) => {
 // Google OAuth routes
 app.get(
   '/api/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'], session: false })
+  (req, res, next) => {
+    const isGoogleConfigured = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+    if (!isGoogleConfigured) {
+      return res.status(503).json({
+        success: false,
+        message: 'Google OAuth is not configured on server. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in user-service .env',
+      });
+    }
+
+    const redirectUri = typeof req.query.redirect_uri === 'string' ? req.query.redirect_uri : undefined;
+    return passport.authenticate('google', {
+      scope: ['profile', 'email'],
+      session: false,
+      state: redirectUri,
+    })(req, res, next);
+  }
 );
 app.get(
   '/api/auth/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  (_req, res, next) => {
+    const isGoogleConfigured = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+    if (!isGoogleConfigured) {
+      return res.status(503).json({
+        success: false,
+        message: 'Google OAuth is not configured on server. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in user-service .env',
+      });
+    }
+    return next();
+  },
+  passport.authenticate('google', { session: false }),
   authController.googleCallback
 );
 
@@ -78,6 +105,9 @@ const startServer = async () => {
     // Connect to Redis
     await connectRedis();
     logger.info('Connected to Redis');
+
+    // Verify SMTP connection (non-blocking for startup)
+    await initializeEmailTransport();
 
     // Start listening
     app.listen(PORT, () => {

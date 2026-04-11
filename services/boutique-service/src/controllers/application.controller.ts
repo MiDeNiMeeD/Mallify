@@ -44,7 +44,19 @@ export const upload = multer({
 // Submit boutique application
 export const submitApplication = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { boutiqueName, ownerName, email, phone, password, address, city, description, category } = req.body;
+    const {
+      boutiqueName,
+      ownerName,
+      email,
+      phone,
+      password,
+      address,
+      city,
+      state,
+      postalCode,
+      description,
+      category,
+    } = req.body;
 
     // Validate required fields
     if (!boutiqueName || !ownerName || !email || !phone || !password || !address || !city || !description || !category) {
@@ -91,6 +103,8 @@ export const submitApplication = async (req: Request, res: Response): Promise<vo
       password: hashedPassword,
       address,
       city,
+      state: state?.trim() || '',
+      postalCode: postalCode?.trim() || '',
       description,
       category,
       cinDocument: files.cinDocument[0].filename,
@@ -283,9 +297,9 @@ export const updateApplicationStatus = async (req: Request, res: Response): Prom
               address: {
                 street: application.address,
                 city: application.city,
-                state: '',
+                state: application.state?.trim() || 'Tunis Governorate',
                 country: 'Tunisia',
-                postalCode: '',
+                postalCode: application.postalCode?.trim() || '1000',
               },
               businessType: 'retail',
               categories: application.category ? [application.category] : [],

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Save, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
-import '../Dashboard/Dashboard.css';
+import LoadingState from '../../components/LoadingState';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Boutique.css';
 
 function BoutiqueHours() {
   const { user } = useAuth();
@@ -69,12 +72,12 @@ function BoutiqueHours() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading working hours...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading working hours"
+        message="Syncing your boutique's weekly schedule."
+        detail="Fetching saved hours and holiday notices…"
+        icon={Clock}
+      />
     );
   }
 

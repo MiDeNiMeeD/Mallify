@@ -14,6 +14,9 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -34,7 +37,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!user || !user.boutiqueList || user.boutiqueList.length === 0) {
-        setError('No boutique found for this user');
+        setError('No boutique found for thisttt user');
         setLoading(false);
         return;
       }
@@ -86,12 +89,12 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading dashboard...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading dashboard"
+        message="Gathering revenue, order, and product insights."
+        detail="Syncing your live boutique metrics…"
+        icon={TrendingUp}
+      />
     );
   }
 

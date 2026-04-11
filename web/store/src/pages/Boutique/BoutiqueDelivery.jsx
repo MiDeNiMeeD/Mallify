@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Truck, Save, Plus } from 'lucide-react';
 import { deliveryOptions } from '../../data/mockData';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Boutique.css';
 
 function BoutiqueDelivery() {
   const [options, setOptions] = useState(deliveryOptions);

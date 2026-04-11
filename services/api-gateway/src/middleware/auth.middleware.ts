@@ -12,14 +12,19 @@ export const publicRoutes = [
   '/health',
   '/auth/login',
   '/auth/register',
+  '/auth/send-verification-otp',
+  '/auth/verify-email',
   '/auth/google',
+  '/auth/google/callback',
   '/auth/facebook',
   '/auth/forgot-password',
   '/auth/reset-password',
   '/users/login', // User login endpoint
   '/users/register', // User registration endpoint
   '/products', // Browse products (GET only)
+  '/products/uploads/*', // Public product image files
   '/boutiques', // Browse boutiques (GET only)
+  '/boutiques/uploads/*', // Public boutique image files
   '/promotions/active', // View active promotions
   '/drivers/applications', // Submit driver application
   '/boutiques/applications', // Submit boutique application
@@ -78,6 +83,17 @@ export const smartAuth = (req: Request, res: Response, next: NextFunction) => {
   
   // Log for debugging
   logger.debug(`Checking if '${path}' matches publicRoutes: ${matchesRoute(path, publicRoutes)}`);
+
+  // Product image static assets must be publicly accessible for <img> tags.
+  if (path.startsWith('/products/uploads/')) {
+    logger.debug(`${path} is a product upload asset - allowing without auth`);
+    return next();
+  }
+
+  if (path.startsWith('/boutiques/uploads/')) {
+    logger.debug(`${path} is a boutique upload asset - allowing without auth`);
+    return next();
+  }
 
   // Public routes - no authentication required
   if (matchesRoute(path, publicRoutes)) {

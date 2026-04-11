@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Percent, Plus, Copy, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
-import '../Dashboard/Dashboard.css';
+import '../../styles/base.css';
+import '../../styles/list-layout.css';
+import './Promotions.css';
 
 function PromotionsDiscounts() {
   const { user } = useAuth();

@@ -66,6 +66,9 @@ router.get('/slug/:slug', productController.getProductBySlug);
 // Get product by ID
 router.get('/:id', idValidation, productController.getProductById);
 
+// Upload product images
+router.post('/upload-images', productController.uploadProductImagesMiddleware, productController.uploadProductImages);
+
 // Create product
 router.post('/', createProductValidation, productController.createProduct);
 

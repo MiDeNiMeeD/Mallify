@@ -43,6 +43,7 @@ const idValidation = [
 router.get('/', boutiqueController.getBoutiques);
 router.get('/featured', boutiqueController.getFeaturedBoutiques);
 router.get('/slug/:slug', boutiqueController.getBoutiqueBySlug);
+router.post('/upload-images', boutiqueController.uploadBoutiqueImagesMiddleware, boutiqueController.uploadBoutiqueImages);
 router.get('/:id', idValidation, boutiqueController.getBoutiqueById);
 router.post('/', createBoutiqueValidation, boutiqueController.createBoutique);
 router.put('/:id', updateBoutiqueValidation, boutiqueController.updateBoutique);

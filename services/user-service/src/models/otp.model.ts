@@ -4,6 +4,12 @@ export interface IOTPCode extends Document {
   email: string;
   code: string;
   type: 'verification' | 'password_reset';
+  pendingRegistration?: {
+    name: string;
+    password: string;
+    phone?: string;
+    role: string;
+  };
   expiresAt: Date;
   createdAt: Date;
 }
@@ -23,6 +29,12 @@ const OTPCodeSchema = new Schema<IOTPCode>(
       type: String,
       enum: ['verification', 'password_reset'],
       required: true,
+    },
+    pendingRegistration: {
+      name: { type: String },
+      password: { type: String },
+      phone: { type: String },
+      role: { type: String },
     },
     expiresAt: {
       type: Date,

@@ -34,6 +34,7 @@ export interface IProduct extends Document {
     name: string;
     sku: string;
     price: number;
+    compareAtPrice?: number;
     quantity: number;
     attributes: { [key: string]: string };
   }>;
@@ -147,6 +148,10 @@ const ProductSchema = new Schema<IProduct>(
         name: String,
         sku: String,
         price: Number,
+        compareAtPrice: {
+          type: Number,
+          min: 0,
+        },
         quantity: Number,
         attributes: Schema.Types.Mixed,
       },

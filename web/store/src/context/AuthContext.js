@@ -37,6 +37,23 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const refreshUserProfile = useCallback(async () => {
+    try {
+      const response = await apiClient.getProfile();
+      const latestUser = response?.data?.user || response?.data || null;
+
+      if (latestUser) {
+        setUser(latestUser);
+        localStorage.setItem('user', JSON.stringify(latestUser));
+        return latestUser;
+      }
+    } catch (error) {
+      console.error('Failed to refresh user profile', error);
+    }
+
+    return null;
+  }, []);
+
   // Check if user is logged in on mount
   useEffect(() => {
     const initializeAuth = async () => {
@@ -47,14 +64,16 @@ export const AuthProvider = ({ children }) => {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
         setIsAuthenticated(true);
-        await loadApplicationInfo(parsedUser.email);
+
+        const latestUser = await refreshUserProfile();
+        await loadApplicationInfo((latestUser || parsedUser)?.email);
       }
 
       setLoading(false);
     };
 
     initializeAuth();
-  }, [loadApplicationInfo]);
+  }, [loadApplicationInfo, refreshUserProfile]);
 
   const login = async (email, password) => {
     try {
@@ -78,8 +97,11 @@ export const AuthProvider = ({ children }) => {
         
         setUser(user);
         setIsAuthenticated(true);
-        await loadApplicationInfo(user.email);
-        return { success: true, user };
+
+        const latestUser = await refreshUserProfile();
+        await loadApplicationInfo((latestUser || user)?.email);
+
+        return { success: true, user: latestUser || user };
       }
       
       return { success: false, message: response.message };
@@ -98,7 +120,8 @@ export const AuthProvider = ({ children }) => {
       if (response.success) {
         setUser(response.data.user);
         setIsAuthenticated(true);
-        return { success: true, user: response.data.user };
+        const latestUser = await refreshUserProfile();
+        return { success: true, user: latestUser || response.data.user };
       }
       
       return { success: false, message: response.message };
@@ -133,6 +156,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     refreshApplicationStatus: () => loadApplicationInfo(user?.email),
+    refreshUserProfile,
   };
 
   return (

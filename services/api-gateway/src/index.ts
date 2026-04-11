@@ -55,6 +55,17 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
+// Uploaded product images are embedded from browser pages on other localhost origins.
+app.use('/api/products/uploads', (_req: Request, res: Response, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
+app.use('/api/boutiques/uploads', (_req: Request, res: Response, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
 // Request logging (before body parsing)
 app.use((req: Request, _res: Response, next) => {
   logger.info(`${req.method} ${req.path}`, {

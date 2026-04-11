@@ -38,6 +38,7 @@ wt ^
 ; new-tab --title "Chat" --tabColor "#F39C12" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\chat-service" cmd /k npm run dev ^
 ; new-tab --title "Review" --tabColor "#E91E63" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\review-service" cmd /k npm run dev ^
 ; new-tab --title "Wishlist" --tabColor "#FF6B9D" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\wishlist-service" cmd /k npm run dev ^
+; new-tab --title "Cart" --tabColor "#C0392B" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\cart-service" cmd /k npm run dev ^
 ; new-tab --title "Analytics" --tabColor "#34495E" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\analytics-service" cmd /k npm run dev ^
 ; new-tab --title "Audit" --tabColor "#5D6D7E" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\audit-service" cmd /k npm run dev ^
 ; new-tab --title "Dispute" --tabColor "#E74C3C" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\dispute-service" cmd /k npm run dev ^
@@ -53,13 +54,13 @@ echo ========================================
 echo.
 echo Running in Windows Terminal with colored tabs
 echo.
-echo Services (16):
+echo Services (17):
 echo - User Service: http://localhost:3001
 echo - API Gateway: http://localhost:4000
 echo - Boutique: 3003 ^| Product: 3002 ^| Order: 3004
 echo - Payment: 3005 ^| Delivery: 3006 ^| Driver: 3007
 echo - Notification: 3008 ^| Chat: 3009
-echo - Review: 3010 ^| Wishlist: 3012
+echo - Review: 3010 ^| Wishlist: 3012 ^| Cart: 3017
 echo - Analytics: 3013 ^| Audit: 3014
 echo - Dispute: 3015 ^| Promotion: 3011
 echo.

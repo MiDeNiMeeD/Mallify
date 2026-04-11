@@ -3,6 +3,7 @@ import { Search, Eye, CheckCircle, XCircle, Filter, Download, AlertCircle } from
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
 import { useNavigate } from 'react-router-dom';
+import LoadingState from '../../components/LoadingState';
 import '../Dashboard/Dashboard.css';
 
 function AllOrders() {
@@ -87,12 +88,12 @@ function AllOrders() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading orders...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading orders"
+        message="Pulling recent order activity and statuses."
+        detail="Preparing the complete order list…"
+        icon={Filter}
+      />
     );
   }
 

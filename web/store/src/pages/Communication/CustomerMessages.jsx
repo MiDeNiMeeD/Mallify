@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MessageSquare, Send, Search, Eye, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
+import LoadingState from '../../components/LoadingState';
 import '../Dashboard/Dashboard.css';
 
 function CustomerMessages() {
@@ -64,12 +65,12 @@ function CustomerMessages() {
 
   if (loading) {
     return (
-      <div className="dashboard-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading messages...</p>
-        </div>
-      </div>
+      <LoadingState
+        title="Loading messages"
+        message="Collecting inbox threads and customer replies."
+        detail="Syncing read state and latest conversations…"
+        icon={MessageSquare}
+      />
     );
   }
 

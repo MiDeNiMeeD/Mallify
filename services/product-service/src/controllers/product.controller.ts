@@ -1,8 +1,93 @@
 import { Request, Response, NextFunction } from 'express';
 import { Product } from '../models/Product';
 import { createLogger } from '@mallify/shared';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs/promises';
 
 const logger = createLogger('product-controller');
+
+const PRODUCT_UPLOAD_DIR = path.join(__dirname, '../../uploads/products');
+const MAX_PRODUCT_IMAGES = 10;
+
+const imageStorage = multer.diskStorage({
+  destination: async (_req, _file, cb) => {
+    try {
+      await fs.mkdir(PRODUCT_UPLOAD_DIR, { recursive: true });
+      cb(null, PRODUCT_UPLOAD_DIR);
+    } catch (error: any) {
+      cb(error, PRODUCT_UPLOAD_DIR);
+    }
+  },
+  filename: (_req, file, cb) => {
+    const safeName = file.originalname
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9._-]/g, '')
+      .toLowerCase();
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${uniqueSuffix}-${safeName}`);
+  },
+});
+
+const imageFileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+    return;
+  }
+  cb(new Error('Only image files are allowed.'));
+};
+
+export const uploadProductImagesMiddleware = multer({
+  storage: imageStorage,
+  fileFilter: imageFileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: MAX_PRODUCT_IMAGES,
+  },
+}).array('images', MAX_PRODUCT_IMAGES);
+
+const buildPublicImageUrl = (req: Request, filename: string) => {
+  const forwardedProto = (req.header('x-forwarded-proto') || req.protocol).split(',')[0].trim();
+  const host = req.header('x-forwarded-host') || req.get('host') || 'localhost';
+  return `${forwardedProto}://${host}/api/products/uploads/${filename}`;
+};
+
+export const uploadProductImages = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const files = (req.files as Express.Multer.File[]) || [];
+
+    if (!files.length) {
+      res.status(400).json({
+        success: false,
+        message: 'No images uploaded',
+      });
+      return;
+    }
+
+    const uploadedImages = files.map((file) => ({
+      filename: file.filename,
+      originalName: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      url: buildPublicImageUrl(req, file.filename),
+    }));
+
+    res.status(201).json({
+      success: true,
+      message: 'Images uploaded successfully',
+      data: {
+        images: uploadedImages,
+      },
+    });
+  } catch (error: any) {
+    logger.error('Error uploading product images:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to upload product images',
+      error: error.message,
+    });
+  }
+};
 
 // Get all products with pagination and filtering
 export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
