@@ -123,7 +123,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         { path: '/orders', icon: FiShoppingCart, label: 'All Orders' },
         { path: '/orders/pending', icon: FiClock, label: 'Pending' },
         { path: '/orders/processing', icon: FiPackage, label: 'Processing' },
-        { path: '/orders/returns', icon: FiAlertCircle, label: 'Returns & Refunds' }
+        
       ]
     },
     { 
@@ -134,15 +134,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         { path: '/analytics/reports', icon: FiBarChart2, label: 'Reports' }
       ]
     },
-    { 
-      icon: FiTag, 
-      label: 'Promotions',
-      children: [
-        { path: '/promotions', icon: FiTag, label: 'All Promotions' },
-        { path: '/promotions/discounts', icon: FiPercent, label: 'Discounts & Coupons' },
-        { path: '/promotions/flash-sales', icon: FiZap, label: 'Flash Sales' }
-      ]
-    },
+    
     { 
       icon: FiMessageSquare, 
       label: 'Communication',

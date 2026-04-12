@@ -35,6 +35,19 @@ export interface IOrder extends Document {
       | 'processing'
       | 'shipped'
       | 'delivered';
+    statusNotes?: Record<string, string>;
+    statusHistory?: Array<{
+      status:
+        | 'pending'
+        | 'confirmed'
+        | 'rejected'
+        | 'cancelled'
+        | 'processing'
+        | 'shipped'
+        | 'delivered';
+      note?: string;
+      changedAt: Date;
+    }>;
     items: Array<{
       productId: mongoose.Types.ObjectId;
       name: string;
@@ -129,6 +142,21 @@ const OrderSchema = new Schema<IOrder>(
           enum: ['pending', 'confirmed', 'rejected', 'cancelled', 'processing', 'shipped', 'delivered'],
           default: 'pending',
         },
+        statusNotes: {
+          type: Schema.Types.Mixed,
+          default: {},
+        },
+        statusHistory: [
+          {
+            status: {
+              type: String,
+              enum: ['pending', 'confirmed', 'rejected', 'cancelled', 'processing', 'shipped', 'delivered'],
+              required: true,
+            },
+            note: { type: String },
+            changedAt: { type: Date, default: Date.now },
+          },
+        ],
         items: [
           {
             productId: String,

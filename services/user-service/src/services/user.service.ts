@@ -1,9 +1,23 @@
 import mongoose from 'mongoose';
 import { User, IUser, DeliveryPerson } from '../models/user.model';
-import { NotFoundError, BadRequestError } from '@mallify/shared';
+import { NotFoundError, BadRequestError, UserRole } from '@mallify/shared';
 import { setCache, getCache, deleteCache } from '../config/redis';
 
 export class UserService {
+  async getBuyerBasicById(userId: string): Promise<{ _id: string; name: string; email: string; phone: string }> {
+    const user = await User.findById(userId).select('_id name email phone role isActive').lean();
+    if (!user || !user.isActive || user.role !== UserRole.CLIENT) {
+      throw new NotFoundError('User');
+    }
+
+    return {
+      _id: String(user._id),
+      name: String(user.name || '').trim(),
+      email: String(user.email || '').trim(),
+      phone: String(user.phone || '').trim(),
+    };
+  }
+
   async getUserById(userId: string): Promise<IUser> {
     // Try to get from cache first
     const cachedUser = await getCache(`user:${userId}`);

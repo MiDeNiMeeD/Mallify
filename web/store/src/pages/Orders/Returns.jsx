@@ -25,9 +25,10 @@ function Returns() {
   };
 
   return (
-    <div className="dashboard-page">
+    <div className="dashboard-page orders-page">
       <div className="page-header">
         <div>
+          <div className="orders-eyebrow">Returns Desk</div>
           <h1 className="page-title">Returns & Refunds</h1>
           <p className="page-subtitle">Manage customer return requests and refunds</p>
         </div>

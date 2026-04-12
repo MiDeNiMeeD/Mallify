@@ -8,6 +8,7 @@ const Toast = ({
   onClose,
   duration = 4000,
   actions = [],
+  input = null,
 }) => {
   useEffect(() => {
     if (show && duration > 0) {
@@ -79,6 +80,18 @@ const Toast = ({
         <div className="toast-icon">{getIcon()}</div>
         <div className="toast-content">
           <span className="toast-message">{message}</span>
+          {input && (
+            <div className="toast-input-wrap">
+              <input
+                type="text"
+                className="toast-input"
+                placeholder={input.placeholder || "Enter note"}
+                value={input.value || ""}
+                onChange={(e) => input.onChange && input.onChange(e.target.value)}
+              />
+              {input.error ? <span className="toast-input-error">{input.error}</span> : null}
+            </div>
+          )}
           {actions.length > 0 && (
             <div className="toast-actions">
               {actions.map((action, index) => (

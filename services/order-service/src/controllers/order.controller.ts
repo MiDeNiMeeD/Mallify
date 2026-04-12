@@ -163,6 +163,9 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
           originalTotal: Number(segment.originalTotal || segment.total || 0),
           payableTotal: Number(segment.payableTotal || segment.total || 0),
           status: String(segment.status || 'pending'),
+          statusNotes: segment.statusNotes || {},
+          statusHistory: Array.isArray(segment.statusHistory) ? segment.statusHistory : [],
+          statusNote: segment?.statusNotes?.[String(segment.status || 'pending')] || '',
           paymentStatus: parent.paymentStatus,
           shippingAddress: parent.shippingAddress,
           createdAt: parent.createdAt,
@@ -248,6 +251,9 @@ export const getOrderById = async (req: Request, res: Response, next: NextFuncti
           originalTotal: segment.originalTotal,
           payableTotal: segment.payableTotal,
           status: segment.status,
+          statusNotes: segment.statusNotes || {},
+          statusHistory: Array.isArray(segment.statusHistory) ? segment.statusHistory : [],
+          statusNote: segment?.statusNotes?.[String(segment.status || 'pending')] || '',
           paymentStatus: parentWithStoreSegment.paymentStatus,
           shippingAddress: parentWithStoreSegment.shippingAddress,
           createdAt: parentWithStoreSegment.createdAt,
@@ -404,6 +410,8 @@ export const createCheckoutOrder = async (req: Request, res: Response, next: Nex
         storeId: currentStoreId,
         boutiqueId: currentStoreId,
         status: 'pending',
+        statusNotes: {},
+        statusHistory: [{ status: 'pending', changedAt: new Date() }],
         items: normalizedItems,
         subtotal,
         tax,
@@ -447,12 +455,13 @@ export const createCheckoutOrder = async (req: Request, res: Response, next: Nex
 export const updateStoreOrderStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
-    const { action } = req.body || {};
+    const { action, note: rawNote } = req.body || {};
     const normalizedAction = String(action || '').toLowerCase();
+    const note = typeof rawNote === 'string' ? rawNote.trim() : '';
 
-    const allowedActions = new Set(['confirm', 'reject', 'cancel']);
+    const allowedActions = new Set(['confirm', 'reject', 'cancel', 'pending']);
     if (!allowedActions.has(normalizedAction)) {
-      res.status(400).json({ success: false, message: 'Invalid action. Use confirm, reject or cancel.' });
+      res.status(400).json({ success: false, message: 'Invalid action. Use confirm, reject, cancel or pending.' });
       return;
     }
 
@@ -475,13 +484,32 @@ export const updateStoreOrderStatus = async (req: Request, res: Response, next: 
       return;
     }
 
-    if (normalizedAction === 'confirm') {
-      storeOrder.status = 'confirmed';
-    } else if (normalizedAction === 'reject') {
-      storeOrder.status = 'rejected';
-    } else {
-      storeOrder.status = 'cancelled';
+    const nextStatus =
+      normalizedAction === 'confirm'
+        ? 'confirmed'
+        : normalizedAction === 'reject'
+        ? 'rejected'
+        : normalizedAction === 'pending'
+        ? 'pending'
+        : 'cancelled';
+
+    storeOrder.status = nextStatus;
+
+    if (!storeOrder.statusNotes || typeof storeOrder.statusNotes !== 'object') {
+      storeOrder.statusNotes = {};
     }
+    if (note) {
+      storeOrder.statusNotes[nextStatus] = note;
+    }
+
+    if (!Array.isArray(storeOrder.statusHistory)) {
+      storeOrder.statusHistory = [];
+    }
+    storeOrder.statusHistory.push({
+      status: nextStatus,
+      note: note || undefined,
+      changedAt: new Date(),
+    });
 
     applyParentProgressFromEmbeddedStoreOrders(parentOrder);
     await parentOrder.save();
@@ -490,7 +518,10 @@ export const updateStoreOrderStatus = async (req: Request, res: Response, next: 
       success: true,
       message: 'Store order status updated',
       data: {
-        order: storeOrder,
+        order: {
+          ...(storeOrder as any),
+          statusNote: (storeOrder.statusNotes || {})[String(storeOrder.status || nextStatus)] || '',
+        },
         parentOrderId: parentOrder._id,
         parentStatus: parentOrder.status,
         confirmationPercent: parentOrder.confirmationPercent,

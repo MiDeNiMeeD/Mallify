@@ -13,6 +13,8 @@ export const API_ENDPOINTS = {
   
   // Users
   USER_PROFILE: `${API_BASE_URL}/api/users/profile`,
+  USER_BY_ID: (id) => `${API_BASE_URL}/api/users/${id}`,
+  USER_BUYER_BASIC_BY_ID: (id) => `${API_BASE_URL}/api/users/buyers/${id}/basic`,
   UPDATE_PROFILE: `${API_BASE_URL}/api/users/profile`,
   
   // Products
@@ -154,6 +156,14 @@ class ApiClient {
     return await this.request(API_ENDPOINTS.USER_PROFILE);
   }
 
+  async getUserById(id) {
+    return await this.request(API_ENDPOINTS.USER_BY_ID(id));
+  }
+
+  async getBuyerBasicById(id) {
+    return await this.request(API_ENDPOINTS.USER_BUYER_BASIC_BY_ID(id));
+  }
+
   async updateProfile(profileData) {
     return await this.request(API_ENDPOINTS.UPDATE_PROFILE, {
       method: 'PUT',
@@ -226,10 +236,10 @@ class ApiClient {
     return await this.request(url);
   }
 
-  async updateStoreOrderAction(id, action) {
+  async updateStoreOrderAction(id, action, note) {
     return await this.request(API_ENDPOINTS.STORE_ORDER_ACTION(id), {
       method: 'PATCH',
-      body: JSON.stringify({ action }),
+      body: JSON.stringify({ action, note }),
     });
   }
 

@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
 import LoadingState from '../../components/LoadingState';
 import { extractPrimaryStoreId, orderAmount, orderCustomerName } from './storeOrderUtils';
+import './Orders.css';
 import '../Dashboard/Dashboard.css';
 
 function OrdersReturns() {
@@ -93,9 +94,10 @@ function OrdersReturns() {
   };
 
   return (
-    <div className="dashboard-page">
+    <div className="dashboard-page orders-page">
       <div className="page-header">
         <div>
+          <div className="orders-eyebrow">Returns Desk</div>
           <h1 className="page-title">Returns & Refunds</h1>
           <p className="page-subtitle">Manage customer return requests and refunds</p>
         </div>

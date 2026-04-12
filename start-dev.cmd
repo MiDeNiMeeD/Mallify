@@ -22,6 +22,13 @@ timeout /t 3 /nobreak >nul
 echo MongoDB started.
 echo.
 
+REM Start app client
+echo Starting app client...
+start "App Client" cmd /k "cd /d ""%BASE_DIR%\app\client"" && npm start"
+timeout /t 3 /nobreak >nul
+echo App client started.
+echo.
+
 REM Start all services and frontends in Windows Terminal with tabs
 echo Launching services in Windows Terminal...
 wt ^

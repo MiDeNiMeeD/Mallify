@@ -59,6 +59,33 @@
   flex: 1;
 }
 
+.toast-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toast-input {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.83rem;
+  color: #111827;
+  background: #fff;
+  outline: none;
+}
+
+.toast-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.16);
+}
+
+.toast-input-error {
+  font-size: 0.72rem;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
 .toast-actions {
   display: flex;
   flex-wrap: wrap;

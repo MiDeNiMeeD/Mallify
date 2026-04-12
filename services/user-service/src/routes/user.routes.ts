@@ -19,6 +19,18 @@ const router = Router();
 router.get('/profile', authenticate, userController.getProfile);
 
 /**
+ * @route   GET /api/users/buyers/:userId/basic
+ * @desc    Get buyer basic profile (name/email/phone) for order views
+ * @access  Private (Admin, Managers, Boutique Owner)
+ */
+router.get(
+  '/buyers/:userId/basic',
+  authenticate,
+  authorize(UserRole.ADMIN, UserRole.DELIVERY_MANAGER, UserRole.BOUTIQUES_MANAGER, UserRole.BOUTIQUE_OWNER),
+  userController.getBuyerBasicById
+);
+
+/**
  * @route   GET /api/users/:userId
  * @desc    Get user by ID (for admins/managers)
  * @access  Private (Admin, Managers)

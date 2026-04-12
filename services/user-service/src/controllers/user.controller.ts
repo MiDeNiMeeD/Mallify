@@ -15,6 +15,12 @@ export class UserController {
     return ResponseFormatter.success(res, user, 'User retrieved successfully');
   });
 
+  getBuyerBasicById = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const { userId } = req.params;
+    const buyer = await userService.getBuyerBasicById(userId);
+    return ResponseFormatter.success(res, buyer, 'Buyer basic profile retrieved successfully');
+  });
+
   updateProfile = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const userId = (req as any).user.id;
     const user = await userService.updateProfile(userId, req.body);
