@@ -87,6 +87,44 @@ app.get(
   authController.googleCallback
 );
 
+// Facebook OAuth routes
+app.get(
+  '/api/auth/facebook',
+  (req, res, next) => {
+    const isFacebookConfigured = Boolean(process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET);
+    if (!isFacebookConfigured) {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Facebook OAuth is not configured on server. Set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET in user-service .env',
+      });
+    }
+
+    const redirectUri = typeof req.query.redirect_uri === 'string' ? req.query.redirect_uri : undefined;
+    return passport.authenticate('facebook', {
+      scope: ['email'],
+      session: false,
+      state: redirectUri,
+    })(req, res, next);
+  }
+);
+app.get(
+  '/api/auth/facebook/callback',
+  (_req, res, next) => {
+    const isFacebookConfigured = Boolean(process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET);
+    if (!isFacebookConfigured) {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Facebook OAuth is not configured on server. Set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET in user-service .env',
+      });
+    }
+    return next();
+  },
+  passport.authenticate('facebook', { session: false }),
+  authController.facebookCallback
+);
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

@@ -3,6 +3,27 @@ import { asyncHandler, ResponseFormatter } from '@mallify/shared';
 import authService from '../services/auth.service';
 
 export class AuthController {
+  private isAppRedirectUri = (redirectUri?: string) =>
+    Boolean(
+      redirectUri &&
+        (redirectUri.startsWith('mallify://') ||
+          redirectUri.startsWith('exp://') ||
+          redirectUri.startsWith('exps://'))
+    );
+
+  private redirectToApp = (
+    res: Response,
+    redirectUri: string,
+    payload: { accessToken: string; refreshToken: string; email?: string }
+  ) => {
+    const separator = redirectUri.includes('?') ? '&' : '?';
+    const accessToken = encodeURIComponent(payload.accessToken);
+    const refreshToken = encodeURIComponent(payload.refreshToken);
+    const email = encodeURIComponent(payload.email || '');
+    const redirectUrl = `${redirectUri}${separator}accessToken=${accessToken}&refreshToken=${refreshToken}&email=${email}`;
+    return res.redirect(redirectUrl);
+  };
+
   register = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const result = await authService.register(req.body);
     return ResponseFormatter.created(res, result, result.message);
@@ -25,18 +46,36 @@ export class AuthController {
     );
 
     const redirectUri = typeof req.query.state === 'string' ? req.query.state : undefined;
-    const isAppRedirect = Boolean(redirectUri && redirectUri.startsWith('mallify://'));
-
-    if (isAppRedirect && redirectUri) {
-      const separator = redirectUri.includes('?') ? '&' : '?';
-      const accessToken = encodeURIComponent(result.accessToken);
-      const refreshToken = encodeURIComponent(result.refreshToken);
-      const email = encodeURIComponent(result.user.email || '');
-      const redirectUrl = `${redirectUri}${separator}accessToken=${accessToken}&refreshToken=${refreshToken}&email=${email}`;
-      return res.redirect(redirectUrl);
+    if (this.isAppRedirectUri(redirectUri) && redirectUri) {
+      return this.redirectToApp(res, redirectUri, {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        email: result.user.email,
+      });
     }
 
     return ResponseFormatter.success(res, result, 'Google login successful');
+  });
+
+  facebookCallback = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const user = req.user as any;
+    const result = await authService.facebookLogin(
+      user.facebookId,
+      user.email,
+      user.name,
+      user.profileImage
+    );
+
+    const redirectUri = typeof req.query.state === 'string' ? req.query.state : undefined;
+    if (this.isAppRedirectUri(redirectUri) && redirectUri) {
+      return this.redirectToApp(res, redirectUri, {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        email: result.user.email,
+      });
+    }
+
+    return ResponseFormatter.success(res, result, 'Facebook login successful');
   });
 
   refreshToken = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {

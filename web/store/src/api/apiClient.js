@@ -236,10 +236,10 @@ class ApiClient {
     return await this.request(url);
   }
 
-  async updateStoreOrderAction(id, action, note) {
+  async updateStoreOrderAction(id, action, note, actorType = 'store') {
     return await this.request(API_ENDPOINTS.STORE_ORDER_ACTION(id), {
       method: 'PATCH',
-      body: JSON.stringify({ action, note }),
+      body: JSON.stringify({ action, note, actorType }),
     });
   }
 

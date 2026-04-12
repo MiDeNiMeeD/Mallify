@@ -30,6 +30,7 @@ export interface IUser extends Document {
   isEmailVerified: boolean;
   isActive: boolean;
   googleId?: string;
+  facebookId?: string;
   profileImage?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -94,6 +95,10 @@ const UserSchema = new Schema<IUser>(
       type: String,
       sparse: true,
     },
+    facebookId: {
+      type: String,
+      sparse: true,
+    },
     profileImage: {
       type: String,
     },
@@ -129,6 +134,7 @@ UserSchema.methods.comparePassword = async function (candidatePassword: string):
 UserSchema.index({ email: 1 });
 UserSchema.index({ role: 1 });
 UserSchema.index({ googleId: 1 }, { sparse: true });
+UserSchema.index({ facebookId: 1 }, { sparse: true });
 
 // Create the base User model
 export const User: Model<IUser> = mongoose.model<IUser>('User', UserSchema);

@@ -411,7 +411,7 @@ export const createCheckoutOrder = async (req: Request, res: Response, next: Nex
         boutiqueId: currentStoreId,
         status: 'pending',
         statusNotes: {},
-        statusHistory: [{ status: 'pending', changedAt: new Date() }],
+        statusHistory: [{ status: 'pending', changedBy: 'system', changedAt: new Date() }],
         items: normalizedItems,
         subtotal,
         tax,
@@ -455,9 +455,16 @@ export const createCheckoutOrder = async (req: Request, res: Response, next: Nex
 export const updateStoreOrderStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
-    const { action, note: rawNote } = req.body || {};
+    const { action, note: rawNote, actorType: rawActorType } = req.body || {};
     const normalizedAction = String(action || '').toLowerCase();
     const note = typeof rawNote === 'string' ? rawNote.trim() : '';
+    const normalizedActorType = String(rawActorType || '').toLowerCase();
+    const changedBy: 'client' | 'store' | 'system' =
+      normalizedActorType === 'client' || normalizedActorType === 'store' || normalizedActorType === 'system'
+        ? (normalizedActorType as 'client' | 'store' | 'system')
+        : normalizedAction === 'cancel'
+        ? 'client'
+        : 'store';
 
     const allowedActions = new Set(['confirm', 'reject', 'cancel', 'pending']);
     if (!allowedActions.has(normalizedAction)) {
@@ -508,6 +515,7 @@ export const updateStoreOrderStatus = async (req: Request, res: Response, next: 
     storeOrder.statusHistory.push({
       status: nextStatus,
       note: note || undefined,
+      changedBy,
       changedAt: new Date(),
     });
 
@@ -525,6 +533,7 @@ export const updateStoreOrderStatus = async (req: Request, res: Response, next: 
         parentOrderId: parentOrder._id,
         parentStatus: parentOrder.status,
         confirmationPercent: parentOrder.confirmationPercent,
+        changedBy,
       },
     });
   } catch (error) {

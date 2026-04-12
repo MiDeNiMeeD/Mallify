@@ -18,6 +18,16 @@ const app: Application = express();
 const PORT = process.env.PORT || 3000;
 const logger = createLogger('api-gateway');
 
+const trustProxyEnv = process.env.TRUST_PROXY;
+if (trustProxyEnv === 'true') {
+  app.set('trust proxy', true);
+} else if (trustProxyEnv === 'false') {
+  app.set('trust proxy', false);
+} else {
+  // ngrok/most local reverse-proxy setups have one hop before the app.
+  app.set('trust proxy', 1);
+}
+
 // ============================================
 // Middleware
 // ============================================

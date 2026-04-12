@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "clone:boutique": "node clone-boutique-data.js"
+    "clone:boutique": "node clone-boutique-data.js",
+    "products:images:dry": "node update-product-images-unsplash.js --dry-run",
+    "products:images:update": "node update-product-images-unsplash.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

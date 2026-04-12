@@ -46,6 +46,7 @@ export interface IOrder extends Document {
         | 'shipped'
         | 'delivered';
       note?: string;
+      changedBy?: 'client' | 'store' | 'system';
       changedAt: Date;
     }>;
     items: Array<{
@@ -154,6 +155,10 @@ const OrderSchema = new Schema<IOrder>(
               required: true,
             },
             note: { type: String },
+            changedBy: {
+              type: String,
+              enum: ['client', 'store', 'system'],
+            },
             changedAt: { type: Date, default: Date.now },
           },
         ],

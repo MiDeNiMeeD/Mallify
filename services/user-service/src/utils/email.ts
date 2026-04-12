@@ -5,6 +5,7 @@ interface EmailOptions {
   subject: string;
   text: string;
   html?: string;
+  attachments?: any[];
 }
 
 const smtpHost = process.env.SMTP_HOST || process.env.EMAIL_HOST || 'smtp.gmail.com';
@@ -50,6 +51,9 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     }
 
     console.log(`[EMAIL SKIPPED - No SMTP config] To: ${options.to}, Subject: ${options.subject}`);
+    if (options.attachments && options.attachments.length) {
+      console.log(`[EMAIL SKIPPED - Attachments]: ${options.attachments.map(a => a.filename || a.path || a.cid).join(', ')}`);
+    }
     if (options.text.includes('verification code') || options.text.includes('OTP')) {
       const codeMatch = options.text.match(/\b\d{6}\b/);
       if (codeMatch) {
@@ -66,6 +70,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
       subject: options.subject,
       text: options.text,
       html: options.html || options.text,
+      attachments: options.attachments || [],
     });
     console.log(`Email sent to ${options.to}`);
   } catch (error) {

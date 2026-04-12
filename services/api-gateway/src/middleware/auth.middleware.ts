@@ -17,6 +17,7 @@ export const publicRoutes = [
   '/auth/google',
   '/auth/google/callback',
   '/auth/facebook',
+  '/auth/facebook/callback',
   '/auth/forgot-password',
   '/auth/reset-password',
   '/users/login', // User login endpoint

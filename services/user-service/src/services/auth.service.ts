@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 import { User, IUser, Client, BoutiqueOwner, DeliveryPerson } from '../models/user.model';
 import { OTPCode } from '../models/otp.model';
 import { RefreshToken } from '../models/refreshToken.model';
@@ -229,31 +231,7 @@ export class AuthService {
   }
 
   async googleLogin(googleId: string, email: string, name: string, profileImage?: string): Promise<LoginResponse> {
-    // Find or create user
-    let user = await User.findOne({ googleId });
-
-    if (!user) {
-      // Check if user exists with this email
-      user = await User.findOne({ email });
-      
-      if (user) {
-        // Link Google account to existing user
-        user.googleId = googleId;
-        user.isEmailVerified = true;
-        if (profileImage) user.profileImage = profileImage;
-        await user.save();
-      } else {
-        // Create new client user
-        user = await Client.create({
-          name,
-          email,
-          googleId,
-          profileImage,
-          role: UserRole.CLIENT,
-          isEmailVerified: true,
-        });
-      }
-    }
+    const user = await this.socialLogin('googleId', googleId, email, name, profileImage);
 
     // Generate tokens
     const accessToken = this.generateAccessToken(user);
@@ -270,6 +248,61 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async facebookLogin(facebookId: string, email: string, name: string, profileImage?: string): Promise<LoginResponse> {
+    const user = await this.socialLogin('facebookId', facebookId, email, name, profileImage);
+
+    // Generate tokens
+    const accessToken = this.generateAccessToken(user);
+    const refreshToken = this.generateRefreshToken();
+
+    // Save refresh token
+    await this.saveRefreshToken(user._id.toString(), refreshToken);
+
+    // Cache user data
+    await setCache(`user:${user._id}`, this.sanitizeUser(user), 3600);
+
+    return {
+      user: this.sanitizeUser(user),
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  private async socialLogin(
+    providerField: 'googleId' | 'facebookId',
+    providerId: string,
+    email: string,
+    name: string,
+    profileImage?: string
+  ): Promise<IUser> {
+    const normalizedEmail = email.trim().toLowerCase();
+    let user = await User.findOne({ [providerField]: providerId });
+
+    if (user) {
+      return user;
+    }
+
+    user = await User.findOne({ email: normalizedEmail });
+    if (user) {
+      (user as any)[providerField] = providerId;
+      user.isEmailVerified = true;
+      if (profileImage) {
+        user.profileImage = profileImage;
+      }
+      await user.save();
+      return user;
+    }
+
+    return Client.create({
+      name,
+      email: normalizedEmail,
+      [providerField]: providerId,
+      profileImage,
+      role: UserRole.CLIENT,
+      isEmailVerified: true,
+    } as any);
   }
 
   async refreshAccessToken(refreshToken: string): Promise<{ accessToken: string }> {
@@ -385,10 +418,10 @@ export class AuthService {
   }
 
   async sendPasswordResetOTP(email: string): Promise<void> {
-    const user = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      // Don't reveal if user exists
-      return;
+      throw new NotFoundError('User with this email does not exist');
     }
 
     // Generate OTP
@@ -396,28 +429,55 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     // Delete existing OTPs
-    await OTPCode.deleteMany({ email, type: 'password_reset' });
+    await OTPCode.deleteMany({ email: normalizedEmail, type: 'password_reset' });
 
     // Save new OTP
     await OTPCode.create({
-      email,
+      email: normalizedEmail,
       code,
       type: 'password_reset',
       expiresAt,
     });
 
     // Send email
+    // Prefer CID attachment for the logo (better rendering and smaller HTML)
+    const logoPath = path.resolve(__dirname, '..', '..', '..', '..', 'app', 'client', 'assets', 'logo-black.png');
+    let attachments: any[] = [];
+    let hasLogo = false;
+    try {
+      if (fs.existsSync(logoPath)) {
+        attachments.push({
+          filename: 'logo-black.png',
+          path: logoPath,
+          cid: 'mallify-logo',
+          contentType: 'image/png',
+          contentDisposition: 'inline',
+        });
+        hasLogo = true;
+      }
+    } catch (err) {
+      console.warn('[EMAIL] Could not access logo file for attachment', err);
+      attachments = [];
+      hasLogo = false;
+    }
+
+    const supportEmail = process.env.SUPPORT_EMAIL || process.env.FROM_EMAIL || 'support@example.com';
+    const emailHtml = `<!doctype html><html><body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="margin:32px auto;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(16,24,40,0.08);"><tr><td style="padding:28px;text-align:center;">${hasLogo?`<img src="cid:mallify-logo" alt="Mallify" style="width:140px;height:auto;display:block;margin:0 auto 18px;"/>`:''}<h2 style="margin:0 0 8px;color:#111;font-size:20px;">Reset your password</h2><p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Use the code below to reset your password. It will expire in 10 minutes.</p><div style="display:inline-block;padding:14px 20px;background:#f8fafc;border-radius:8px;font-size:22px;font-weight:600;color:#111;letter-spacing:4px;">${code}</div><p style="margin:20px 0 0;color:#6b7280;font-size:13px;">If you didn't request this, you can safely ignore this email.</p><p style="margin:8px 0 0;color:#6b7280;font-size:13px;">Need help? <a href="mailto:${supportEmail}" style="color:#111;text-decoration:underline;">Contact support</a></p></td></tr><tr><td style="background:#f9fafb;padding:12px 20px;text-align:center;color:#9ca3af;font-size:12px;">© ${new Date().getFullYear()} Mallify. All rights reserved.</td></tr></table></td></tr></table></body></html>`;
+
     await sendEmail({
-      to: email,
+      to: normalizedEmail,
       subject: 'Reset your password - Mallify',
       text: `Your password reset code is: ${code}. It expires in 10 minutes.`,
-      html: `<p>Your password reset code is: <strong>${code}</strong></p><p>It expires in 10 minutes.</p>`,
+      html: emailHtml,
+      attachments: attachments.length ? attachments : undefined,
     });
   }
 
   async resetPassword(email: string, code: string, newPassword: string): Promise<void> {
+    const normalizedEmail = email.trim().toLowerCase();
+
     const otpDoc = await OTPCode.findOne({
-      email,
+      email: normalizedEmail,
       code,
       type: 'password_reset',
       expiresAt: { $gt: new Date() },
@@ -428,7 +488,7 @@ export class AuthService {
     }
 
     // Update user password
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       throw new NotFoundError('User');
     }
