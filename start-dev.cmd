@@ -1,6 +1,7 @@
 @echo off
+chcp 65001 >nul
 echo ========================================
-echo Starting Development Environment
+echo 🚀 Starting Development Environment
 echo ========================================
 echo.
 
@@ -15,21 +16,18 @@ REM Set base directory as environment variable
 set "BASE_DIR=%~dp0"
 set "BASE_DIR=%BASE_DIR:~0,-1%"
 
-REM Start MongoDB
+REM Start MongoDB and Redis using Docker
 echo Starting MongoDB...
 start "MongoDB" cmd /k "docker start mallify-mongodb || docker run --name mallify-mongodb -p 27017:27017 -d mongo:latest"
 timeout /t 3 /nobreak >nul
 echo MongoDB started.
+echo Starting Redis...
+docker update --restart always mallify-redis >nul 2>&1
+docker start mallify-redis >nul 2>&1
+echo Redis started.
 echo.
 
-REM Start app client
-echo Starting app client...
-start "App Client" cmd /k "cd /d ""%BASE_DIR%\app\client"" && npm start"
-timeout /t 3 /nobreak >nul
-echo App client started.
-echo.
-
-REM Start all services and frontends in Windows Terminal with tabs
+REM Start all services  in Windows Terminal with tabs
 echo Launching services in Windows Terminal...
 wt ^
   new-tab --title "MongoDB Manager" --tabColor "#00A86B" --suppressApplicationTitle --startingDirectory "%BASE_DIR%" cmd /k mongo-manager.cmd ^
@@ -50,20 +48,35 @@ wt ^
 ; new-tab --title "Promotion Service" --tabColor "#FF5722" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\promotion-service" cmd /k npm run dev ^
 ; new-tab --title "Dispute Service" --tabColor "#795548" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\dispute-service" cmd /k npm run dev ^
 ; new-tab --title "Audit Service" --tabColor "#9E9E9E" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\services\audit-service" cmd /k npm run dev ^
-; new-tab --title "Home Frontend" --tabColor "#27AE60" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\web\home" cmd /k npm run dev ^
+
+
+
+
+
+
+REM Start all frontends in Windows Terminal with tabs
+echo Launching Frontends in Windows Terminal...
+wt ^
+ new-tab --title "Home Frontend" --tabColor "#27AE60" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\web\home" cmd /k npm run dev ^
 ; new-tab --title "Manager Boutique" --tabColor "#8E44AD" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\web\manager\store" cmd /k npm start ^
 ; new-tab --title "Manager Order" --tabColor "#FF6B6B" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\web\manager\order" cmd /k npm start ^
 ; new-tab --title "Store Owner" --tabColor "#6be1ff" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\web\store" cmd /k npm start ^
 ; new-tab --title "Admin Panel" --tabColor "#34495E" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\web\admin" cmd /k npm start ^
+; new-tab --title "ngrok 4000" --tabColor "#00CED1" --suppressApplicationTitle --startingDirectory "%BASE_DIR%" cmd /k ngrok http 4000 ^
+; new-tab --title "App Client" --tabColor "#1E90FF" --suppressApplicationTitle --startingDirectory "%BASE_DIR%\app\client" cmd /k npm start ^
+
+
+
+
 
 echo.
 echo ========================================
-echo Development Environment Ready!
+echo ✅ Development Environment Ready!
 echo ========================================
 echo.
 echo All services running in Windows Terminal tabs
 echo.
-echo === Backend Services ===
+echo === 🧩 Backend Services ===
 echo - API Gateway:          http://localhost:4000
 echo - User Service:         http://localhost:3001
 echo - Boutique Service:     http://localhost:3002
@@ -81,13 +94,16 @@ echo - Promotion Service:    http://localhost:3013
 echo - Dispute Service:      http://localhost:3014
 echo - Audit Service:        http://localhost:3015
 echo.
-echo === Frontend Apps ===
+echo === 🖥️ Frontend Apps ===
 echo - Home:                 http://localhost:5174
 echo - Manager Store:        http://localhost:3333
 echo - Manager Order:        http://localhost:3334
 echo - Store Owner:          http://localhost:3000
 echo.
-echo === Database ===
+echo === 🌐 Tunnel ===
+echo - ngrok (API 4000):     ngrok http 4000
+echo.
+echo === 🗄️ Database ===
 echo - MongoDB:              mongodb://localhost:27017
 echo.
 pause

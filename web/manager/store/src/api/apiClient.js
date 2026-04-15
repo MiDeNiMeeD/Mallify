@@ -36,6 +36,10 @@ export const API_ENDPOINTS = {
   
   // Payments
   PAYMENTS: `${API_BASE_URL}/api/payments`,
+
+  // Subscription Plans
+  SUBSCRIPTION_PLANS: `${API_BASE_URL}/api/boutiques/subscription-plans`,
+  SUBSCRIPTION_PLAN_BY_ID: (id) => `${API_BASE_URL}/api/boutiques/subscription-plans/${id}`,
 };
 
 // API client with authentication
@@ -249,6 +253,31 @@ class ApiClient {
 
   async getOrderById(id) {
     return await this.request(API_ENDPOINTS.ORDER_BY_ID(id));
+  }
+
+  // Subscription plan methods (Boutiques Manager)
+  async getSubscriptionPlans() {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_PLANS);
+  }
+
+  async createSubscriptionPlan(planData) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_PLANS, {
+      method: 'POST',
+      body: JSON.stringify(planData),
+    });
+  }
+
+  async updateSubscriptionPlan(id, planData) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_PLAN_BY_ID(id), {
+      method: 'PUT',
+      body: JSON.stringify(planData),
+    });
+  }
+
+  async deleteSubscriptionPlan(id) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_PLAN_BY_ID(id), {
+      method: 'DELETE',
+    });
   }
 }
 

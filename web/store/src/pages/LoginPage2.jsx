@@ -30,9 +30,10 @@ const LoginPage2 = () => {
       
       if (result.success) {
         showToast(`Welcome back, ${result.user.name}!`, 'success');
+        const nextPath = result?.accessInfo?.hasManagementAccess ? '/dashboard' : '/subscription';
         // Navigate to dashboard after short delay to show success toast
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate(nextPath);
         }, 1500);
       } else {
         showToast(result.message || 'Login failed. Please check your credentials.', 'error');
@@ -74,7 +75,10 @@ const LoginPage2 = () => {
         <div className="login-section2">
           <div className="login-card2">
             <div className="card-header2">
-              <h1>Sign in</h1>
+              <div>
+                <h1>Sign in</h1>
+                <p className="role-badge2">Boutique Owner Portal</p>
+              </div>
               <button className="google-sign-btn2" onClick={handleGoogleSignIn}>
                 <span className="google-text2">Sign with</span>
                 <svg width="20" height="20" viewBox="0 0 20 20">

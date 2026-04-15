@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wsl redis-cli:*)",
+      "Bash(wsl -- bash -c \"which redis-cli; redis-cli ping\")",
+      "Bash(wsl -e bash -c \"which redis-cli 2>/dev/null; redis-cli ping 2>&1 || echo 'redis-cli not found'\")"
+    ]
+  }
+}

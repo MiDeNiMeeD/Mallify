@@ -6,10 +6,10 @@ echo     MongoDB Manager - Mallify
 echo ========================================
 echo.
 echo Container: mallify-mongodb
-echo Port: 27017
+echo Port: 27017 📶
 echo.
-echo [1] Start MongoDB
-echo [2] Stop MongoDB
+echo [1] Start MongoDB ✅
+echo [2] Stop MongoDB ❌
 echo [3] Restart MongoDB
 echo [4] Show MongoDB Status
 echo [5] Show Container Logs

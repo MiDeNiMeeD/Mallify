@@ -30,6 +30,13 @@ export const API_ENDPOINTS = {
   BOUTIQUE_BY_SLUG: (slug) => `${API_BASE_URL}/api/boutiques/slug/${slug}`,
   BOUTIQUE_APPLICATIONS: `${API_BASE_URL}/api/boutiques/applications`,
   BOUTIQUE_UPLOAD_IMAGES: `${API_BASE_URL}/api/boutiques/upload-images`,
+  SUBSCRIPTION_PLANS: `${API_BASE_URL}/api/boutiques/subscription-plans`,
+  SUBSCRIPTION_BY_BOUTIQUE: (boutiqueId) => `${API_BASE_URL}/api/boutiques/${boutiqueId}/subscription`,
+  SUBSCRIPTION_ACCESS_BY_BOUTIQUE: (boutiqueId) => `${API_BASE_URL}/api/boutiques/${boutiqueId}/subscription/access`,
+  SUBSCRIPTION_CHECKOUT: (boutiqueId) => `${API_BASE_URL}/api/boutiques/${boutiqueId}/subscription/checkout-session`,
+  SUBSCRIPTION_ACTIVATE: (boutiqueId) => `${API_BASE_URL}/api/boutiques/${boutiqueId}/subscription/activate`,
+  SUBSCRIPTION_CANCEL: (boutiqueId) => `${API_BASE_URL}/api/boutiques/${boutiqueId}/subscription/cancel`,
+  SUBSCRIPTION_UPGRADE: (boutiqueId) => `${API_BASE_URL}/api/boutiques/${boutiqueId}/subscription/upgrade`,
   
   // Orders
   ORDERS: `${API_BASE_URL}/api/orders`,
@@ -312,6 +319,45 @@ class ApiClient {
     return await this.request(API_ENDPOINTS.BOUTIQUE_UPLOAD_IMAGES, {
       method: 'POST',
       body: formData,
+    });
+  }
+
+  async getSubscriptionPlans() {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_PLANS);
+  }
+
+  async getBoutiqueSubscription(boutiqueId) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_BY_BOUTIQUE(boutiqueId));
+  }
+
+  async getBoutiqueSubscriptionAccess(boutiqueId) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_ACCESS_BY_BOUTIQUE(boutiqueId));
+  }
+
+  async createSubscriptionCheckoutSession(boutiqueId, payload) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_CHECKOUT(boutiqueId), {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  }
+
+  async activateBoutiqueSubscription(boutiqueId, payload) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_ACTIVATE(boutiqueId), {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  }
+
+  async cancelBoutiqueSubscription(boutiqueId) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_CANCEL(boutiqueId), {
+      method: 'PATCH',
+    });
+  }
+
+  async upgradeBoutiqueSubscription(boutiqueId, planId) {
+    return await this.request(API_ENDPOINTS.SUBSCRIPTION_UPGRADE(boutiqueId), {
+      method: 'POST',
+      body: JSON.stringify({ planId }),
     });
   }
 

@@ -26,6 +26,7 @@ export const publicRoutes = [
   '/products/uploads/*', // Public product image files
   '/boutiques', // Browse boutiques (GET only)
   '/boutiques/uploads/*', // Public boutique image files
+  '/boutiques/subscription/webhook', // Stripe webhook endpoint
   '/promotions/active', // View active promotions
   '/drivers/applications', // Submit driver application
   '/boutiques/applications', // Submit boutique application

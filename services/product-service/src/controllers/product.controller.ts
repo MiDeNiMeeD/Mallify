@@ -1,11 +1,45 @@
 import { Request, Response, NextFunction } from 'express';
 import { Product } from '../models/Product';
+import { BoutiqueAccess, BoutiqueSubscriptionAccess } from '../models/BoutiqueAccess';
 import { createLogger } from '@mallify/shared';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
 
 const logger = createLogger('product-controller');
+const MANAGEMENT_ROLES = new Set(['admin', 'boutiques_manager', 'boutique_owner']);
+
+const canViewHiddenBoutiques = (req: Request) => {
+  const role = (req.header('x-user-role') || '').toLowerCase();
+  return MANAGEMENT_ROLES.has(role);
+};
+
+const getPublicVisibleBoutiqueIdSet = async (): Promise<Set<string>> => {
+  const now = new Date();
+  const activeSubscriptions = await BoutiqueSubscriptionAccess.find(
+    {
+      status: 'active',
+      currentPeriodEnd: { $gt: now },
+    },
+    { boutiqueId: 1 }
+  ).lean();
+
+  const subscribedIds = activeSubscriptions.map((entry) => entry.boutiqueId);
+  if (!subscribedIds.length) {
+    return new Set<string>();
+  }
+
+  const activeBoutiques = await BoutiqueAccess.find(
+    {
+      _id: { $in: subscribedIds },
+      status: 'active',
+      verified: true,
+    },
+    { _id: 1 }
+  ).lean();
+
+  return new Set(activeBoutiques.map((boutique) => String(boutique._id)));
+};
 
 const PRODUCT_UPLOAD_DIR = path.join(__dirname, '../../uploads/products');
 const MAX_PRODUCT_IMAGES = 10;
@@ -127,6 +161,33 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
       query.$text = { $search: search as string };
     }
 
+    if (!canViewHiddenBoutiques(req)) {
+      query.status = 'active';
+
+      const visibleBoutiqueIds = await getPublicVisibleBoutiqueIdSet();
+
+      if (boutiqueId) {
+        if (!visibleBoutiqueIds.has(String(boutiqueId))) {
+          res.json({
+            success: true,
+            message: 'Products retrieved successfully',
+            data: {
+              products: [],
+              pagination: {
+                currentPage: 1,
+                totalPages: 0,
+                totalItems: 0,
+                itemsPerPage: Math.min(100, Math.max(1, Number(limit))),
+              },
+            },
+          });
+          return;
+        }
+      } else {
+        query.boutiqueId = { $in: [...visibleBoutiqueIds] };
+      }
+    }
+
     const pageNum = Math.max(1, Number(page));
     const limitNum = Math.min(100, Math.max(1, Number(limit)));
     const skip = (pageNum - 1) * limitNum;
@@ -174,6 +235,17 @@ export const getProductById = async (req: Request, res: Response, next: NextFunc
       return;
     }
 
+    if (!canViewHiddenBoutiques(req)) {
+      const visibleBoutiqueIds = await getPublicVisibleBoutiqueIdSet();
+      if (!visibleBoutiqueIds.has(String(product.boutiqueId))) {
+        res.status(404).json({
+          success: false,
+          message: 'Product not found',
+        });
+        return;
+      }
+    }
+
     // Increment view count asynchronously
     (product as any).incrementViewCount().catch((err: any) => {
       logger.error('Failed to increment view count:', err);
@@ -203,6 +275,17 @@ export const getProductBySlug = async (req: Request, res: Response, next: NextFu
         message: 'Product not found',
       });
       return;
+    }
+
+    if (!canViewHiddenBoutiques(req)) {
+      const visibleBoutiqueIds = await getPublicVisibleBoutiqueIdSet();
+      if (!visibleBoutiqueIds.has(String(product.boutiqueId))) {
+        res.status(404).json({
+          success: false,
+          message: 'Product not found',
+        });
+        return;
+      }
     }
 
     // Increment view count
@@ -384,11 +467,18 @@ export const getFeaturedProducts = async (req: Request, res: Response, next: Nex
   try {
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 10));
 
-    const products = await Product.find({
+    const query: any = {
       featured: true,
       status: 'active',
       quantity: { $gt: 0 },
-    })
+    };
+
+    if (!canViewHiddenBoutiques(req)) {
+      const visibleBoutiqueIds = await getPublicVisibleBoutiqueIdSet();
+      query.boutiqueId = { $in: [...visibleBoutiqueIds] };
+    }
+
+    const products = await Product.find(query)
       .sort({ salesCount: -1, rating: -1 })
       .limit(limit)
       .lean();
@@ -416,6 +506,28 @@ export const getProductsByBoutique = async (req: Request, res: Response, next: N
 
     const query: any = { boutiqueId };
     if (status) query.status = status;
+
+    if (!canViewHiddenBoutiques(req)) {
+      const visibleBoutiqueIds = await getPublicVisibleBoutiqueIdSet();
+      if (!visibleBoutiqueIds.has(String(boutiqueId))) {
+        res.json({
+          success: true,
+          message: 'Boutique products retrieved successfully',
+          data: {
+            products: [],
+            pagination: {
+              currentPage: pageNum,
+              totalPages: 0,
+              totalItems: 0,
+              itemsPerPage: limitNum,
+            },
+          },
+        });
+        return;
+      }
+
+      query.status = 'active';
+    }
 
     const [products, total] = await Promise.all([
       Product.find(query)

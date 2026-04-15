@@ -142,6 +142,17 @@
   color: #FFFFFF;
 }
 
+.nav-item.disabled {
+  color: #64748B;
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.nav-item.disabled:hover {
+  color: #64748B;
+  background: transparent;
+}
+
 .nav-item.active,
 .nav-item.has-active-child {
   background: linear-gradient(135deg, rgba(254, 76, 194, 0.1) 0%, rgba(230, 31, 167, 0.1) 100%);
@@ -230,6 +241,17 @@
   padding-left: 1.25rem;
 }
 
+.nav-subitem.disabled {
+  color: #64748B;
+  cursor: not-allowed;
+}
+
+.nav-subitem.disabled:hover {
+  color: #64748B;
+  background: transparent;
+  padding-left: 1rem;
+}
+
 .nav-subitem.active {
   background: linear-gradient(135deg, rgba(254, 76, 194, 0.08) 0%, rgba(230, 31, 167, 0.08) 100%);
   color: #FE4CC2;
@@ -311,6 +333,16 @@
   color: #FFFFFF;
 }
 
+.popup-item.disabled {
+  color: #64748B;
+  cursor: not-allowed;
+}
+
+.popup-item.disabled:hover {
+  color: #64748B;
+  background: transparent;
+}
+
 .popup-item.active {
   background: linear-gradient(135deg, #FE4CC2 0%, #E61FA7 100%);
   color: #FFFFFF;
@@ -374,6 +406,12 @@
 .user-role {
   font-size: 12px;
   color: #94A3B8;
+}
+
+.subscription-note {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #FBBF24;
 }
 
 .sidebar.collapsed .user-details {

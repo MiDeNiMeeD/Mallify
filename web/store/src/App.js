@@ -25,6 +25,7 @@ import PromotionsDiscounts from "./pages/Promotions/PromotionsDiscounts";
 import PromotionsFlashSales from "./pages/Promotions/PromotionsFlashSales";
 import CustomerMessages from "./pages/Communication/CustomerMessages";
 import ReviewsRatings from "./pages/Communication/ReviewsRatings";
+import SubscriptionPlans from "./pages/Subscription/SubscriptionPlans";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -34,6 +35,24 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return isAuthenticated ? children : <Navigate to="/StoreOwner-SignIn" replace />;
+};
+
+const ManagementRoute = ({ children }) => {
+  const { isAuthenticated, loading, subscriptionLoading, hasManagementAccess } = useAuth();
+
+  if (loading || subscriptionLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/StoreOwner-SignIn" replace />;
+  }
+
+  if (!hasManagementAccess) {
+    return <Navigate to="/subscription" replace />;
+  }
+
+  return children;
 };
 
 function AppRoutes() {
@@ -50,248 +69,259 @@ function AppRoutes() {
       <Route path="/StoreOwner-SignIn" element={<LoginPage2 />} />
 
       <Route
-        path="/dashboard"
+        path="/subscription"
         element={
           <ProtectedRoute>
             <Layout>
-              <DashboardOverview />
+              <SubscriptionPlans />
             </Layout>
           </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard"
+        element={
+          <ManagementRoute>
+            <Layout>
+              <DashboardOverview />
+            </Layout>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/boutique/preview"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <MyBoutique />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/boutique/profile"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <BoutiqueProfile />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/boutique/hours"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <BoutiqueHours />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/boutique/delivery"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <BoutiqueDelivery />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/products"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <ProductsList />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/products/add"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <AddProduct />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/products/:productId"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <ViewProduct />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/products/:productId/edit"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <EditProduct />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/products/inventory"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <InventoryAlerts />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/orders"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <OrdersList />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/orders/pending"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <OrdersPending />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/orders/processing"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <OrdersProcessing />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/orders/returns"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <OrdersReturns />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/orders/:orderId"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <OrderDetails />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/analytics"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <AnalyticsOverview />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/analytics/reports"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <AnalyticsReports />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/promotions"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <PromotionsList />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/promotions/discounts"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <PromotionsDiscounts />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/promotions/flash-sales"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <PromotionsFlashSales />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/communication/customers"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <CustomerMessages />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
       <Route
         path="/communication/reviews"
         element={
-          <ProtectedRoute>
+          <ManagementRoute>
             <Layout>
               <ReviewsRatings />
             </Layout>
-          </ProtectedRoute>
+          </ManagementRoute>
         }
       />
 
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to={isAuthenticated ? '/dashboard' : '/StoreOwner-SignIn'} replace />} />
     </Routes>
   );
 }

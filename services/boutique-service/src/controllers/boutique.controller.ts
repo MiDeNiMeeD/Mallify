@@ -1,11 +1,32 @@
 import { Request, Response, NextFunction } from 'express';
 import { Boutique } from '../models/Boutique';
+import { BoutiqueSubscription } from '../models/BoutiqueSubscription';
 import { createLogger } from '@mallify/shared';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
 
 const logger = createLogger('boutique-controller');
+
+const MANAGEMENT_ROLES = new Set(['admin', 'boutiques_manager', 'boutique_owner']);
+
+const canViewHiddenBoutiques = (req: Request) => {
+  const role = (req.header('x-user-role') || '').toLowerCase();
+  return MANAGEMENT_ROLES.has(role);
+};
+
+const getSubscribedBoutiqueIds = async () => {
+  const now = new Date();
+  const activeSubscriptions = await BoutiqueSubscription.find(
+    {
+      status: 'active',
+      currentPeriodEnd: { $gt: now },
+    },
+    { boutiqueId: 1 }
+  ).lean();
+
+  return activeSubscriptions.map((entry) => entry.boutiqueId);
+};
 
 const BOUTIQUE_UPLOAD_DIR = path.join(__dirname, '../../uploads/boutiques');
 
@@ -103,6 +124,7 @@ export const getBoutiques = async (req: Request, res: Response, next: NextFuncti
     } = req.query;
 
     const query: any = {};
+    const isManagementView = canViewHiddenBoutiques(req);
 
     if (status) query.status = status;
     if (verified !== undefined) query.verified = verified === 'true';
@@ -112,6 +134,14 @@ export const getBoutiques = async (req: Request, res: Response, next: NextFuncti
     
     if (search) {
       query.$text = { $search: search as string };
+    }
+
+    if (!isManagementView) {
+      query.status = 'active';
+      query.verified = true;
+
+      const subscribedBoutiqueIds = await getSubscribedBoutiqueIds();
+      query._id = { $in: subscribedBoutiqueIds };
     }
 
     const pageNum = Math.max(1, Number(page));
@@ -149,6 +179,7 @@ export const getBoutiques = async (req: Request, res: Response, next: NextFuncti
 export const getBoutiqueById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
+    const isManagementView = canViewHiddenBoutiques(req);
 
     const boutique = await Boutique.findById(id);
 
@@ -158,6 +189,30 @@ export const getBoutiqueById = async (req: Request, res: Response, next: NextFun
         message: 'Boutique not found',
       });
       return;
+    }
+
+    if (!isManagementView) {
+      if (boutique.status !== 'active' || !boutique.verified) {
+        res.status(404).json({
+          success: false,
+          message: 'Boutique not found',
+        });
+        return;
+      }
+
+      const subscription = await BoutiqueSubscription.findOne({
+        boutiqueId: boutique._id,
+        status: 'active',
+        currentPeriodEnd: { $gt: new Date() },
+      }).lean();
+
+      if (!subscription) {
+        res.status(404).json({
+          success: false,
+          message: 'Boutique not found',
+        });
+        return;
+      }
     }
 
     res.json({
@@ -174,6 +229,7 @@ export const getBoutiqueById = async (req: Request, res: Response, next: NextFun
 export const getBoutiqueBySlug = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { slug } = req.params;
+    const isManagementView = canViewHiddenBoutiques(req);
 
     const boutique = await Boutique.findOne({ slug });
 
@@ -183,6 +239,30 @@ export const getBoutiqueBySlug = async (req: Request, res: Response, next: NextF
         message: 'Boutique not found',
       });
       return;
+    }
+
+    if (!isManagementView) {
+      if (boutique.status !== 'active' || !boutique.verified) {
+        res.status(404).json({
+          success: false,
+          message: 'Boutique not found',
+        });
+        return;
+      }
+
+      const subscription = await BoutiqueSubscription.findOne({
+        boutiqueId: boutique._id,
+        status: 'active',
+        currentPeriodEnd: { $gt: new Date() },
+      }).lean();
+
+      if (!subscription) {
+        res.status(404).json({
+          success: false,
+          message: 'Boutique not found',
+        });
+        return;
+      }
     }
 
     res.json({
@@ -300,11 +380,13 @@ export const deleteBoutique = async (req: Request, res: Response, next: NextFunc
 export const getFeaturedBoutiques = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 10));
+    const subscribedBoutiqueIds = await getSubscribedBoutiqueIds();
 
     const boutiques = await Boutique.find({
       featured: true,
       status: 'active',
       verified: true,
+      _id: { $in: subscribedBoutiqueIds },
     })
       .sort({ rating: -1, reviewCount: -1 })
       .limit(limit)

@@ -9,6 +9,12 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [applicationInfo, setApplicationInfo] = useState(null);
   const [applicationLoading, setApplicationLoading] = useState(false);
+  const [subscriptionAccess, setSubscriptionAccess] = useState({
+    hasManagementAccess: false,
+    reason: 'subscription_required',
+    subscription: null,
+  });
+  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
 
   const loadApplicationInfo = useCallback(async (email) => {
     if (!email) {
@@ -54,6 +60,40 @@ export const AuthProvider = ({ children }) => {
     return null;
   }, []);
 
+  const loadSubscriptionAccess = useCallback(async (activeUser) => {
+    const boutiqueId = activeUser?.boutiqueList?.[0];
+    if (!boutiqueId) {
+      setSubscriptionAccess({
+        hasManagementAccess: false,
+        reason: 'no_boutique',
+        subscription: null,
+      });
+      return null;
+    }
+
+    try {
+      setSubscriptionLoading(true);
+      const response = await apiClient.getBoutiqueSubscriptionAccess(boutiqueId);
+      const accessInfo = response?.data || {
+        hasManagementAccess: false,
+        reason: 'subscription_required',
+        subscription: null,
+      };
+      setSubscriptionAccess(accessInfo);
+      return accessInfo;
+    } catch (error) {
+      console.error('Failed to load subscription access', error);
+      setSubscriptionAccess({
+        hasManagementAccess: false,
+        reason: 'subscription_required',
+        subscription: null,
+      });
+      return null;
+    } finally {
+      setSubscriptionLoading(false);
+    }
+  }, []);
+
   // Check if user is logged in on mount
   useEffect(() => {
     const initializeAuth = async () => {
@@ -66,14 +106,16 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
 
         const latestUser = await refreshUserProfile();
-        await loadApplicationInfo((latestUser || parsedUser)?.email);
+        const activeUser = latestUser || parsedUser;
+        await loadApplicationInfo(activeUser?.email);
+        await loadSubscriptionAccess(activeUser);
       }
 
       setLoading(false);
     };
 
     initializeAuth();
-  }, [loadApplicationInfo, refreshUserProfile]);
+  }, [loadApplicationInfo, loadSubscriptionAccess, refreshUserProfile]);
 
   const login = async (email, password) => {
     try {
@@ -99,9 +141,11 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
 
         const latestUser = await refreshUserProfile();
-        await loadApplicationInfo((latestUser || user)?.email);
+        const activeUser = latestUser || user;
+        await loadApplicationInfo(activeUser?.email);
+        const accessInfo = await loadSubscriptionAccess(activeUser);
 
-        return { success: true, user: latestUser || user };
+        return { success: true, user: activeUser, accessInfo };
       }
       
       return { success: false, message: response.message };
@@ -138,6 +182,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     setApplicationInfo(null);
+    setSubscriptionAccess({
+      hasManagementAccess: false,
+      reason: 'subscription_required',
+      subscription: null,
+    });
   };
 
   const updateUser = (updatedUser) => {
@@ -151,11 +200,15 @@ export const AuthProvider = ({ children }) => {
     loading,
     applicationInfo,
     applicationLoading,
+    subscriptionAccess,
+    subscriptionLoading,
+    hasManagementAccess: Boolean(subscriptionAccess?.hasManagementAccess),
     login,
     register,
     logout,
     updateUser,
     refreshApplicationStatus: () => loadApplicationInfo(user?.email),
+    refreshSubscriptionAccess: async () => loadSubscriptionAccess(user),
     refreshUserProfile,
   };
 
