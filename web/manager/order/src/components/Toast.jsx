@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./Toast.css";
 
-const Toast = ({ show, message, type = "error", onClose, duration = 4000 }) => {
+const Toast = ({ show, message, type = "error", onClose, duration = 4000, actions = [] }) => {
   useEffect(() => {
     if (show && duration > 0) {
       const timer = setTimeout(() => {
@@ -69,7 +69,22 @@ const Toast = ({ show, message, type = "error", onClose, duration = 4000 }) => {
   return (
     <div className={`toast-notification ${getTypeClass()}`}>
       <div className="toast-icon">{getIcon()}</div>
-      <span className="toast-message">{message}</span>
+      <div className="toast-content">
+        <span className="toast-message">{message}</span>
+        {actions.length > 0 && (
+          <div className="toast-actions">
+            {actions.map((action, index) => (
+              <button
+                key={index}
+                className={`toast-action-btn ${action.variant || 'secondary'}`}
+                onClick={action.onClick}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       <button className="toast-close" onClick={onClose}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>

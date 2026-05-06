@@ -19,7 +19,7 @@
 
 .layout-content {
   margin-top: 70px;
-  padding: 2rem;
+
   min-height: calc(100vh - 70px);
   max-width: 100%;
   overflow-x: hidden;

@@ -64,14 +64,28 @@ class ApiClient {
         ...options,
         headers,
       });
+      const rawText = await response.text();
+      let data = null;
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
+      if (rawText) {
+        try {
+          data = JSON.parse(rawText);
+        } catch (parseError) {
+          data = null;
+        }
       }
 
-      return data;
+      if (!response.ok) {
+        console.error('API Error Details:', {
+          url,
+          status: response.status,
+          statusText: response.statusText,
+          body: data || rawText
+        });
+        throw new Error((data && data.message) || response.statusText || 'Something went wrong');
+      }
+
+      return data || {};
     } catch (error) {
       console.error('API Error:', error);
       throw error;
@@ -206,14 +220,34 @@ class ApiClient {
     return await this.request(url);
   }
 
+  async createDriver(driverData) {
+    return await this.request(`${API_BASE_URL}/api/drivers`, {
+      method: 'POST',
+      body: JSON.stringify(driverData),
+    });
+  }
+
   async getDriverById(id) {
     return await this.request(`${API_BASE_URL}/api/drivers/${id}`);
+  }
+
+  async deleteDriver(id) {
+    return await this.request(`${API_BASE_URL}/api/drivers/${id}`, {
+      method: 'DELETE'
+    });
   }
 
   async updateDriverStatus(id, status) {
     return await this.request(`${API_BASE_URL}/api/drivers/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status }),
+    });
+  }
+
+  async updateDriver(id, driverData) {
+    return await this.request(`${API_BASE_URL}/api/drivers/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(driverData),
     });
   }
 

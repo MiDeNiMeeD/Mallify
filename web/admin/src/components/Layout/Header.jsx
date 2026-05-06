@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { FiBell, FiSearch, FiUser } from 'react-icons/fi';
+import React, { useState, useEffect, useRef } from 'react';
+import { FiBell, FiSearch } from 'react-icons/fi';
 import './Header.css';
 
 const Header = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const notificationRef = useRef(null);
 
   // Mock notifications
   const notifications = [
@@ -14,6 +15,20 @@ const Header = () => {
   ];
 
   const unreadCount = notifications.filter(n => !n.read).length;
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    if (showNotifications) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showNotifications]);
 
   return (
     <header className="admin-header-bar">
@@ -32,16 +47,7 @@ const Header = () => {
 
         {/* Actions */}
         <div className="admin-header-actions">
-          {/* Quick Stats */}
-          <div className="admin-quick-stats">
-            <div className="admin-stat-item">
-              <FiUser size={16} />
-              <span>24,589</span>
-            </div>
-          </div>
-
-          {/* Notifications */}
-          <div className="admin-notification-wrapper">
+          <div className="admin-notification-wrapper" ref={notificationRef}>
             <button
               className="admin-icon-btn"
               onClick={() => setShowNotifications(!showNotifications)}

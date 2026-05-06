@@ -4,6 +4,90 @@ import { NotFoundError, BadRequestError, UserRole } from '@mallify/shared';
 import { setCache, getCache, deleteCache } from '../config/redis';
 
 export class UserService {
+  async listUsers(filters: {
+    search?: string;
+    role?: string;
+    status?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<IUser[]> {
+    const query: Record<string, any> = {};
+
+    if (filters.search) {
+      const regex = new RegExp(filters.search.trim(), 'i');
+      query.$or = [{ name: regex }, { email: regex }];
+    }
+
+    if (filters.role && filters.role !== 'all') {
+      query.role = filters.role;
+    }
+
+    if (filters.status && filters.status !== 'all') {
+      query.isActive = filters.status === 'active';
+    }
+
+    const page = filters.page && filters.page > 0 ? filters.page : undefined;
+    const limit = filters.limit && filters.limit > 0 ? filters.limit : undefined;
+
+    let cursor = User.find(query)
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    if (page && limit) {
+      cursor = cursor.skip((page - 1) * limit).limit(limit);
+    }
+
+    const users = await cursor;
+    return users;
+  }
+
+  async updateUserById(userId: string, updateData: Partial<IUser> & { status?: string }): Promise<IUser> {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new NotFoundError('User');
+    }
+
+    if (updateData.status) {
+      if (updateData.status !== 'active' && updateData.status !== 'suspended') {
+        throw new BadRequestError('Invalid status value');
+      }
+      user.isActive = updateData.status === 'active';
+    }
+
+    if (updateData.name !== undefined) {
+      user.name = String(updateData.name).trim();
+    }
+
+    if (updateData.email !== undefined) {
+      user.email = String(updateData.email).trim().toLowerCase();
+    }
+
+    if (updateData.phone !== undefined) {
+      user.phone = String(updateData.phone).trim();
+    }
+
+    if (updateData.role !== undefined) {
+      if (!Object.values(UserRole).includes(updateData.role as UserRole)) {
+        throw new BadRequestError('Invalid role value');
+      }
+      user.role = updateData.role as UserRole;
+    }
+
+    await user.save();
+    await deleteCache(`user:${userId}`);
+
+    return user;
+  }
+
+  async deleteUserById(userId: string): Promise<void> {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new NotFoundError('User');
+    }
+
+    await deleteCache(`user:${userId}`);
+    await User.findByIdAndDelete(userId);
+  }
   async getBuyerBasicById(userId: string): Promise<{ _id: string; name: string; email: string; phone: string }> {
     const user = await User.findById(userId).select('_id name email phone role isActive').lean();
     if (!user || !user.isActive || user.role !== UserRole.CLIENT) {

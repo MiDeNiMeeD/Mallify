@@ -24,7 +24,10 @@ import {
   FiMapPin,
   FiTruck,
   FiCreditCard,
-  FiAlertCircle
+  FiAlertCircle,
+  FiClock,
+  FiCheckCircle,
+  FiTag
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import './Sidebar.css';
@@ -110,9 +113,16 @@ const Sidebar = () => {
       label: 'Boutiques',
       children: [
         { path: '/boutiques', icon: FiShoppingBag, label: 'All Boutiques' },
-        { path: '/boutiques/approvals', icon: FiUserCheck, label: 'Approvals' },
-        { path: '/boutiques/compliance', icon: FiShield, label: 'Compliance' },
-        { path: '/boutiques/performance', icon: FiTrendingUp, label: 'Performance' }
+        { path: '/boutiques/pending', icon: FiClock, label: 'Pending' },
+        { path: '/boutiques/verified', icon: FiCheckCircle, label: 'Approved' }
+      ]
+    },
+    {
+      icon: FiPackage,
+      label: 'Products',
+      children: [
+        { path: '/products', icon: FiPackage, label: 'All Products' },
+        { path: '/products/add', icon: FiShoppingBag, label: 'Create Product' }
       ]
     },
     { 
@@ -133,6 +143,7 @@ const Sidebar = () => {
         { path: '/payments/disputes', icon: FiAlertCircle, label: 'Disputes' }
       ]
     },
+    { path: '/promotions', icon: FiTag, label: 'Promotions' },
     { 
       icon: FiBarChart2, 
       label: 'Analytics',

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { FiSearch, FiFilter, FiEdit2, FiTrash2, FiMail, FiPhone, FiCalendar, FiUser, FiShield } from 'react-icons/fi';
 import apiClient from '../../api/apiClient';
+import Toast from '../../components/Toast';
 import './AllUsers.css';
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
+  const [loadError, setLoadError] = useState('');
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -19,24 +23,52 @@ const AllUsers = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      setLoadError('');
       const response = await apiClient.getUsers();
-      setUsers(response.data || []);
+      const payload = Array.isArray(response.data)
+        ? response.data
+        : response.data?.users || [];
+      setUsers(payload);
     } catch (error) {
       console.error('Error fetching users:', error);
+      setLoadError(error?.message || 'Failed to fetch users');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteUser = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
-        await apiClient.deleteUser(userId);
-        setUsers(users.filter(user => user._id !== userId));
-      } catch (error) {
-        console.error('Error deleting user:', error);
-        alert('Failed to delete user');
-      }
+  const showToast = (message, type = 'info') => {
+    setToast({ show: true, message, type });
+  };
+
+  const closeToast = () => {
+    setToast({ show: false, message: '', type: 'info' });
+    setPendingDeleteId(null);
+  };
+
+  const handleDeleteUser = (userId) => {
+    setPendingDeleteId(userId);
+    setToast({
+      show: true,
+      message: 'Delete this user? This action cannot be undone.',
+      type: 'warning',
+    });
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!pendingDeleteId) {
+      return;
+    }
+
+    try {
+      await apiClient.deleteUser(pendingDeleteId);
+      setUsers(users.filter(user => user._id !== pendingDeleteId));
+      setToast({ show: true, message: 'User deleted successfully.', type: 'success' });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      setToast({ show: true, message: 'Failed to delete user.', type: 'error' });
+    } finally {
+      setPendingDeleteId(null);
     }
   };
 
@@ -47,9 +79,10 @@ const AllUsers = () => {
       setUsers(users.map(user => 
         user._id === userId ? { ...user, status: newStatus } : user
       ));
+      showToast(`User ${newStatus === 'active' ? 'activated' : 'suspended'} successfully.`, 'success');
     } catch (error) {
       console.error('Error updating user status:', error);
-      alert('Failed to update user status');
+      showToast('Failed to update user status.', 'error');
     }
   };
 
@@ -73,7 +106,7 @@ const AllUsers = () => {
     total: users.length,
     active: users.filter(u => u.status === 'active').length,
     suspended: users.filter(u => u.status === 'suspended').length,
-    customers: users.filter(u => u.role === 'customer').length,
+    customers: users.filter(u => u.role === 'client').length,
     boutiques: users.filter(u => u.role === 'boutique_owner').length,
     drivers: users.filter(u => u.role === 'driver').length,
   };
@@ -106,6 +139,20 @@ const AllUsers = () => {
 
   return (
     <div className="all-users-page">
+      <Toast
+        show={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={closeToast}
+        actions={
+          pendingDeleteId
+            ? [
+                { label: 'Cancel', onClick: closeToast },
+                { label: 'Confirm', onClick: confirmDeleteUser, variant: 'primary' },
+              ]
+            : []
+        }
+      />
       <div className="page-header">
         <div>
           <h1><FiUser /> All Users</h1>
@@ -143,13 +190,7 @@ const AllUsers = () => {
             <p>Boutiques</p>
           </div>
         </div>
-        <div className="stat-card">
-          <FiUser className="stat-icon driver" />
-          <div className="stat-details">
-            <h3>{stats.drivers}</h3>
-            <p>Drivers</p>
-          </div>
-        </div>
+       
       </div>
 
       {/* Filters */}
@@ -199,7 +240,7 @@ const AllUsers = () => {
             {currentUsers.length === 0 ? (
               <tr>
                 <td colSpan="7" className="no-data">
-                  No users found
+                  {loadError || 'No users found'}
                 </td>
               </tr>
             ) : (

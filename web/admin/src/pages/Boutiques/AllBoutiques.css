@@ -137,10 +137,48 @@
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
 }
 
-.boutiques-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+/* Masonry Layout */
+.boutiques-masonry {
+  display: flex;
   gap: 1.5rem;
+}
+
+.boutiques-masonry-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Load More Button */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn-load-more {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-load-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+}
+
+.btn-load-more:active {
+  transform: translateY(0);
 }
 
 .boutique-card {

@@ -16,8 +16,8 @@ export const AuthProvider = ({ children }) => {
     if (storedUser && token) {
       const parsedUser = JSON.parse(storedUser);
       
-      // Verify user has boutiques_manager role
-      if (parsedUser.role === 'boutiques_manager') {
+      // Verify user has an allowed role
+      if (parsedUser.role === 'boutiques_manager' || parsedUser.role === 'delivery_manager') {
         setUser(parsedUser);
         setIsAuthenticated(true);
       } else {
@@ -36,11 +36,11 @@ export const AuthProvider = ({ children }) => {
       const response = await apiClient.login(email, password);
       
       if (response.success) {
-        // Check if user has boutiques_manager role
-        if (response.data.user.role !== 'boutiques_manager') {
+        // Check if user has an allowed role
+        if (response.data.user.role !== 'boutiques_manager' && response.data.user.role !== 'delivery_manager') {
           return { 
             success: false, 
-            message: 'Access denied. Only Boutiques Managers can access this dashboard.' 
+            message: 'Access denied. Only Boutiques Managers or Delivery Managers can access this dashboard.' 
           };
         }
         

@@ -34,7 +34,7 @@ class ApiClient {
   // Auth endpoints
   async login(email, password) {
     try {
-      const response = await this.request(`${this.baseURL}/api/users/login`, {
+      const response = await this.request(`${this.baseURL}/api/auth/login`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
@@ -83,6 +83,13 @@ class ApiClient {
     return await this.request(url);
   }
 
+  async createUser(userData) {
+    return await this.request(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+  }
+
   async getUserById(id) {
     return await this.request(`${API_BASE_URL}/api/users/${id}`);
   }
@@ -115,6 +122,77 @@ class ApiClient {
     return await this.request(`${API_BASE_URL}/api/boutiques/${id}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
+    });
+  }
+
+  // Product Management
+  async getProducts(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString ? `${API_BASE_URL}/api/products?${queryString}` : `${API_BASE_URL}/api/products`;
+    return await this.request(url);
+  }
+
+  async getProductById(id) {
+    return await this.request(`${API_BASE_URL}/api/products/${id}`);
+  }
+
+  async createProduct(productData) {
+    return await this.request(`${API_BASE_URL}/api/products`, {
+      method: 'POST',
+      body: JSON.stringify(productData),
+    });
+  }
+
+  async updateProduct(id, productData) {
+    return await this.request(`${API_BASE_URL}/api/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(productData),
+    });
+  }
+
+  async getBoutiqueApplications(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString
+      ? `${API_BASE_URL}/api/boutiques/applications?${queryString}`
+      : `${API_BASE_URL}/api/boutiques/applications`;
+    return await this.request(url);
+  }
+
+  async getBoutiqueApplicationById(id) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/applications/${id}`);
+  }
+
+  async updateBoutiqueApplicationStatus(id, status) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/applications/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  async updateBoutique(id, updates) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  }
+
+  async deleteBoutiqueApplication(id) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/applications/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async sendApprovalEmail(email, boutiqueName) {
+    return await this.request(`${API_BASE_URL}/api/notifications/send-approval`, {
+      method: 'POST',
+      body: JSON.stringify({ email, boutiqueName }),
+    });
+  }
+
+  async sendRejectionEmail(email, boutiqueName, reason) {
+    return await this.request(`${API_BASE_URL}/api/notifications/send-rejection`, {
+      method: 'POST',
+      body: JSON.stringify({ email, boutiqueName, reason }),
     });
   }
 
@@ -161,6 +239,31 @@ class ApiClient {
     return await this.request(`${API_BASE_URL}/api/settings`, {
       method: 'PUT',
       body: JSON.stringify(settings),
+    });
+  }
+
+  // Subscription Plans
+  async getSubscriptionPlans() {
+    return await this.request(`${API_BASE_URL}/api/boutiques/subscription-plans`);
+  }
+
+  async createSubscriptionPlan(planData) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/subscription-plans`, {
+      method: 'POST',
+      body: JSON.stringify(planData),
+    });
+  }
+
+  async updateSubscriptionPlan(id, planData) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/subscription-plans/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(planData),
+    });
+  }
+
+  async deleteSubscriptionPlan(id) {
+    return await this.request(`${API_BASE_URL}/api/boutiques/subscription-plans/${id}`, {
+      method: 'DELETE',
     });
   }
 }

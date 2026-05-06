@@ -12,6 +12,18 @@ import {
 const router = Router();
 
 /**
+ * @route   GET /api/users
+ * @desc    Get all users (admin/manager view)
+ * @access  Private (Admin, Managers)
+ */
+router.get(
+  '/',
+  authenticate,
+  authorize(UserRole.ADMIN, UserRole.DELIVERY_MANAGER, UserRole.BOUTIQUES_MANAGER),
+  userController.getUsers
+);
+
+/**
  * @route   GET /api/users/profile
  * @desc    Get current user profile
  * @access  Private
@@ -40,6 +52,30 @@ router.get(
   authenticate,
   authorize(UserRole.ADMIN, UserRole.DELIVERY_MANAGER, UserRole.BOUTIQUES_MANAGER),
   userController.getUserById
+);
+
+/**
+ * @route   PUT /api/users/:userId
+ * @desc    Update user (admin/manager)
+ * @access  Private (Admin, Managers)
+ */
+router.put(
+  '/:userId',
+  authenticate,
+  authorize(UserRole.ADMIN, UserRole.DELIVERY_MANAGER, UserRole.BOUTIQUES_MANAGER),
+  userController.updateUserById
+);
+
+/**
+ * @route   DELETE /api/users/:userId
+ * @desc    Delete user (admin/manager)
+ * @access  Private (Admin, Managers)
+ */
+router.delete(
+  '/:userId',
+  authenticate,
+  authorize(UserRole.ADMIN, UserRole.DELIVERY_MANAGER, UserRole.BOUTIQUES_MANAGER),
+  userController.deleteUserById
 );
 
 /**

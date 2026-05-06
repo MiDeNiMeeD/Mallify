@@ -16,23 +16,23 @@ const LoginPage = () => {
     setToast({ show: true, message, type });
   };
 
-  const hideToast = () => {
-    setToast({ ...toast, show: false });
+  const closeToast = () => {
+    setToast({ show: false, message: '', type: 'error' });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    hideToast();
+    closeToast();
     setLoading(true);
 
     try {
       const result = await login(email, password);
-      
+
       if (result.success) {
         showToast('Login successful! Welcome to Admin Dashboard...', 'success');
         setTimeout(() => {
           navigate('/dashboard');
-        }, 1000);
+        }, 1500);
       } else {
         showToast(result.message || 'Invalid email or password. Please try again.', 'error');
       }
@@ -44,41 +44,41 @@ const LoginPage = () => {
   };
 
   const handleGoogleSignIn = () => {
-    showToast('Google Sign In will be available soon!', 'info');
+    showToast('Google Sign In will be implemented soon!', 'info');
   };
 
   return (
-    <div className="admin-login-container" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/loginPicture.jpg)` }}>
-      <Toast 
-        show={toast.show} 
-        message={toast.message} 
-        type={toast.type} 
-        onClose={hideToast}
+    <div className="login-container2">
+      <video className="bg-video2" autoPlay loop muted playsInline>
+        <source src={`${process.env.PUBLIC_URL}/loginPicture.mp4`} type="video/mp4" />
+      </video>
+      <Toast
+        show={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={closeToast}
       />
 
       {/* Header */}
-      <header className="admin-header">
-        <div className="admin-logo">
-          <img src={`${process.env.PUBLIC_URL}/mallify.png`} alt="Mallify Logo" className="admin-logo-image" />
-          <div className="admin-logo-text">
-            <div className="admin-logo-main">Mallify</div>
-            <div className="admin-logo-sub">Admin Portal</div>
-          </div>
+      <header className="header2">
+        <div className="logo2">
+          <img src={`${process.env.PUBLIC_URL}/mallify.png`} alt="Mallify Logo" className="logo-image2" />
+          Mallify
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="admin-main-content">
+      <div className="main-content2">
         {/* Left Side - Login Form */}
-        <div className="admin-login-section">
-          <div className="admin-login-card">
-            <div className="admin-card-header">
-              <div className="admin-title-section">
-                <h1>Administration</h1>
+        <div className="login-section2">
+          <div className="login-card2">
+            <div className="card-header2">
+              <div>
+                <h1>Sign in</h1>
+                <p className="role-badge2">Admin Portal</p>
               </div>
-             
-              <button className="admin-google-btn" onClick={handleGoogleSignIn}>
-                <span className="admin-google-text">Sign with</span>
+              <button className="google-sign-btn2" onClick={handleGoogleSignIn}>
+                <span className="google-text2">Sign with</span>
                 <svg width="20" height="20" viewBox="0 0 20 20">
                   <path d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4"/>
                   <path d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" fill="#34A853"/>
@@ -89,7 +89,7 @@ const LoginPage = () => {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div className="admin-form-group">
+              <div className="form-group2">
                 <label htmlFor="email">Email address</label>
                 <input
                   type="email"
@@ -101,8 +101,8 @@ const LoginPage = () => {
                 />
               </div>
 
-              <div className="admin-form-group">
-                <div className="admin-password-header">
+              <div className="form-group2">
+                <div className="password-header2">
                   <label htmlFor="password">Password</label>
                 </div>
                 <input
@@ -110,24 +110,16 @@ const LoginPage = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="*******"
                   required
                 />
               </div>
 
-              <button type="submit" className="admin-signin-btn" disabled={loading}>
-                {loading ? (
-                  <span className="admin-loading">
-                    <span className="admin-spinner"></span>
-                    Authenticating...
-                  </span>
-                ) : (
-                  'Sign in to Admin Portal'
-                )}
+              <button type="submit" className="signin-btn2" disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </form>
 
-          
           </div>
         </div>
       </div>

@@ -16,9 +16,12 @@ export const registerSchema = Joi.object({
     .valid(
       UserRole.CLIENT,
       UserRole.BOUTIQUE_OWNER,
-      UserRole.DELIVERY_PERSON
+      UserRole.DELIVERY_PERSON,
+      UserRole.DELIVERY_MANAGER,
+      UserRole.BOUTIQUES_MANAGER
     )
     .required(),
+  skipEmailVerification: Joi.boolean().optional(),
 });
 
 export const loginSchema = Joi.object({

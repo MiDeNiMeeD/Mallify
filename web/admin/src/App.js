@@ -14,19 +14,28 @@ import ManagersUsers from "./pages/Users/ManagersUsers";
 
 // Boutiques Pages
 import AllBoutiquesPage from "./pages/Boutiques/AllBoutiquesPage";
-import ApprovalsPage from "./pages/Boutiques/ApprovalsPage";
-import CompliancePage from "./pages/Boutiques/CompliancePage";
-import PerformancePage from "./pages/Boutiques/PerformancePage";
+import PendingBoutiquesPage from "./pages/Boutiques/PendingBoutiquesPage";
+import VerifiedBoutiquesPage from "./pages/Boutiques/VerifiedBoutiquesPage";
+import BoutiqueDetailPage from "./pages/Boutiques/BoutiqueDetailPage";
 
 // Orders Pages
 import AllOrdersPage from "./pages/Orders/AllOrdersPage";
 import TrackingPage from "./pages/Orders/TrackingPage";
 import DisputesPage from "./pages/Orders/DisputesPage";
 
+// Products Pages
+import AllProductsPage from "./pages/Products/AllProductsPage";
+import CreateProductPage from "./pages/Products/CreateProductPage";
+import EditProductPage from "./pages/Products/EditProductPage";
+import ManageProductPage from "./pages/Products/ManageProductPage";
+
 // Payments Pages
 import TransactionsPage from "./pages/Payments/TransactionsPage";
 import PayoutsPage from "./pages/Payments/PayoutsPage";
 import PaymentDisputesPage from "./pages/Payments/PaymentDisputesPage";
+
+// Promotions Pages
+import PromotionsPage from "./pages/Promotions/Promotions";
 
 // Analytics Pages
 import AnalyticsOverviewPage from "./pages/Analytics/AnalyticsOverviewPage";
@@ -49,27 +58,9 @@ const ProtectedRoute = ({ children }) => {
   
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        gap: '1.5rem'
-      }}>
-        <div style={{
-          width: '48px',
-          height: '48px',
-          border: '4px solid rgba(124, 58, 237, 0.1)',
-          borderTopColor: '#7C3AED',
-          borderRadius: '50%',
-          animation: 'spin 0.8s linear infinite'
-        }}></div>
-        <div style={{
-          fontSize: '1.125rem',
-          color: '#6B7280',
-          fontWeight: '500'
-        }}>Loading...</div>
+      <div className="app-loading-screen">
+        <div className="app-loading-spinner" aria-hidden="true" />
+        <div className="app-loading-text">Loading...</div>
       </div>
     );
   }
@@ -109,19 +100,28 @@ function AppRoutes() {
       
       {/* Boutiques Routes */}
       <Route path="/boutiques" element={<ProtectedRoute><Layout><AllBoutiquesPage /></Layout></ProtectedRoute>} />
-      <Route path="/boutiques/approvals" element={<ProtectedRoute><Layout><ApprovalsPage /></Layout></ProtectedRoute>} />
-      <Route path="/boutiques/compliance" element={<ProtectedRoute><Layout><CompliancePage /></Layout></ProtectedRoute>} />
-      <Route path="/boutiques/performance" element={<ProtectedRoute><Layout><PerformancePage /></Layout></ProtectedRoute>} />
+      <Route path="/boutiques/pending" element={<ProtectedRoute><Layout><PendingBoutiquesPage /></Layout></ProtectedRoute>} />
+      <Route path="/boutiques/verified" element={<ProtectedRoute><Layout><VerifiedBoutiquesPage /></Layout></ProtectedRoute>} />
+      <Route path="/boutiques/:id" element={<ProtectedRoute><Layout><BoutiqueDetailPage /></Layout></ProtectedRoute>} />
       
       {/* Orders Routes */}
       <Route path="/orders" element={<ProtectedRoute><Layout><AllOrdersPage /></Layout></ProtectedRoute>} />
       <Route path="/orders/tracking" element={<ProtectedRoute><Layout><TrackingPage /></Layout></ProtectedRoute>} />
       <Route path="/orders/disputes" element={<ProtectedRoute><Layout><DisputesPage /></Layout></ProtectedRoute>} />
+
+      {/* Products Routes */}
+      <Route path="/products" element={<ProtectedRoute><Layout><AllProductsPage /></Layout></ProtectedRoute>} />
+      <Route path="/products/add" element={<ProtectedRoute><Layout><CreateProductPage /></Layout></ProtectedRoute>} />
+      <Route path="/products/edit/:id" element={<ProtectedRoute><Layout><EditProductPage /></Layout></ProtectedRoute>} />
+      <Route path="/products/:id/manage" element={<ProtectedRoute><Layout><ManageProductPage /></Layout></ProtectedRoute>} />
       
       {/* Payments Routes */}
       <Route path="/payments" element={<ProtectedRoute><Layout><TransactionsPage /></Layout></ProtectedRoute>} />
       <Route path="/payments/payouts" element={<ProtectedRoute><Layout><PayoutsPage /></Layout></ProtectedRoute>} />
       <Route path="/payments/disputes" element={<ProtectedRoute><Layout><PaymentDisputesPage /></Layout></ProtectedRoute>} />
+
+      {/* Promotions Routes */}
+      <Route path="/promotions" element={<ProtectedRoute><Layout><PromotionsPage /></Layout></ProtectedRoute>} />
       
       {/* Analytics Routes */}
       <Route path="/analytics" element={<ProtectedRoute><Layout><AnalyticsOverviewPage /></Layout></ProtectedRoute>} />

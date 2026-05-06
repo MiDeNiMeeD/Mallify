@@ -7,7 +7,8 @@ import {
   updateDriver,
   updateAvailability,
   updateLocation,
-  getAvailableDrivers
+  getAvailableDrivers,
+  deleteDriver
 } from '../controllers/driver.controller';
 
 const router = Router();
@@ -35,7 +36,6 @@ router.get('/:id', getDriverById);
 router.post(
   '/',
   [
-    body('userId').notEmpty().withMessage('User ID is required'),
     body('firstName').notEmpty().withMessage('First name is required'),
     body('lastName').notEmpty().withMessage('Last name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
@@ -70,5 +70,8 @@ router.patch(
   ],
   updateLocation
 );
+
+// Delete driver
+router.delete('/:id', deleteDriver);
 
 export default router;

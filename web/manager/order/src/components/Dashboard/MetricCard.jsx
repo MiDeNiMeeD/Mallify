@@ -1,26 +1,23 @@
 import React from 'react';
-import './MetricCard.css';
 
-const MetricCard = ({ icon: Icon, label, value, trend, trendValue, color = 'orange' }) => {
-  const isPositive = trend === 'up';
-  
+const MetricCard = ({ icon: Icon, label, value, color = 'orange' }) => {
+  const colorMap = {
+    green: 'success',
+    blue: 'info',
+    red: 'danger',
+    orange: 'orange'
+  };
+  const iconColor = colorMap[color] || 'orange';
+
   return (
-    <div className={`metric-card gradient-${color}`}>
-      <div className="metric-icon-wrapper">
-        <div className={`metric-icon icon-${color}`}>
-          <Icon size={24} />
+    <div className="stat-card">
+      <div className="stat-card-header">
+        <span className="stat-label">{label}</span>
+        <div className={`stat-icon ${iconColor}`}>
+          <Icon size={18} />
         </div>
       </div>
-      <div className="metric-content">
-        <span className="metric-label">{label}</span>
-        <h3 className="metric-value">{value}</h3>
-        {trendValue && (
-          <div className={`metric-trend ${isPositive ? 'positive' : 'negative'}`}>
-            <span className="trend-arrow">{isPositive ? '↑' : '↓'}</span>
-            <span>{trendValue}</span>
-          </div>
-        )}
-      </div>
+      <div className="stat-value">{value}</div>
     </div>
   );
 };
