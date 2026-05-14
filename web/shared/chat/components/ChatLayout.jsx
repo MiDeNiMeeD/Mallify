@@ -44,7 +44,7 @@ export const ChatLayout = ({ initialPeerId, className = '' }) => {
 
   return (
     <div className={`mc-layout ${active ? 'has-active' : ''} ${className}`}>
-      <aside className="mc-layout-sidebar" key={refreshKey}>
+      <aside className="mc-layout-sidebar">
         <ConversationList
           activeConversationId={active?.id}
           onSelect={(conv) => setActive(conv)}

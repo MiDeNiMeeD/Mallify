@@ -258,14 +258,13 @@ export const markRead = async (req: Request, res: Response): Promise<void> => {
   if (unread.length) {
     const messageIds = unread.map((m) => String(m._id));
     const peerId = conv.participants.find((p) => String(p) !== me);
-    if (peerId) {
-      emitToUser(String(peerId), SOCKET_EVENTS.MESSAGE_READ, {
-        conversationId: String(conv._id),
-        readerId: me,
-        messageIds,
-        readAt: now,
-      });
-    }
+    const targets = peerId ? [me, String(peerId)] : [me];
+    emitToUsers(targets, SOCKET_EVENTS.MESSAGE_READ, {
+      conversationId: String(conv._id),
+      readerId: me,
+      messageIds,
+      readAt: now,
+    });
   }
 
   res.json({

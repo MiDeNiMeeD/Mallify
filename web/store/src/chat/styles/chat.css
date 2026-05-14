@@ -28,12 +28,14 @@
 .mc-layout {
   display: grid;
   grid-template-columns: 320px 1fr;
+  grid-template-rows: minmax(0, 1fr);
   height: 100%;
-  min-height: 480px;
+  min-height: 0;
   background: var(--mc-bg);
   border: 1px solid var(--mc-border);
   border-radius: var(--mc-radius);
   overflow: hidden;
+  position: relative; /* anchor for the new-chat modal backdrop */
 }
 .mc-layout-sidebar {
   border-right: 1px solid var(--mc-border);
@@ -542,6 +544,24 @@
   font-size: 12px;
 }
 
+/* Seen-by indicator (Messenger-style — sits below the latest message
+ * the peer has read; floats with read state) */
+.mc-seen {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+  padding: 2px 4px 4px;
+  font-size: 10px;
+  color: var(--mc-text-muted);
+}
+.mc-seen .mc-avatar {
+  flex-shrink: 0;
+}
+.mc-seen .mc-avatar-dot {
+  display: none;
+}
+
 /* Typing */
 .mc-typing {
   padding: 6px 16px;
@@ -669,15 +689,55 @@
   background: var(--mc-primary);
   color: var(--mc-primary-contrast);
   border: none;
-  border-radius: var(--mc-radius);
-  padding: 9px 16px;
-  font-weight: 600;
+  border-radius: 999px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-size: 14px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.mc-send-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mc-primary) 88%, black);
+}
+.mc-send-btn:active:not(:disabled) {
+  transform: scale(0.94);
 }
 .mc-send-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
+}
+.mc-send-btn svg {
+  /* nudge so the paper-plane visually centers in the circle */
+  transform: translateX(-1px);
+}
+.mc-send-spin {
+  display: inline-block;
+  font-weight: 700;
+}
+
+/* Polished icon buttons (attach, new chat, etc.) */
+.mc-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mc-text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.mc-icon-btn:hover:not(:disabled) {
+  color: var(--mc-primary);
+}
+.mc-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.mc-new-chat-btn {
+  color: var(--mc-primary);
+  background: rgba(37, 99, 235, 0.08);
+}
+.mc-new-chat-btn:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.16);
 }
 
 /* Empty */
@@ -690,7 +750,7 @@
 
 /* New chat picker */
 .mc-picker-backdrop {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(15, 20, 36, 0.45);
   display: flex;
@@ -699,9 +759,9 @@
   z-index: 1000;
 }
 .mc-picker {
-  width: min(720px, calc(100vw - 32px));
-  height: min(720px, calc(100vh - 48px));
-  max-height: calc(100vh - 48px);
+  width: min(640px, calc(100% - 32px));
+  height: min(720px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
   background: var(--mc-bg);
   border-radius: var(--mc-radius);
   box-shadow: var(--mc-shadow);

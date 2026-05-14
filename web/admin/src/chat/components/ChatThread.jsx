@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
@@ -24,12 +24,11 @@ export const ChatThread = ({ conversation, onBack, onConversationChanged }) => {
   const conversationId = conversation?.id;
   const peerId = conversation?.peerId;
 
-  const peer = useMemo(
-    () => (peerId ? { id: peerId, ...(resolveUser(peerId) || {}) } : null),
-    [peerId, resolveUser]
-  );
+  // Don't memoize — resolveUser is a stable callback but its return value
+  // changes when the user cache fills. Recomputing each render is cheap.
+  const peer = peerId ? { id: peerId, ...(resolveUser(peerId) || {}) } : null;
 
-  const peerIds = useMemo(() => (peerId ? [peerId] : []), [peerId]);
+  const peerIds = peerId ? [peerId] : [];
   const presenceMap = usePresence(peerIds);
   const presence = peerId ? presenceMap[peerId] : null;
 

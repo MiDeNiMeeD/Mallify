@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { IconPaperclip, IconSend } from './Icons';
 import { formatBytes } from '../utils/format';
 import { isImageMime, isVideoMime } from '../utils/preview';
 
@@ -98,12 +99,12 @@ export const MessageInput = ({
       <div className="mc-composer-row">
         <button
           type="button"
-          className="mc-icon-btn"
+          className="mc-icon-btn mc-attach-btn"
           onClick={() => fileRef.current?.click()}
           disabled={disabled || busy}
           title="Attach"
         >
-          📎
+          <IconPaperclip />
         </button>
         <input
           ref={fileRef}
@@ -130,8 +131,9 @@ export const MessageInput = ({
           className="mc-send-btn"
           onClick={submit}
           disabled={disabled || busy || (!text.trim() && !pending.length)}
+          title="Send"
         >
-          {busy ? '…' : 'Send'}
+          {busy ? <span className="mc-send-spin">…</span> : <IconSend />}
         </button>
       </div>
     </div>

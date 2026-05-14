@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const initials = (name = '') =>
   name
@@ -16,10 +16,25 @@ const colorFor = (seed = '') => {
 
 export const Avatar = ({ src, name, id, size = 40, online, className = '' }) => {
   const bg = colorFor(id || name || 'x');
+  const [errored, setErrored] = useState(false);
+
+  useEffect(() => {
+    setErrored(false);
+  }, [src]);
+
+  const showImage = src && !errored;
+
   return (
     <span className={`mc-avatar ${className}`} style={{ width: size, height: size }}>
-      {src ? (
-        <img src={src} alt={name || ''} className="mc-avatar-img" />
+      {showImage ? (
+        <img
+          src={src}
+          alt={name || ''}
+          className="mc-avatar-img"
+          referrerPolicy="no-referrer"
+          loading="lazy"
+          onError={() => setErrored(true)}
+        />
       ) : (
         <span className="mc-avatar-initials" style={{ background: bg }}>
           {initials(name || '')}

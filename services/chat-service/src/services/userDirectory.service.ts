@@ -41,7 +41,7 @@ const normalize = (u: any): DirectoryUser => ({
   id: String(u._id || u.id),
   name: u.name,
   email: u.email,
-  avatar: u.avatar || u.profilePicture,
+  avatar: u.avatar || u.profileImage || u.profilePicture,
   role: u.role,
   boutiqueList: (u.boutiqueList || []).map(String),
 });

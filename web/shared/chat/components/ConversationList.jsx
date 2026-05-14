@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Avatar } from './Avatar';
+import { IconPlus } from './Icons';
 import { formatRelativeTime } from '../utils/format';
 import { messagePreview } from '../utils/preview';
 import { useChat } from '../context/ChatProvider';
@@ -40,8 +41,8 @@ export const ConversationList = ({
       <div className="mc-conv-list-header">
         <h2>Chats</h2>
         {showNewChat && onNewChat && (
-          <button type="button" className="mc-icon-btn" onClick={onNewChat} title="New chat">
-            ＋
+          <button type="button" className="mc-icon-btn mc-new-chat-btn" onClick={onNewChat} title="New chat">
+            <IconPlus />
           </button>
         )}
       </div>
