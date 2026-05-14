@@ -120,6 +120,7 @@ export const routeMap: Record<string, string> = {
   '/api/promotions': 'promotion',
   '/api/wishlist': 'wishlist',
   '/api/cart': 'cart',
+  '/api/recommendations': 'analytics',
   '/api/analytics': 'analytics',
   '/api/audit': 'audit',
   '/api/disputes': 'dispute',

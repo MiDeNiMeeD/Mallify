@@ -1,0 +1,17 @@
+/* Make the chat fill the full viewport area, escaping the admin layout's
+ * inner padding so the chat sits flush. The chat list scrolls internally
+ * (mc-msg-list has overflow-y: auto). */
+.admin-messages-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+  margin: -1.5rem;
+  border-radius: 0;
+}
+.admin-messages-page .mc-layout {
+  flex: 1;
+  min-height: 0;
+  border-radius: 0;
+  border: none;
+}

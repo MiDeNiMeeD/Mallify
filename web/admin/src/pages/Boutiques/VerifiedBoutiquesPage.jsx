@@ -235,42 +235,50 @@ const VerifiedBoutiquesPage = () => {
         </div>
       </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Verified Network</span>
-            <div className="stat-icon success">
-              <FiCheckCircle />
+      <div className="admin-stats-grid">
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Verified Network</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#059669' }}>
+              <FiCheckCircle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.total}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.total.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Avg. Sales</span>
-            <div className="stat-icon pink">
-              <FiTrendingUp />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Avg. Sales</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#2563EB' }}>
+              <FiTrendingUp size={22} />
             </div>
           </div>
-          <div className="stat-value">{formatCurrency(stats.avgSales)}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{formatCurrency(stats.avgSales)}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Avg. Orders</span>
-            <div className="stat-icon info">
-              <FiActivity />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Avg. Orders</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(96, 165, 250, 0.15)', color: '#3B82F6' }}>
+              <FiActivity size={22} />
             </div>
           </div>
-          <div className="stat-value">{formatNumber(Math.round(stats.avgOrders))}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{formatNumber(Math.round(stats.avgOrders))}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Watchlist</span>
-            <div className="stat-icon danger">
-              <FiAlertTriangle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Watchlist</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#DC2626' }}>
+              <FiAlertTriangle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.watch}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.watch.toLocaleString()}</div>
+          </div>
         </div>
       </div>
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FiSearch, FiShoppingBag, FiMail, FiPhone, FiMapPin, FiCalendar, FiEye, FiEdit2, FiTrash2, FiX } from 'react-icons/fi';
 import apiClient from '../../api/apiClient';
 import Toast from '../../components/Toast';
-import '../Users/Customers.css';
 
 const BoutiquesUsers = () => {
   const [boutiques, setBoutiques] = useState([]);
@@ -137,6 +136,37 @@ const BoutiquesUsers = () => {
     pending: boutiques.filter(b => !b.verified).length,
   };
 
+  const statCards = [
+    {
+      title: 'Total Boutiques',
+      value: stats.total,
+      icon: FiShoppingBag,
+      iconBg: 'rgba(59, 130, 246, 0.15)',
+      iconColor: '#2563EB',
+    },
+    {
+      title: 'Verified',
+      value: stats.verified,
+      icon: FiShoppingBag,
+      iconBg: 'rgba(16, 185, 129, 0.15)',
+      iconColor: '#059669',
+    },
+    {
+      title: 'Pending',
+      value: stats.pending,
+      icon: FiShoppingBag,
+      iconBg: 'rgba(245, 158, 11, 0.15)',
+      iconColor: '#D97706',
+    },
+    {
+      title: 'Active',
+      value: stats.active,
+      icon: FiShoppingBag,
+      iconBg: 'rgba(96, 165, 250, 0.15)',
+      iconColor: '#3B82F6',
+    },
+  ];
+
   if (loading) {
     return (
       <div className="customers-page">
@@ -171,35 +201,20 @@ const BoutiquesUsers = () => {
         </div>
       </div>
 
-      <div className="customers-stats">
-        <div className="stat-card">
-          <FiShoppingBag className="stat-icon boutique" />
-          <div className="stat-details">
-            <h3>{stats.total}</h3>
-            <p>Total Boutiques</p>
+      <div className="admin-stats-grid">
+        {statCards.map((stat, index) => (
+          <div key={index} className="admin-stat-card">
+            <div className="admin-stat-header">
+              <span className="admin-stat-title">{stat.title}</span>
+              <div className="admin-stat-icon" style={{ background: stat.iconBg, color: stat.iconColor }}>
+                <stat.icon size={22} />
+              </div>
+            </div>
+            <div className="admin-stat-body">
+              <div className="admin-stat-value">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</div>
+            </div>
           </div>
-        </div>
-        <div className="stat-card">
-          <FiShoppingBag className="stat-icon verified" />
-          <div className="stat-details">
-            <h3>{stats.verified}</h3>
-            <p>Verified</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiShoppingBag className="stat-icon pending" />
-          <div className="stat-details">
-            <h3>{stats.pending}</h3>
-            <p>Pending</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiShoppingBag className="stat-icon active" />
-          <div className="stat-details">
-            <h3>{stats.active}</h3>
-            <p>Active</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="users-filters">
@@ -219,8 +234,7 @@ const BoutiquesUsers = () => {
           <thead>
             <tr>
               <th>Boutique</th>
-              <th>Email</th>
-              <th>Phone</th>
+              <th>Contact</th>
               <th>Status</th>
               <th>Joined</th>
               <th>Actions</th>
@@ -252,13 +266,12 @@ const BoutiquesUsers = () => {
                       <FiMail />
                       {boutique.email}
                     </div>
-                  </td>
-                  <td>
                     <div className="user-phone">
                       <FiPhone />
                       {boutique.phone || 'N/A'}
                     </div>
                   </td>
+               
                   <td>
                     <span className={`status-badge ${boutique.verified ? 'status-verified' : 'status-pending'}`}>
                       {boutique.verified ? 'Verified' : 'Pending'}

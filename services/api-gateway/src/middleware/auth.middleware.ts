@@ -31,6 +31,7 @@ export const publicRoutes = [
   '/drivers/applications', // Submit driver application
   '/boutiques/applications', // Submit boutique application
   '/notifications/send-otp', // Send OTP for email verification
+  '/chat/socket.io/*', // Socket.io handshake/transport (chat-service authenticates internally)
 ];
 
 // Routes that allow optional authentication (public but enhanced with auth)
@@ -94,6 +95,11 @@ export const smartAuth = (req: Request, res: Response, next: NextFunction) => {
 
   if (path.startsWith('/boutiques/uploads/')) {
     logger.debug(`${path} is a boutique upload asset - allowing without auth`);
+    return next();
+  }
+
+  if (path.startsWith('/chat/uploads/')) {
+    logger.debug(`${path} is a chat upload asset - allowing without auth`);
     return next();
   }
 

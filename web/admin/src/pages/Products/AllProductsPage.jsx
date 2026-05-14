@@ -387,42 +387,50 @@ const AllProductsPage = () => {
         </div>
       </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">All Products</span>
-            <div className="stat-icon pink">
-              <FiPackage />
+      <div className="admin-stats-grid">
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">All Products</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#2563EB' }}>
+              <FiPackage size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.total}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.total.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Live Products</span>
-            <div className="stat-icon success">
-              <FiCheckCircle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Live Products</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#059669' }}>
+              <FiCheckCircle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.live}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.live.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Low Stock</span>
-            <div className="stat-icon warning">
-              <FiAlertTriangle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Low Stock</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#D97706' }}>
+              <FiAlertTriangle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.lowStock}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.lowStock.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Avg Price</span>
-            <div className="stat-icon info">
-              <FiTrendingUp />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Avg Price</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(96, 165, 250, 0.15)', color: '#3B82F6' }}>
+              <FiTrendingUp size={22} />
             </div>
           </div>
-          <div className="stat-value">{formatCurrency(stats.avgPrice)}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{formatCurrency(stats.avgPrice)}</div>
+          </div>
         </div>
       </div>
 

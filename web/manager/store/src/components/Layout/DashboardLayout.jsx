@@ -22,7 +22,8 @@ import {
   FiFileText,
   FiAlertTriangle,
   FiPackage,
-  FiPlusCircle
+  FiPlusCircle,
+  FiMessageCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { notifications } from '../../utils/mockData';
@@ -142,6 +143,7 @@ const DashboardLayout = ({ children }) => {
       ]
     },
     { path: '/promotions', icon: FiTag, label: 'Promotions' },
+    { path: '/messages', icon: FiMessageCircle, label: 'Messages' },
   ];
 
   return (

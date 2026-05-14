@@ -307,42 +307,50 @@ const AllBoutiquesPage = () => {
         </div>
       </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Total Boutiques</span>
-            <div className="stat-icon pink">
-              <FiShoppingBag />
+      <div className="admin-stats-grid">
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Total Boutiques</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#2563EB' }}>
+              <FiShoppingBag size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.total}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.total.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Active</span>
-            <div className="stat-icon success">
-              <FiCheckCircle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Active</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#059669' }}>
+              <FiCheckCircle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.active}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.active.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Pending</span>
-            <div className="stat-icon warning">
-              <FiClock />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Pending</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#D97706' }}>
+              <FiClock size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.pending}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.pending.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Suspended</span>
-            <div className="stat-icon danger">
-              <FiXCircle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Suspended</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#DC2626' }}>
+              <FiXCircle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.suspended}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.suspended.toLocaleString()}</div>
+          </div>
         </div>
       </div>
 

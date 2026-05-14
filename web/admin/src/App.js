@@ -52,6 +52,9 @@ import MaintenancePage from "./pages/System/MaintenancePage";
 import NotificationsManagerPage from "./pages/Notifications/NotificationsManagerPage";
 import SettingsPage from "./pages/Settings/SettingsPage";
 
+// Messages
+import MessagesPage from "./pages/Messages/MessagesPage";
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -134,6 +137,9 @@ function AppRoutes() {
       <Route path="/system/activity" element={<ProtectedRoute><Layout><ActivityMonitorPage /></Layout></ProtectedRoute>} />
       <Route path="/system/maintenance" element={<ProtectedRoute><Layout><MaintenancePage /></Layout></ProtectedRoute>} />
       
+      {/* Messages Route */}
+      <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
+
       {/* Notifications Route */}
       <Route path="/notifications" element={<ProtectedRoute><Layout><NotificationsManagerPage /></Layout></ProtectedRoute>} />
       

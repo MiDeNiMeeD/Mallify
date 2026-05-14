@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FiSearch, FiShield, FiMail, FiPhone, FiCalendar, FiUsers, FiEye, FiEdit2, FiTrash2, FiX, FiUserPlus, FiFilter } from 'react-icons/fi';
 import apiClient from '../../api/apiClient';
 import Toast from '../../components/Toast';
-import './Customers.css';
 
 const ManagersUsers = () => {
   const [managers, setManagers] = useState([]);
@@ -201,6 +200,37 @@ const ManagersUsers = () => {
     boutiquesManagers: managers.filter(m => m.role === 'boutiques_manager').length,
   };
 
+  const statCards = [
+    {
+      title: 'Total Managers',
+      value: stats.total,
+      icon: FiShield,
+      iconBg: 'rgba(59, 130, 246, 0.15)',
+      iconColor: '#2563EB',
+    },
+    {
+      title: 'Active',
+      value: stats.active,
+      icon: FiShield,
+      iconBg: 'rgba(16, 185, 129, 0.15)',
+      iconColor: '#059669',
+    },
+    {
+      title: 'Delivery',
+      value: stats.deliveryManagers,
+      icon: FiUsers,
+      iconBg: 'rgba(96, 165, 250, 0.15)',
+      iconColor: '#3B82F6',
+    },
+    {
+      title: 'Boutiques',
+      value: stats.boutiquesManagers,
+      icon: FiUsers,
+      iconBg: 'rgba(245, 158, 11, 0.15)',
+      iconColor: '#D97706',
+    },
+  ];
+
   if (loading) {
     return (
       <div className="customers-page">
@@ -238,35 +268,20 @@ const ManagersUsers = () => {
         </button>
       </div>
 
-      <div className="customers-stats">
-        <div className="stat-card">
-          <FiShield className="stat-icon manager" />
-          <div className="stat-details">
-            <h3>{stats.total}</h3>
-            <p>Total Managers</p>
+      <div className="admin-stats-grid">
+        {statCards.map((stat, index) => (
+          <div key={index} className="admin-stat-card">
+            <div className="admin-stat-header">
+              <span className="admin-stat-title">{stat.title}</span>
+              <div className="admin-stat-icon" style={{ background: stat.iconBg, color: stat.iconColor }}>
+                <stat.icon size={22} />
+              </div>
+            </div>
+            <div className="admin-stat-body">
+              <div className="admin-stat-value">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</div>
+            </div>
           </div>
-        </div>
-        <div className="stat-card">
-          <FiShield className="stat-icon active" />
-          <div className="stat-details">
-            <h3>{stats.active}</h3>
-            <p>Active</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiUsers className="stat-icon delivery" />
-          <div className="stat-details">
-            <h3>{stats.deliveryManagers}</h3>
-            <p>Delivery</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiUsers className="stat-icon boutiques" />
-          <div className="stat-details">
-            <h3>{stats.boutiquesManagers}</h3>
-            <p>Boutiques</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="users-filters">
@@ -294,9 +309,8 @@ const ManagersUsers = () => {
           <thead>
             <tr>
               <th>User</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Role Type</th>
+              <th>Contact</th>
+              <th>Role</th>
               <th>Joined</th>
               <th>Actions</th>
             </tr>
@@ -327,13 +341,12 @@ const ManagersUsers = () => {
                       <FiMail />
                       {manager.email}
                     </div>
-                  </td>
-                  <td>
                     <div className="user-phone">
                       <FiPhone />
                       {manager.phone || 'N/A'}
                     </div>
                   </td>
+                 
                   <td>
                     <span className={`role-badge ${manager.role === 'delivery_manager' ? 'badge-delivery-manager' : 'badge-boutiques-manager'}`}>
                       {manager.role === 'delivery_manager' ? 'Delivery' : 'Boutiques'}

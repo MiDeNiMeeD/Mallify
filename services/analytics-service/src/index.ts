@@ -5,6 +5,7 @@ import compression from 'compression';
 import dotenv from 'dotenv';
 import { connectDatabase } from './config/database';
 import analyticsRoutes from './routes/analytics.routes';
+import aiRoutes from './routes/ai.routes';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/recommendations', aiRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });

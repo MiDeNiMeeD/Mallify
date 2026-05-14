@@ -209,42 +209,50 @@ const PendingBoutiquesPage = () => {
         </div>
       </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Total Pending</span>
-            <div className="stat-icon pink">
-              <FiInbox />
+      <div className="admin-stats-grid">
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Total Pending</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#2563EB' }}>
+              <FiInbox size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.total}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.total.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Awaiting Review</span>
-            <div className="stat-icon info">
-              <FiClock />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Awaiting Review</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(96, 165, 250, 0.15)', color: '#3B82F6' }}>
+              <FiClock size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.awaiting}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.awaiting.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">In Review</span>
-            <div className="stat-icon success">
-              <FiCheckCircle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">In Review</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#059669' }}>
+              <FiCheckCircle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.review}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{stats.review.toLocaleString()}</div>
+          </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Need Attention</span>
-            <div className="stat-icon danger">
-              <FiAlertTriangle />
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Need Attention</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#DC2626' }}>
+              <FiAlertTriangle size={22} />
             </div>
           </div>
-          <div className="stat-value">{stats.needsInfo + stats.overdue}</div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{(stats.needsInfo + stats.overdue).toLocaleString()}</div>
+          </div>
         </div>
       </div>
 

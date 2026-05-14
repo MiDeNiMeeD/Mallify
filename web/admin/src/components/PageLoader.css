@@ -1,0 +1,29 @@
+.page-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.page-loader-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(124, 58, 237, 0.1);
+  border-top-color: #7C3AED;
+  border-radius: 50%;
+  animation: pageLoaderSpin 0.8s linear infinite;
+}
+
+@keyframes pageLoaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-loader-text {
+  font-size: 1rem;
+  color: #6B7280;
+  font-weight: 500;
+}

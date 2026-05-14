@@ -57,12 +57,16 @@ const ApprovalsPage = () => {
         </div>
       </div>
 
-      <div className="boutiques-stats">
-        <div className="stat-card">
-          <FiClock className="stat-icon pending" />
-          <div className="stat-details">
-            <h3>{applications.length}</h3>
-            <p>Pending Applications</p>
+      <div className="admin-stats-grid">
+        <div className="admin-stat-card">
+          <div className="admin-stat-header">
+            <span className="admin-stat-title">Pending Applications</span>
+            <div className="admin-stat-icon" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#D97706' }}>
+              <FiClock size={22} />
+            </div>
+          </div>
+          <div className="admin-stat-body">
+            <div className="admin-stat-value">{applications.length.toLocaleString()}</div>
           </div>
         </div>
       </div>

@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { FiSearch, FiFilter, FiEdit2, FiTrash2, FiMail, FiPhone, FiCalendar, FiUser, FiShield } from 'react-icons/fi';
+import {
+  FiSearch,
+  FiFilter,
+  FiEdit2,
+  FiTrash2,
+  FiMail,
+  FiPhone,
+  FiCalendar,
+  FiUser,
+  FiShield,
+  FiUsers,
+  FiShoppingBag
+} from 'react-icons/fi';
 import apiClient from '../../api/apiClient';
 import Toast from '../../components/Toast';
 import './AllUsers.css';
@@ -86,8 +98,10 @@ const AllUsers = () => {
     }
   };
 
-  // Filter users based on search and filters
+  // Filter users based on search and filters (exclude admins from view)
   const filteredUsers = users.filter(user => {
+    // Exclude admins from the list
+    if (user.role === 'admin') return false;
     const matchesSearch = user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          user.email?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
@@ -101,23 +115,24 @@ const AllUsers = () => {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-  // Statistics
+  // Statistics (exclude admins)
+  const nonAdminUsers = users.filter(u => u.role !== 'admin');
   const stats = {
-    total: users.length,
-    active: users.filter(u => u.status === 'active').length,
-    suspended: users.filter(u => u.status === 'suspended').length,
-    customers: users.filter(u => u.role === 'client').length,
-    boutiques: users.filter(u => u.role === 'boutique_owner').length,
-    drivers: users.filter(u => u.role === 'driver').length,
+    total: nonAdminUsers.length,
+    active: nonAdminUsers.filter(u => u.status === 'active').length,
+    suspended: nonAdminUsers.filter(u => u.status === 'suspended').length,
+    customers: nonAdminUsers.filter(u => u.role === 'client').length,
+    boutiques: nonAdminUsers.filter(u => u.role === 'boutique_owner').length,
+    drivers: nonAdminUsers.filter(u => u.role === 'delivery_person').length,
   };
 
   const getRoleBadge = (role) => {
     const badges = {
-      admin: { label: 'Admin', class: 'badge-admin' },
-      customer: { label: 'Customer', class: 'badge-customer' },
-      boutique_owner: { label: 'Boutique', class: 'badge-boutique' },
-      driver: { label: 'Driver', class: 'badge-driver' },
-      delivery_manager: { label: 'Manager', class: 'badge-manager' },
+      client: { label: 'Customer', class: 'badge-customer' },
+      boutique_owner: { label: 'Boutique Owner', class: 'badge-boutique' },
+      delivery_person: { label: 'Driver', class: 'badge-driver' },
+      delivery_manager: { label: 'Delivery Manager', class: 'badge-manager' },
+      boutiques_manager: { label: 'Boutiques Manager', class: 'badge-manager' },
     };
     return badges[role] || { label: role, class: 'badge-default' };
   };
@@ -125,13 +140,43 @@ const AllUsers = () => {
   const getStatusBadge = (status) => {
     return status === 'active' ? 'status-active' : 'status-suspended';
   };
+  const statCards = [
+    {
+      title: 'Total Users',
+      value: stats.total.toLocaleString(),
+      icon: FiUsers,
+      iconBg: 'rgba(59, 130, 246, 0.15)',
+      iconColor: '#2563EB'
+    },
+    {
+      title: 'Active',
+      value: stats.active.toLocaleString(),
+      icon: FiShield,
+      iconBg: 'rgba(16, 185, 129, 0.15)',
+      iconColor: '#059669'
+    },
+    {
+      title: 'Customers',
+      value: stats.customers.toLocaleString(),
+      icon: FiUser,
+      iconBg: 'rgba(96, 165, 250, 0.15)',
+      iconColor: '#3B82F6'
+    },
+    {
+      title: 'Boutiques',
+      value: stats.boutiques.toLocaleString(),
+      icon: FiShoppingBag,
+      iconBg: 'rgba(245, 158, 11, 0.15)',
+      iconColor: '#D97706'
+    }
+  ];
 
-  if (loading) {
+ if (loading) {
     return (
-      <div className="all-users-page">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading users...</p>
+      <div className="dashboard-page">
+        <div className="empty-state">
+          <div className="loading-spinner"></div>
+          <p>Loading boutiques...</p>
         </div>
       </div>
     );
@@ -160,39 +205,22 @@ const AllUsers = () => {
         </div>
       </div>
 
-      {/* Statistics */}
-      <div className="users-stats">
-        <div className="stat-card">
-          <FiUser className="stat-icon" />
-          <div className="stat-details">
-            <h3>{stats.total}</h3>
-            <p>Total Users</p>
+      {/* Stats Grid */}
+      <div className="admin-stats-grid">
+        {statCards.map((stat, index) => (
+          <div key={index} className="admin-stat-card">
+            <div className="admin-stat-header">
+              <span className="admin-stat-title">{stat.title}</span>
+              <div className="admin-stat-icon" style={{ background: stat.iconBg, color: stat.iconColor }}>
+                <stat.icon size={22} />
+              </div>
+            </div>
+            <div className="admin-stat-body">
+              <div className="admin-stat-value">{stat.value}</div>
+            </div>
           </div>
-        </div>
-        <div className="stat-card">
-          <FiShield className="stat-icon active" />
-          <div className="stat-details">
-            <h3>{stats.active}</h3>
-            <p>Active</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiUser className="stat-icon customer" />
-          <div className="stat-details">
-            <h3>{stats.customers}</h3>
-            <p>Customers</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiUser className="stat-icon boutique" />
-          <div className="stat-details">
-            <h3>{stats.boutiques}</h3>
-            <p>Boutiques</p>
-          </div>
-        </div>
-       
+        ))}
       </div>
-
       {/* Filters */}
       <div className="users-filters">
         <div className="search-box">
@@ -208,11 +236,11 @@ const AllUsers = () => {
           <FiFilter />
           <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
             <option value="all">All Roles</option>
-            <option value="customer">Customers</option>
-            <option value="boutique_owner">Boutiques</option>
-            <option value="driver">Drivers</option>
-            <option value="delivery_manager">Managers</option>
-            <option value="admin">Admins</option>
+            <option value="client">Customers</option>
+            <option value="boutique_owner">Boutique Owners</option>
+            <option value="delivery_person">Drivers</option>
+            <option value="delivery_manager">Delivery Managers</option>
+            <option value="boutiques_manager">Boutiques Managers</option>
           </select>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="all">All Status</option>
@@ -228,8 +256,7 @@ const AllUsers = () => {
           <thead>
             <tr>
               <th>User</th>
-              <th>Email</th>
-              <th>Phone</th>
+              <th>Contact</th>
               <th>Role</th>
               <th>Status</th>
               <th>Joined</th>
@@ -264,13 +291,12 @@ const AllUsers = () => {
                         <FiMail />
                         {user.email}
                       </div>
-                    </td>
-                    <td>
-                      <div className="user-phone">
+                       <div className="user-phone">
                         <FiPhone />
                         {user.phone || 'N/A'}
                       </div>
                     </td>
+                    
                     <td>
                       <span className={`role-badge ${roleBadge.class}`}>
                         {roleBadge.label}
@@ -296,9 +322,7 @@ const AllUsers = () => {
                         >
                           <FiShield />
                         </button>
-                        <button className="btn-action btn-edit" title="Edit">
-                          <FiEdit2 />
-                        </button>
+                       
                         <button 
                           className="btn-action btn-delete"
                           onClick={() => handleDeleteUser(user._id)}

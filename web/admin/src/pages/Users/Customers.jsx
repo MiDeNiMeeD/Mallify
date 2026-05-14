@@ -136,6 +136,37 @@ const Customers = () => {
     totalSpent: customers.reduce((sum, c) => sum + (c.totalSpent || 0), 0),
   };
 
+  const statCards = [
+    {
+      title: 'Total Customers',
+      value: stats.total,
+      icon: FiShoppingBag,
+      iconBg: 'rgba(59, 130, 246, 0.15)',
+      iconColor: '#2563EB',
+    },
+    {
+      title: 'Active',
+      value: stats.active,
+      icon: FiTrendingUp,
+      iconBg: 'rgba(16, 185, 129, 0.15)',
+      iconColor: '#059669',
+    },
+    {
+      title: 'Total Orders',
+      value: stats.totalOrders,
+      icon: FiShoppingBag,
+      iconBg: 'rgba(96, 165, 250, 0.15)',
+      iconColor: '#3B82F6',
+    },
+    {
+      title: 'Total Revenue',
+      value: `$${(stats.totalSpent / 1000).toFixed(1)}K`,
+      icon: FiTrendingUp,
+      iconBg: 'rgba(245, 158, 11, 0.15)',
+      iconColor: '#D97706',
+    },
+  ];
+
   if (loading) {
     return (
       <div className="customers-page">
@@ -170,35 +201,20 @@ const Customers = () => {
         </div>
       </div>
 
-      <div className="customers-stats">
-        <div className="stat-card">
-          <FiShoppingBag className="stat-icon" />
-          <div className="stat-details">
-            <h3>{stats.total}</h3>
-            <p>Total Customers</p>
+      <div className="admin-stats-grid">
+        {statCards.map((stat, index) => (
+          <div key={index} className="admin-stat-card">
+            <div className="admin-stat-header">
+              <span className="admin-stat-title">{stat.title}</span>
+              <div className="admin-stat-icon" style={{ background: stat.iconBg, color: stat.iconColor }}>
+                <stat.icon size={22} />
+              </div>
+            </div>
+            <div className="admin-stat-body">
+              <div className="admin-stat-value">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</div>
+            </div>
           </div>
-        </div>
-        <div className="stat-card">
-          <FiTrendingUp className="stat-icon active" />
-          <div className="stat-details">
-            <h3>{stats.active}</h3>
-            <p>Active</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiShoppingBag className="stat-icon orders" />
-          <div className="stat-details">
-            <h3>{stats.totalOrders}</h3>
-            <p>Total Orders</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FiTrendingUp className="stat-icon revenue" />
-          <div className="stat-details">
-            <h3>${(stats.totalSpent / 1000).toFixed(1)}K</h3>
-            <p>Total Revenue</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="users-filters">
@@ -218,8 +234,7 @@ const Customers = () => {
           <thead>
             <tr>
               <th>User</th>
-              <th>Email</th>
-              <th>Phone</th>
+              <th>Contact</th>
               <th>Status</th>
               <th>Joined</th>
               <th>Actions</th>
@@ -251,13 +266,12 @@ const Customers = () => {
                       <FiMail />
                       {customer.email}
                     </div>
-                  </td>
-                  <td>
                     <div className="user-phone">
                       <FiPhone />
                       {customer.phone || 'N/A'}
                     </div>
                   </td>
+                  
                   <td>
                     <span className={`status-badge ${customer.status === 'active' ? 'status-active' : 'status-suspended'}`}>
                       {customer.status || 'active'}
@@ -278,13 +292,13 @@ const Customers = () => {
                       >
                         <FiEye />
                       </button>
-                      <button
+                      {/* <button
                         className="btn-action btn-edit"
                         onClick={() => handleEditCustomer(customer)}
                         title="Edit"
                       >
                         <FiEdit2 />
-                      </button>
+                      </button> */}
                       <button
                         className="btn-action btn-delete"
                         onClick={() => handleDeleteCustomer(customer._id)}

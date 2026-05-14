@@ -27,7 +27,8 @@ import {
   FiAlertCircle,
   FiClock,
   FiCheckCircle,
-  FiTag
+  FiTag,
+  FiMessageCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import './Sidebar.css';
@@ -163,6 +164,7 @@ const Sidebar = () => {
         { path: '/system/maintenance', icon: FiTool, label: 'Maintenance' }
       ]
     },
+    { path: '/messages', icon: FiMessageCircle, label: 'Messages' },
     { path: '/notifications', icon: FiBell, label: 'Notifications' },
     { path: '/settings', icon: FiSettings, label: 'Settings' }
   ];

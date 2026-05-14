@@ -18,6 +18,7 @@ import AnalyticsReports from "./pages/Analytics/AnalyticsReports";
 import AnalyticsInsights from "./pages/Analytics/AnalyticsInsights";
 import Compliance from "./pages/Compliance/Compliance";
 import Promotions from "./pages/Promotions/Promotions";
+import MessagesPage from "./pages/Messages/MessagesPage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -196,15 +197,26 @@ function AppRoutes() {
         } 
       />
       
-      <Route 
-        path="/promotions" 
+      <Route
+        path="/promotions"
         element={
           <ProtectedRoute>
             <DashboardLayout>
               <Promotions />
             </DashboardLayout>
           </ProtectedRoute>
-        } 
+        }
+      />
+
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <MessagesPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
       />
 
       {/* Catch all - redirect to dashboard */}

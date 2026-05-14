@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import Analytics from '../models/Analytics';
 
 /**
  * AI-Powered Analytics Controller
@@ -12,8 +13,17 @@ import mongoose from 'mongoose';
  */
 export const getPersonalizedRecommendations = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { userId } = req.params;
+    const userIdFromHeader = req.header('x-user-id');
+    const rawUserId = String(req.params.userId || req.query.userId || userIdFromHeader || '').trim();
     const { limit = 10, context = 'general' } = req.query;
+    const requestedLimit = Number(limit);
+    const safeLimit = Number.isFinite(requestedLimit)
+      ? Math.min(Math.max(requestedLimit, 1), 20)
+      : 10;
+    const productServiceUrl = process.env.PRODUCT_SERVICE_URL || 'http://localhost:3002';
+    const analyticsUserId = mongoose.Types.ObjectId.isValid(rawUserId)
+      ? new mongoose.Types.ObjectId(rawUserId)
+      : null;
     
     // AI recommendation algorithm based on:
     // 1. User's browsing history
@@ -22,42 +32,87 @@ export const getPersonalizedRecommendations = async (req: Request, res: Response
     // 4. Product similarity (content-based filtering)
     // 5. Current trends
     
-    // Mock recommendation logic (replace with actual ML model)
-    const recommendations = {
-      userId,
-      algorithm: 'hybrid_collaborative_content_based',
+    const fetchProductsByIds = async (productIds: string[]) => {
+      if (productIds.length === 0) return [];
+
+      const results = await Promise.all(
+        productIds.map(async (productId) => {
+          try {
+            const response = await fetch(
+              `${productServiceUrl}/api/products/${encodeURIComponent(productId)}`
+            );
+            if (!response.ok) return null;
+            const data: unknown = await response.json().catch(() => ({}));
+            const payload = data as any;
+            return payload?.data?.product || payload?.product || payload;
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      return results.filter(Boolean);
+    };
+
+    const fetchFallbackProducts = async (fallbackLimit: number) => {
+      try {
+        const response = await fetch(
+          `${productServiceUrl}/api/products?limit=${fallbackLimit}`
+        );
+        if (!response.ok) return [];
+        const data: unknown = await response.json().catch(() => ({}));
+        const payload = data as any;
+        return payload?.data?.products || payload?.products || [];
+      } catch {
+        return [];
+      }
+    };
+
+    let rankedProductIds: string[] = [];
+    if (analyticsUserId) {
+      const events = await Analytics.find({
+        userId: analyticsUserId,
+        eventType: { $in: ['product_view', 'add_to_cart', 'purchase'] },
+      })
+        .sort({ timestamp: -1 })
+        .limit(200)
+        .lean();
+
+      const scores = new Map<string, number>();
+      events.forEach((event) => {
+        const productId = String(
+          event?.data?.productId ||
+            event?.data?.product?.id ||
+            event?.data?.product?._id ||
+            event?.data?.id ||
+            ''
+        ).trim();
+        if (!productId) return;
+        scores.set(productId, (scores.get(productId) || 0) + 1);
+      });
+
+      rankedProductIds = [...scores.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([productId]) => productId)
+        .slice(0, safeLimit);
+    }
+
+    let recommendedProducts = await fetchProductsByIds(rankedProductIds);
+    if (recommendedProducts.length === 0) {
+      recommendedProducts = await fetchFallbackProducts(safeLimit);
+    }
+
+    res.status(200).json({
+      userId: rawUserId,
+      algorithm: 'behavioral_trends_fallback',
       context,
-      recommendations: [
-        {
-          productId: 'mock-id-1',
-          score: 0.95,
-          reason: 'Based on your recent purchases',
-          category: 'Electronics',
-          tags: ['frequently_bought_together', 'trending']
-        },
-        {
-          productId: 'mock-id-2',
-          score: 0.87,
-          reason: 'Similar users also liked this',
-          category: 'Fashion',
-          tags: ['collaborative_filtering']
-        },
-        {
-          productId: 'mock-id-3',
-          score: 0.82,
-          reason: 'Trending in your area',
-          category: 'Home & Garden',
-          tags: ['trending', 'location_based']
-        }
-      ].slice(0, Number(limit)),
+      recommendations: recommendedProducts,
       metadata: {
         generatedAt: new Date(),
         modelVersion: '2.1.0',
-        confidence: 0.88
-      }
-    };
-    
-    res.status(200).json(recommendations);
+        confidence: recommendedProducts.length > 0 ? 0.72 : 0.2,
+      },
+    });
     return;
   } catch (error) {
     res.status(500).json({ error: 'Failed to generate recommendations' });
