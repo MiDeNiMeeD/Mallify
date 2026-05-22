@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(200, 255, 200)
+    Note over U,S: Inscription via Google
+    U->>S: Cliquer sur l'icône Google
+    S-->>U: Ouvrir la fenêtre d'authentification Google
+    U->>S: Choisir un compte Google et autoriser
+    S->>S: Récupérer et vérifier le token Google
+    alt Token invalide
+        S-->>U: Alerte "Échec de connexion Google"
+    else Token valide
+        S->>S: Créer / récupérer utilisateur (vérifié:true)
+        S-->>U: Afficher l'accueil (MainTabs)
+    end
+    end

@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Chargement de l'écran Checkout
+    U->>S: Naviguer vers Checkout (depuis Cart)
+    alt cartItems passés dans route.params
+        S-->>U: Utiliser les items reçus
+    else cartItems absents
+        S->>S: Résoudre userId
+        S->>S: GET /cart/{userId} (fallback)
+        alt Erreur
+            S-->>U: Afficher panier vide
+        else Succès
+            S-->>U: Afficher les items
+        end
+    end
+
+    Note over U,S: Chargement de l'adresse de livraison
+    S->>S: GET /addresses (fetchMyAddresses)
+    alt Échec
+        S->>S: Récupérer identité active (email)
+        S->>S: GET /addresses?email=...
+    end
+    alt Au moins une adresse
+        S->>S: Sélectionner (préférence route.params) > défaut > première
+        S-->>U: Afficher l'adresse sélectionnée
+    else Aucune adresse
+        S-->>U: Adresse par défaut affichée ("Home", "61480 Sunbrook Park, PC 5679")
+    end
+
+    Note over U,S: Affichage récap
+    S-->>U: Liste items + adresse + shipping (Regular $15) + promo + total
+    end

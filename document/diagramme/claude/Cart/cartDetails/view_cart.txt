@@ -1,0 +1,46 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V2 as I:CartView
+    participant SVC as C:ShopApi
+    participant Cache as E:CartCache
+    participant C as C:CartController
+    participant EC as E:Cart
+
+    rect rgb(255, 245, 220)
+    Note over U,EC: Affichage du panier
+    U->>V2: Ouvrir l'onglet Cart
+    activate V2
+    V2->>V2: useFocusEffect → loadCart()
+    V2->>SVC: resolveCartUserId()
+    activate SVC
+    SVC-->>V2: userId
+    deactivate SVC
+    V2->>Cache: getCachedCartItems(userId)
+    activate Cache
+    Cache-->>V2: items cachés (ou null)
+    deactivate Cache
+    alt Cache présent
+        V2-->>U: Afficher items immédiatement
+    else Cache vide (premier chargement)
+        V2-->>U: Afficher loader
+    end
+    V2->>SVC: fetchCartItems(userId)
+    activate SVC
+    SVC->>C: GET /cart/{userId}
+    activate C
+    C->>EC: récupérer items
+    activate EC
+    EC-->>C: Items
+    deactivate EC
+    C-->>SVC: HTTP 200 {cart:{items:[...]}}
+    deactivate C
+    SVC->>Cache: cartCache.set(userId, items)
+    SVC-->>V2: Items
+    deactivate SVC
+    V2-->>U: Liste à jour + total
+    alt Panier vide
+        V2-->>U: Afficher "Your cart is empty"
+    end
+    deactivate V2
+    end

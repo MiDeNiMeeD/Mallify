@@ -1,0 +1,33 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:ProductDetailsView
+    participant V2 as I:CartView
+    participant V3 as I:CheckoutView
+    participant M as I:RemoveModal
+    participant SVC as C:ShopApi
+    participant Cache as E:CartCache
+    participant C as C:CartController
+    participant EC as E:Cart
+
+    Note over U,EC: Flux complet du panier (MVC)
+
+    Note right of U: voir cartDetails/add_to_cart.txt
+    ref over U,V1,SVC,C,EC: Ajout d'un produit au panier
+
+    Note right of U: voir cartDetails/view_cart.txt
+    ref over U,V2,SVC,Cache,C,EC: Affichage du panier
+
+    opt Actions sur les items
+        Note right of U: voir cartDetails/update_quantity.txt
+        ref over U,V2,SVC,C,EC: Modification de la quantité
+        Note right of U: voir cartDetails/remove_item.txt
+        ref over U,V2,M,SVC,C,EC: Suppression d'un item
+    end
+
+    opt Aller au paiement
+        activate V2
+        U->>V2: Cliquer "Checkout"
+        V2->>V3: navigation.navigate("Checkout", {cartItems})
+        deactivate V2
+    end

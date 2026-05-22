@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(220, 240, 255)
+    Note over U,S: Connexion via Google
+    U->>S: Cliquer sur l'icône Google
+    S-->>U: Ouvrir la fenêtre d'authentification Google
+    U->>S: Choisir un compte Google et autoriser
+    S->>S: Récupérer et vérifier le token Google
+    alt Token invalide
+        S-->>U: Alerte "Échec de connexion Google"
+    else Token valide
+        S->>S: Rechercher / créer utilisateur (provider:"google")
+        S->>S: Générer accessToken + refreshToken
+        S-->>U: Afficher l'accueil (MainTabs)
+    end
+    end

@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 245, 220)
+    Note over U,S: Modifier l'adresse de livraison
+    U->>S: Cliquer l'icône éditer sur l'adresse
+    S-->>U: Afficher l'écran ShippingAddress (avec selectedAddressId)
+    U->>S: Choisir / ajouter une adresse
+    S-->>U: Retour à Checkout (route.params.selectedShippingAddress)
+    S->>S: setSelectedAddress(adresse retournée)
+    S-->>U: Adresse mise à jour dans le récap
+    end

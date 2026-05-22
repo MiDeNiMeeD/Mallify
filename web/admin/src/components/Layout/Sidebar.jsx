@@ -31,6 +31,7 @@ import {
   FiMessageCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { useChat } from '../../chat';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -38,6 +39,7 @@ const Sidebar = () => {
   const [expandedItems, setExpandedItems] = useState({});
   const [popupMenu, setPopupMenu] = useState(null);
   const { user, logout } = useAuth();
+  const { totalUnread } = useChat();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -164,7 +166,7 @@ const Sidebar = () => {
         { path: '/system/maintenance', icon: FiTool, label: 'Maintenance' }
       ]
     },
-    { path: '/messages', icon: FiMessageCircle, label: 'Messages' },
+    { path: '/messages', icon: FiMessageCircle, label: 'Messages', badge: totalUnread },
     { path: '/notifications', icon: FiBell, label: 'Notifications' },
     { path: '/settings', icon: FiSettings, label: 'Settings' }
   ];
@@ -258,7 +260,14 @@ const Sidebar = () => {
                 className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}
                 title={collapsed ? item.label : ''}
               >
-                <item.icon size={20} className="admin-nav-icon" />
+                <span className="admin-nav-icon-wrap">
+                  <item.icon size={20} className="admin-nav-icon" />
+                  {item.badge > 0 && (
+                    <span className="admin-nav-badge">
+                      {item.badge > 99 ? '99+' : item.badge}
+                    </span>
+                  )}
+                </span>
                 {!collapsed && <span className="admin-nav-label">{item.label}</span>}
               </NavLink>
             )}

@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant V as I:ManagersUsersView
+    participant MD as I:ManagerDetailModal
+    participant MA as I:AddManagerModal
+    participant T as I:Toast
+    participant API as C:ApiClient
+    participant C as C:UserController
+    participant CA as C:AuthController
+    participant EU as E:User
+
+    Note over A,EU: Flux complet Admin → Gestion des Managers (MVC)
+
+    Note right of A: voir adminUsersDetails/load_managers.txt
+    ref over A,V,API,C,EU: Chargement (GET /api/users + filtre managers)
+
+    opt Consulter un manager
+        Note right of A: voir adminUsersDetails/view_manager.txt
+        ref over A,V,MD: Visualiser les détails (modal)
+    end
+
+    opt Créer un manager
+        Note right of A: voir adminUsersDetails/create_manager.txt
+        ref over A,V,MA,API,CA,EU: Créer (form + validation + POST /api/auth/register)
+    end
+
+    opt Éditer un manager
+        Note right of A: voir adminUsersDetails/edit_manager.txt
+        ref over A,V: ⚠️ Non implémenté
+    end
+
+    opt Supprimer un manager
+        Note right of A: voir adminUsersDetails/delete_manager.txt
+        ref over A,V,T,API,C,EU: Supprimer (toast confirm + DELETE /api/users/:id)
+    end

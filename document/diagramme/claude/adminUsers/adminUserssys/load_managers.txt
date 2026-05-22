@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over A,S: Chargement de la page Managers
+    A->>S: Ouvrir "Managers Users"
+    S->>S: setLoading(true)
+    S-->>A: Afficher loader "Loading managers..."
+    S->>S: GET /api/users
+    alt Erreur
+        S-->>A: Toast "Failed to fetch managers"
+        S->>S: setLoadError(message)
+    else Succès
+        S->>S: Filtrer (role == "delivery_manager" OU "boutiques_manager")
+        S-->>A: Afficher la liste + 4 stat cards (total / active / delivery / boutiques)
+    end
+    S->>S: setLoading(false)
+
+    opt Recherche / filtre
+        A->>S: Saisir nom/email OU choisir un rôle
+        S-->>A: Liste filtrée (côté client) + reset page = 1
+    end
+
+    opt Pagination
+        A->>S: Cliquer "Previous" / "Next"
+        S-->>A: Afficher 10 managers de la page courante
+    end
+    end

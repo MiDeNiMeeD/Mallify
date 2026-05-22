@@ -1,0 +1,32 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant S as Système
+    participant ST as Stripe
+
+    Note over U,ST: Flux complet "Sélection plan d'abonnement + paiement Stripe"
+
+    Note right of U: voir subscriptionsys/load_plans.txt
+    ref over U,S: Chargement des plans + subscription access
+
+    opt Retour depuis Stripe Checkout (URL ?checkout=...)
+        Note right of U: voir subscriptionsys/checkout_return.txt
+        ref over U,S: Traitement params success/cancel
+    end
+
+    opt Changer l'intervalle de facturation
+        Note right of U: voir subscriptionsys/select_billing.txt
+        ref over U,S: Monthly / Yearly
+    end
+
+    alt Pas encore abonné — Nouvel abonnement
+        Note right of U: voir subscriptionsys/subscribe_stripe.txt
+        ref over U,S,ST: Stripe Checkout (redirection + paiement + webhook)
+    else Déjà abonné — Upgrade
+        Note right of U: voir subscriptionsys/upgrade_plan.txt
+        ref over U,S: Upgrade (proration credit)
+    else Déjà abonné — Plan courant
+        Note over U,S: Bouton "Current Plan" désactivé
+    else Déjà abonné — Plan inférieur
+        Note over U,S: Aucun bouton (downgrade interdit)
+    end

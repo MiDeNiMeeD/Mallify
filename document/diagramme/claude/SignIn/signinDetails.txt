@@ -1,0 +1,32 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:SignInView
+    participant V2 as I:ForgotPasswordView
+    participant C as C:AuthController
+    participant OAuth as S:OAuthProvider
+    participant EU as E:User
+    participant ST as E:TokenStorage
+
+    rect rgb(230, 244, 255)
+    Note over U,V1: Affichage du formulaire
+    U->>V1: Demander l'interface de connexion
+    activate V1
+    V1->>V1: charger()
+    V1-->>U: Interface affichée (email + Google + Facebook)
+    deactivate V1
+    end
+
+    alt Connexion avec Facebook
+        Note right of U: voir signinDetails/facebook.txt
+        ref over U,V1,C,OAuth,EU,ST: Connexion Facebook
+    else Connexion avec Google
+        Note right of U: voir signinDetails/google.txt
+        ref over U,V1,C,OAuth,EU,ST: Connexion Google
+    else Connexion avec email / mot de passe
+        Note right of U: voir signinDetails/email.txt
+        ref over U,V1,C,EU,ST: Saisie + validation + Demande de connexion
+    else Mot de passe oublié
+        Note right of U: voir signinDetails/forgot_password.txt
+        ref over U,V1,V2: Mot de passe oublié (3 étapes)
+    end

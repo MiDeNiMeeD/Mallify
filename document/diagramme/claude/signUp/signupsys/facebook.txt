@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(220, 230, 255)
+    Note over U,S: Inscription via Facebook
+    U->>S: Cliquer sur l'icône Facebook
+    S-->>U: Ouvrir la fenêtre d'authentification Facebook
+    U->>S: Se connecter et autoriser
+    S->>S: Récupérer et vérifier le token Facebook
+    alt Token invalide
+        S-->>U: Alerte "Échec de connexion Facebook"
+    else Token valide
+        S->>S: Créer / récupérer utilisateur (vérifié:true)
+        S-->>U: Afficher l'accueil (MainTabs)
+    end
+    end

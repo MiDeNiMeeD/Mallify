@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(220, 240, 255)
+    Note over U,S: Sauvegarder les modifications
+    U->>S: Cliquer "Update"
+    S->>S: Valider fullName non vide
+    alt fullName vide
+        S-->>U: Alerte "Please enter your full name"
+    else fullName OK
+        S->>S: Valider phoneNumber non vide
+        alt phoneNumber vide
+            S-->>U: Alerte "Please enter your phone number"
+        else phoneNumber OK
+            S->>S: toE164Phone(phoneNumber)
+            Note over S: Règles E.164 :<br/>+ déjà présent → digits gardés<br/>8 chiffres → +216 prefix (Tunisie)<br/>10-15 chiffres → +digits<br/>sinon → invalide
+            alt Téléphone invalide
+                S-->>U: Alerte "Invalid phone — Example: +21624905669"
+            else Téléphone valide
+                S->>S: setIsSaving(true), bouton spinner
+                S->>S: PUT /users/profile {name, nickname, phone, city, gender, dateOfBirth (ISO), profileImage}
+                alt Erreur (réseau / serveur)
+                    S-->>U: Alerte "Update failed"
+                else Succès
+                    S-->>U: Alerte "Profile updated successfully!"
+                    U->>S: Fermer l'alerte (onPress)
+                    S-->>U: navigation.goBack() (retour à Profile)
+                end
+                S->>S: setIsSaving(false)
+            end
+        end
+    end
+    end

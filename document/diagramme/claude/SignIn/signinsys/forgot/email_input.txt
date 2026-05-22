@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Étape 1 — Saisie de l'email
+    U->>S: Cliquer "Forgot password?"
+    S-->>U: Afficher l'écran ForgotPassword
+    U->>S: Saisir l'email
+    U->>S: Cliquer "Continue"
+    S->>S: Valider le format de l'email (regex)
+    alt Email invalide
+        S-->>U: Alerte "Please enter a valid email address"
+    else Email valide
+        S->>S: POST /auth/forgot-password {email}
+        S->>S: Rechercher l'utilisateur
+        alt Utilisateur introuvable
+            S-->>U: Alerte "Could not send reset email"
+        else Utilisateur trouvé
+            S->>S: Générer code OTP + expiration
+            S->>S: Stocker code OTP (en base ou cache)
+            S-->>U: Envoyer code OTP par email
+            S-->>U: Alerte "Password reset OTP sent"
+            S-->>U: Afficher l'écran OTP (mode: password_reset)
+        end
+    end
+    end

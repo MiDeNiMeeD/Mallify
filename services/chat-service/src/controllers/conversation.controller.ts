@@ -70,12 +70,39 @@ export const openOrCreateConversation = async (req: Request, res: Response): Pro
   }
 
   const { conv, created } = await getOrCreateDirect(me, peerId);
-  if (created) {
-    emitConversationCreated({
-      conversationId: String(conv._id),
-      participants: [me, peerId],
-      createdBy: me,
-    });
+
+  // If we're reopening a conversation the caller previously soft-deleted/cleared,
+  // un-hide it so it reappears in their list. Without this, the existing thread
+  // is reachable via the contact picker (messages are intact) but stays missing
+  // from the conversations list until a new message is sent.
+  let resurfaced = false;
+  if (!created) {
+    const myState = (conv.state || []).find((s: any) => String(s.userId) === me);
+    if (myState && (myState.deletedAt || myState.clearedAt)) {
+      await Conversation.updateOne(
+        { _id: conv._id },
+        {
+          $set: {
+            'state.$[me].deletedAt': null,
+            'state.$[me].clearedAt': null,
+          },
+        },
+        { arrayFilters: [{ 'me.userId': new Types.ObjectId(me) }] }
+      );
+      myState.deletedAt = null;
+      myState.clearedAt = null;
+      resurfaced = true;
+    }
+  }
+
+  if (created || resurfaced) {
+    if (created) {
+      emitConversationCreated({
+        conversationId: String(conv._id),
+        participants: [me, peerId],
+        createdBy: me,
+      });
+    }
     emitToUsers([me, peerId], SOCKET_EVENTS.CONVERSATION_NEW, {
       conversationId: String(conv._id),
     });

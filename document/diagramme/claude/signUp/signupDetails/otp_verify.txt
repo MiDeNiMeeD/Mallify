@@ -1,0 +1,60 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V2 as I:OTPView
+    participant C as C:AuthController
+    participant Cache as E:TempRegistration
+    participant EU as E:User
+    participant M as S:EmailService
+
+    rect rgb(245, 230, 255)
+    Note over U,V2: Saisie du code OTP
+    activate V2
+    V2->>V2: démarrerCompteARebours(55s)
+    loop Saisie des 6 chiffres
+        U->>V2: Saisir un chiffre
+    end
+    U->>V2: Cliquer "Verify"
+    V2->>V2: valider(longueur === 6)
+    alt Code incomplet
+        V2-->>U: Alerte "Please enter the full 6-digit OTP"
+    end
+    end
+
+    rect rgb(255, 235, 235)
+    Note over V2,C: Vérification du code OTP
+    V2->>C: POST /auth/verify-email {email, code}
+    activate C
+    C->>Cache: récupérer(email)
+    activate Cache
+    Cache-->>C: codeAttendu + expiration + hash
+    deactivate Cache
+
+    alt Code incorrect
+        C-->>V2: HTTP 400 {message: "Invalid OTP"}
+        V2-->>U: Alerte "Invalid OTP"
+        Note over U,EU: Aucun compte n'est créé en base
+    else Code expiré
+        C-->>V2: HTTP 400 {message: "OTP expired"}
+        V2-->>U: Alerte "OTP expired"
+        U->>V2: Cliquer "Resend code"
+        V2->>C: POST /auth/send-verification-otp {email}
+        C->>Cache: mettreAJour(nouveauCodeOTP)
+        C->>M: envoyerOTP(email, nouveauCode)
+        M-->>U: Nouveau code par email
+        C-->>V2: HTTP 200
+        V2-->>U: Alerte "Sent - new OTP"
+    else Code valide
+        Note over C,EU: ✅ Création EFFECTIVE du compte
+        C->>EU: créer(email, hash, role:"client", vérifié:true)
+        activate EU
+        EU-->>C: Utilisateur créé
+        deactivate EU
+        C->>Cache: nettoyer cache
+        C-->>V2: HTTP 201 (compte créé)
+        V2-->>U: Alerte "Account created successfully!"
+        V2->>V2: navigation.replace("MainTabs")
+        deactivate V2
+    end
+    deactivate C
+    end

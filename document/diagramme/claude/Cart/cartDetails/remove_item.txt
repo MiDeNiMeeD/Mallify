@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V2 as I:CartView
+    participant M as I:RemoveModal
+    participant SVC as C:ShopApi
+    participant C as C:CartController
+    participant EC as E:Cart
+
+    rect rgb(255, 235, 235)
+    Note over U,EC: Suppression d'un item du panier
+    activate V2
+    U->>V2: Cliquer icône poubelle
+    V2->>V2: setItemToRemove(item) + setShowRemoveModal(true)
+    V2->>M: Afficher modal
+    activate M
+    M-->>U: Modal "Remove From Cart?"
+    alt Annuler
+        U->>M: Cliquer "Cancel"
+        M->>V2: cancelRemoveItem()
+        V2->>V2: reset(itemToRemove, showModal)
+    else Confirmer
+        U->>M: Cliquer "Yes, Remove"
+        M->>V2: confirmRemoveItem()
+        V2->>V2: Sauvegarder previousItems (snapshot)
+        V2-->>U: filter(items != itemToRemove) (optimiste)
+        V2->>V2: setShowModal(false)
+        deactivate M
+        V2->>SVC: removeCartItem(userId, {productId, color, size})
+        activate SVC
+        SVC->>C: DELETE /cart/{userId}/items/{productId}?color=...&size=...
+        activate C
+        C->>EC: supprimer ligne
+        activate EC
+        EC-->>C: OK
+        deactivate EC
+        alt Succès
+            C-->>SVC: HTTP 200
+            SVC-->>V2: OK
+        else Échec
+            C-->>SVC: HTTP 4xx/5xx
+            SVC-->>V2: throw
+            V2-->>U: setCartItems(previousItems) (rollback)
+        end
+        deactivate C
+        deactivate SVC
+    end
+    deactivate V2
+    end

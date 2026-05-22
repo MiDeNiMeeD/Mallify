@@ -1,0 +1,58 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant M1 as I:CalendarModal
+    participant M2 as I:MonthPickerModal
+    participant M3 as I:YearPickerModal
+
+    rect rgb(245, 230, 255)
+    Note over U,M3: Sélectionner la date de naissance
+    activate V
+    U->>V: Cliquer le champ "Date of Birth"
+    V->>V: setCurrentDisplayDate(new Date(dateOfBirth))
+    V->>M1: setShowDatePicker(true)
+    activate M1
+    M1-->>U: Afficher calendrier du mois courant
+
+    opt Navigation mensuelle
+        U->>M1: Cliquer flèche gauche / droite
+        M1->>V: navigateMonth("prev" | "next")
+        V->>V: setCurrentDisplayDate(±1 mois)
+        V-->>M1: rerender
+    end
+
+    opt Choisir mois directement
+        U->>M1: Cliquer le nom du mois (en-tête)
+        M1->>V: handleMonthHeaderPress()
+        V->>M2: setShowMonthPicker(true)
+        activate M2
+        M2-->>U: Liste des 12 mois
+        U->>M2: Sélectionner un mois
+        M2->>V: handleMonthSelect(monthIndex)
+        V->>V: setCurrentDisplayDate(setMonth)
+        V->>M2: setShowMonthPicker(false)
+        deactivate M2
+    end
+
+    opt Choisir année
+        U->>M1: Cliquer l'année (en-tête)
+        M1->>V: handleYearHeaderPress()
+        V->>M3: setShowYearPicker(true)
+        activate M3
+        M3-->>U: Liste des années (1950 → courante, ordre inversé)
+        U->>M3: Sélectionner une année
+        M3->>V: handleYearSelect(year)
+        V->>V: setCurrentDisplayDate(setFullYear)
+        V->>M3: setShowYearPicker(false)
+        deactivate M3
+    end
+
+    U->>M1: Cliquer un jour
+    M1->>V: handleDateSelect(day)
+    V->>V: setDateOfBirth(new Date(year, month, day))
+    V->>M1: setShowDatePicker(false)
+    deactivate M1
+    V-->>U: Champ affiche formatDate(dateOfBirth) → MM/DD/YYYY
+    deactivate V
+    end

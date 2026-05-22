@@ -1,0 +1,55 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:SignInView
+    participant C as C:AuthController
+    participant EU as E:User
+    participant ST as E:TokenStorage
+
+    rect rgb(255, 245, 220)
+    Note over U,V1: Saisie + validation locale
+    activate V1
+    loop Saisie des données
+        U->>V1: Saisir email et mot de passe
+    end
+    U->>V1: Cliquer "Sign in"
+    V1->>V1: valider() (champs non vides)
+    alt Champs manquants
+        V1-->>U: Alerte "Missing info - enter email and password"
+    end
+    end
+
+    rect rgb(230, 255, 230)
+    Note over V1,C: Demande de connexion
+    V1->>C: POST /auth/login {email, password}
+    activate C
+    C->>EU: rechercher(email)
+    activate EU
+    EU-->>C: Utilisateur (hash, vérifié, role)
+    deactivate EU
+
+    alt Utilisateur introuvable
+        C-->>V1: HTTP 400 {message: "User not found"}
+        V1-->>U: Alerte "Error"
+    else Compte non vérifié
+        C-->>V1: HTTP 403 {message: "Email not verified"}
+        V1-->>U: Alerte "Error"
+    else Mot de passe incorrect
+        C->>C: comparer(password, hash) → ✗
+        C-->>V1: HTTP 401 {message: "Invalid credentials"}
+        V1-->>U: Alerte "Error"
+    else Identifiants valides
+        C->>C: comparer(password, hash) → ✓
+        C->>C: générer accessToken + refreshToken
+        C-->>V1: HTTP 200 {accessToken, refreshToken}
+        V1->>ST: setAuthTokens({accessToken, refreshToken})
+        activate ST
+        ST-->>V1: OK
+        deactivate ST
+        V1->>ST: AsyncStorage.setItem("userEmail", email)
+        V1-->>U: Alerte "Signed in successfully"
+        V1->>V1: navigation.replace("MainTabs")
+    end
+    deactivate C
+    deactivate V1
+    end

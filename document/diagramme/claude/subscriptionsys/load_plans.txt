@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Chargement des plans
+    U->>S: Ouvrir la page "Subscription Plans"
+    S->>S: setLoading(true)
+    S-->>U: Afficher "Loading plans..."
+    S->>S: GET /api/boutiques/subscription-plans
+    alt Erreur
+        S-->>U: Toast "Failed to load subscription plans"
+    else Succès
+        S->>S: Trier par displayOrder
+        S->>S: Sélectionner par défaut le plan central (index 1)
+        S->>S: refreshSubscriptionAccess() (GET .../subscription/access)
+        S-->>U: Afficher les 3 plans (Get started / Recommandé / Premium) + stats
+    end
+    S->>S: setLoading(false)
+    end

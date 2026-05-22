@@ -283,16 +283,16 @@ const SubscriptionPlans = () => {
                     <p className="subscription-card__description">{plan.description}</p>
                     {isUpgradeable && prorationCredit ? (
                       <div className="subscription-card__price-block">
-                        <span className="subscription-card__price subscription-card__price--strikethrough">${price}</span>
+                        <span className="subscription-card__price subscription-card__price--strikethrough">{price} DT</span>
                         <span className="subscription-card__price subscription-card__price--net">
-                          ${Math.max(0, price - parseFloat(prorationCredit.credit)).toFixed(2)}
+                          {Math.max(0, price - parseFloat(prorationCredit.credit)).toFixed(2)} DT
                         </span>
                         <div className="subscription-card__proration">
-                          ~${prorationCredit.credit} credit · {prorationCredit.daysLeft} day{prorationCredit.daysLeft === 1 ? '' : 's'} remaining
+                          ~{prorationCredit.credit} DT credit · {prorationCredit.daysLeft} day{prorationCredit.daysLeft === 1 ? '' : 's'} remaining
                         </div>
                       </div>
                     ) : (
-                      <div className="subscription-card__price">${price}</div>
+                      <div className="subscription-card__price">{price} DT</div>
                     )}
                     <div className="subscription-card__period">per user / {interval}</div>
 

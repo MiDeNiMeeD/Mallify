@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:ProductDetailsView
+    participant SVC as C:ShopApi
+    participant C as C:CartController
+    participant EC as E:Cart
+
+    rect rgb(230, 244, 255)
+    Note over U,EC: Ajout d'un produit au panier
+    activate V1
+    U->>V1: Sélectionner couleur / taille
+    U->>V1: Cliquer "Add to Cart"
+    alt product.id absent
+        V1->>V1: navigation.navigate("MainTabs", screen:"Cart")
+    else Produit valide
+        V1->>SVC: resolveCartUserId()
+        activate SVC
+        SVC-->>V1: userId
+        deactivate SVC
+        V1->>SVC: addItemToCart(userId, payload)
+        activate SVC
+        SVC->>C: POST /cart/{userId}/items
+        activate C
+        C->>EC: ajouter / fusionner ligne (productId+color+size)
+        activate EC
+        EC-->>C: OK
+        deactivate EC
+        C-->>SVC: HTTP 200
+        deactivate C
+        SVC-->>V1: OK
+        deactivate SVC
+    end
+    deactivate V1
+    end

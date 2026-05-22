@@ -1,0 +1,72 @@
+---
+config:
+  theme: redux
+  look: classic
+---
+sequenceDiagram
+    actor U as Utilisateur
+    participant V1@{ "type": "boundary" } as SignUpView
+    participant V2@{ "type": "boundary" } as OTPView
+    participant C@{ "type": "control" } as AuthController
+    participant OAuth as S:OAuthProvider
+    participant Cache@{ "type": "entity" } as TempRegistration
+    participant EU@{ "type": "entity" } as User
+    participant M as Service:EmailService
+    autonumber
+
+    U->>V1: Demander l'interface d'inscription
+    activate V1
+    V1->>V1: charger()
+    V1-->>U: Interface affichée (email + Google + Facebook)
+    deactivate V1
+
+    opt 
+        Note over U,M: [ REF ] Inscription Facebook ( Nominal )
+	end
+    opt 
+        Note over U,M: [ REF ] Inscription Google ( Nominal )
+	end
+    opt Inscription avec email / mot de passe
+
+    rect rgb(230, 255, 230)
+    rect rgb(255, 245, 220)
+    activate V1
+        U->>V1: Saisir email, mot de passe, confirmation
+    
+    U->>V1: Cliquer "Sign up"
+    V1->>V1: valider() (champs non vides, password === repassword)
+    alt Données invalides
+        V1-->>U: Alerte "Missing info" / "Password mismatch"
+    end
+    end
+
+    V1->>C: POST /auth/register {email, password, role:"client"}
+    activate C
+    C->>EU: vérifier(email existe ?)
+    activate EU
+    EU-->>C: Résultat
+    deactivate EU
+    alt Email déjà utilisé
+        C-->>V1: HTTP 400 {message}
+        V1-->>U: Alerte "Error"
+    else Email disponible
+        C->>C: hacher(password) + générer codeOTP
+        C->>Cache: stocker(email, hash, codeOTP, expiration)
+        activate Cache
+        Cache-->>C: OK
+        deactivate Cache
+        C->>M: envoyerOTP(email, codeOTP)
+        activate M
+        M-->>U: Email avec le code OTP
+        deactivate M
+        C-->>V1: HTTP 200 (en attente de vérification)
+        V1->>V2: navigation.navigate("OTP", {email})
+        deactivate V1
+        deactivate C
+    
+    end
+
+    
+    end
+        Note over U,M: [ REF ] Vérification du code OTP ( Nominal )
+    end

@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 235, 235)
+    Note over U,S: Suppression d'un item du panier
+    U->>S: Cliquer l'icône poubelle
+    S-->>U: Afficher la modal "Remove From Cart?"
+    alt Annuler
+        U->>S: Cliquer "Cancel"
+        S-->>U: Fermer la modal
+    else Confirmer
+        U->>S: Cliquer "Yes, Remove"
+        S-->>U: Retirer l'item de l'UI (optimiste)
+        S-->>U: Fermer la modal
+        S->>S: DELETE /cart/{userId}/items/{productId}?color=...&size=...
+        alt Échec
+            S-->>U: Rollback (restaurer la liste précédente)
+        else Succès
+            S-->>U: État confirmé, total recalculé
+        end
+    end
+    end

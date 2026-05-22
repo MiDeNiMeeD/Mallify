@@ -4,6 +4,8 @@ import { Lightbox } from './Lightbox';
 import { formatClockTime } from '../utils/format';
 import { isImageMime, isVideoMime, isAudioMime } from '../utils/preview';
 import { formatBytes } from '../utils/format';
+import { resolveAttachmentUrl } from '../utils/attachmentUrl';
+import { useChat } from '../context/ChatProvider';
 
 const REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 
@@ -24,6 +26,8 @@ export const MessageBubble = ({
   onReport,
   resolveUser,
 }) => {
+  const { config } = useChat();
+  const apiBaseUrl = config?.apiBaseUrl;
   const [showMenu, setShowMenu] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -93,7 +97,7 @@ export const MessageBubble = ({
           )}
 
           {message.attachments?.length > 0 && (
-            <Attachments attachments={message.attachments} />
+            <Attachments attachments={message.attachments} apiBaseUrl={apiBaseUrl} />
           )}
 
           {editing ? (
@@ -211,34 +215,35 @@ const ReplyPreview = ({ replyToId, resolveUser }) => {
   );
 };
 
-const Attachments = ({ attachments }) => {
+const Attachments = ({ attachments, apiBaseUrl }) => {
   const [lightbox, setLightbox] = useState(null);
 
   return (
     <div className="mc-msg-attachments">
       {attachments.map((a, i) => {
+        const url = resolveAttachmentUrl(a.url, apiBaseUrl);
         if (isImageMime(a.mimeType)) {
           return (
             <button
               key={i}
               type="button"
               className="mc-att-image-wrap"
-              onClick={() => setLightbox({ src: a.url, alt: a.name })}
+              onClick={() => setLightbox({ src: url, alt: a.name })}
             >
-              <img src={a.url} alt={a.name} className="mc-att-image" />
+              <img src={url} alt={a.name} className="mc-att-image" />
             </button>
           );
         }
         if (isVideoMime(a.mimeType)) {
           return (
-            <video key={i} src={a.url} controls className="mc-att-video" />
+            <video key={i} src={url} controls className="mc-att-video" />
           );
         }
         if (isAudioMime(a.mimeType)) {
-          return <audio key={i} src={a.url} controls className="mc-att-audio" />;
+          return <audio key={i} src={url} controls className="mc-att-audio" />;
         }
         return (
-          <a key={i} href={a.url} target="_blank" rel="noreferrer" className="mc-att-file">
+          <a key={i} href={url} target="_blank" rel="noreferrer" className="mc-att-file">
             <span className="mc-att-icon">📎</span>
             <span className="mc-att-name">{a.name}</span>
             <span className="mc-att-size">{formatBytes(a.size)}</span>

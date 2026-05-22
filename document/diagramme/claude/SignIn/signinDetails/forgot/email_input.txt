@@ -1,0 +1,52 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:SignInView
+    participant V2 as I:ForgotPasswordView
+    participant V3 as I:OTPView
+    participant C as C:AuthController
+    participant EU as E:User
+    participant Cache as E:PasswordResetCache
+    participant M as S:EmailService
+
+    rect rgb(230, 244, 255)
+    Note over U,V3: Étape 1 — Saisie de l'email + envoi OTP
+    activate V1
+    U->>V1: Cliquer "Forgot password?"
+    V1->>V2: navigation.navigate("ForgotPassword")
+    deactivate V1
+    activate V2
+    V2-->>U: Interface affichée
+    U->>V2: Saisir l'email
+    U->>V2: Cliquer "Continue"
+    V2->>V2: isValidEmail(email) (regex)
+    alt Email invalide
+        V2-->>U: Alerte "Please enter a valid email address"
+    else Email valide
+        V2->>C: POST /auth/forgot-password {email}
+        activate C
+        C->>EU: rechercher(email)
+        activate EU
+        EU-->>C: Utilisateur (ou null)
+        deactivate EU
+        alt Utilisateur introuvable
+            C-->>V2: HTTP 404 {message}
+            V2-->>U: Alerte "Could not send reset email"
+        else Utilisateur trouvé
+            C->>C: générer codeOTP (6 chiffres) + expiration
+            C->>Cache: stocker(email, codeOTP, expiration)
+            activate Cache
+            Cache-->>C: OK
+            deactivate Cache
+            C->>M: envoyerOTP(email, codeOTP)
+            activate M
+            M-->>U: Email avec le code OTP
+            deactivate M
+            C-->>V2: HTTP 200
+            V2-->>U: Alerte "Password reset OTP sent"
+            V2->>V3: navigation.navigate("OTP", {email, mode:"password_reset"})
+            deactivate V2
+        end
+        deactivate C
+    end
+    end

@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(245, 230, 255)
+    Note over U,S: Saisie du code OTP
+    S->>S: Démarrer compte à rebours (55s)
+    loop Saisie des 6 chiffres
+        U->>S: Saisir un chiffre
+    end
+    U->>S: Cliquer "Verify"
+    S->>S: Vérifier longueur === 6
+    alt Code incomplet
+        S-->>U: Alerte "Veuillez saisir les 6 chiffres"
+    end
+    end
+
+    rect rgb(255, 235, 235)
+    Note over U,S: Vérification du code OTP
+    S->>S: Comparer code reçu / code attendu + expiration
+    alt Code incorrect
+        S-->>U: Alerte "Code invalide"
+        Note over U,S: Aucun compte n'est créé
+    else Code expiré
+        S-->>U: Alerte "Code expiré"
+        U->>S: Cliquer "Resend code"
+        S->>S: Générer nouveau code OTP
+        S-->>U: Envoyer nouveau code par email
+        S-->>U: Alerte "Nouveau code envoyé"
+    else Code valide
+        Note over U,S: ✅ Création effective du compte
+        S->>S: Créer utilisateur en base (email, hash, role:"client", vérifié:true)
+        S->>S: Supprimer données temporaires
+        S-->>U: Alerte "Compte créé avec succès"
+        S-->>U: Afficher l'accueil (MainTabs)
+    end
+    end

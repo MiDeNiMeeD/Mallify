@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Affichage du formulaire
+    U->>S: Demander l'interface d'inscription
+    S-->>U: Afficher le formulaire (email + Google + Facebook)
+    end
+
+    alt Inscription avec Facebook
+        Note right of U: voir signupsys/facebook.txt
+        ref over U,S: Inscription Facebook
+    else Inscription avec Google
+        Note right of U: voir signupsys/google.txt
+        ref over U,S: Inscription Google
+    else Inscription avec email / mot de passe
+        Note right of U: voir signupsys/email_signup.txt
+        ref over U,S: Saisie + validation + Demande d'inscription
+        Note right of U: voir signupsys/otp_verify.txt
+        ref over U,S: Vérification du code OTP
+    end

@@ -1,0 +1,78 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:CheckoutView
+    participant M as I:SuccessModal
+    participant V6 as I:OrderView
+    participant V7 as I:MainTabs
+    participant SVC as C:ShopApi
+    participant CO as C:OrderController
+    participant CC as C:CartController
+    participant EO as E:Order
+    participant EC as E:Cart
+
+    rect rgb(230, 255, 230)
+    Note over U,EC: Confirmation de la commande
+    activate V3
+    U->>V3: Cliquer "Confirm Order"
+    alt submittingOrder OU orderItems vide
+        Note over V3: return — bouton désactivé
+    else Action valide
+        V3->>V3: setSubmittingOrder(true) — bouton "Confirming..."
+        V3->>SVC: resolveCartUserId()
+        activate SVC
+        SVC-->>V3: userId
+        deactivate SVC
+
+        V3->>SVC: createCheckoutOrder({userId, items, shippingAddress, sharedShippingFee, taxRate:0, discount:0})
+        activate SVC
+        SVC->>CO: POST /orders/checkout
+        activate CO
+        CO->>EO: créer Order (status: pending)
+        activate EO
+        EO-->>CO: Order créé
+        deactivate EO
+        Note over CO: Calcul backend : subtotal + shipping + tax
+        alt Erreur
+            CO-->>SVC: HTTP 4xx/5xx
+            SVC-->>V3: throw
+            V3-->>U: Pas de feedback (silencieux)
+        else Succès
+            CO-->>SVC: HTTP 200 {order}
+            SVC-->>V3: order
+            deactivate CO
+
+            par Pour chaque item avec productId
+                V3->>SVC: removeCartItem(userId, {productId, color, size})
+                SVC->>CC: DELETE /cart/{userId}/items/{productId}?color=&size=
+                activate CC
+                CC->>EC: supprimer ligne
+                activate EC
+                EC-->>CC: OK
+                deactivate EC
+                CC-->>SVC: HTTP 200
+                deactivate CC
+            end
+
+            V3->>V3: setDbOrderItems([])
+            V3->>M: setShowSuccessModal(true)
+            activate M
+            M-->>U: Modal "Order Successful!"
+        end
+        deactivate SVC
+        V3->>V3: setSubmittingOrder(false)
+    end
+
+    Note over U,V7: Après la modal de succès
+    alt Cliquer "View Order"
+        U->>M: Cliquer
+        M->>V3: setShowSuccessModal(false)
+        V3->>V6: navigation.navigate("OrderScreen")
+    else Cliquer "Back Home"
+        U->>M: Cliquer
+        M->>V3: setShowSuccessModal(false)
+        V3->>V7: navigation.navigate("MainTabs")
+    end
+    deactivate M
+    deactivate V3
+    end

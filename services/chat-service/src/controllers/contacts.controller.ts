@@ -90,6 +90,36 @@ export const getContacts = async (req: Request, res: Response): Promise<void> =>
     return;
   }
 
+  if (role === 'client') {
+    const [admins, managers, boutiqueOwners, customers] = await Promise.all([
+      listByRole('admin', 100),
+      listByRole('boutiques_manager', 100),
+      listByRole('boutique_owner', 200),
+      listByRole('client', 200),
+    ]);
+    const filterByQuery = (arr: any[]) => {
+      if (!q) return arr;
+      const needle = q.toLowerCase();
+      return arr.filter(
+        (x) =>
+          (x.name || '').toLowerCase().includes(needle) ||
+          (x.email || '').toLowerCase().includes(needle)
+      );
+    };
+    res.json({
+      mode: 'buckets',
+      buckets: {
+        admins: stripSelf(u.id, filterByQuery(admins)),
+        managers: stripSelf(u.id, filterByQuery(managers)),
+        boutiqueOwners: stripSelf(u.id, filterByQuery(boutiqueOwners)),
+        customers: stripSelf(u.id, filterByQuery(customers)),
+      },
+      meta: { callerRole: role },
+      debug: debugBlock(),
+    });
+    return;
+  }
+
   const [admins, managers] = await Promise.all([
     listByRole('admin', 50),
     listByRole('boutiques_manager', 50),

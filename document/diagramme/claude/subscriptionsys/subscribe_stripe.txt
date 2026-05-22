@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant S as Système
+    participant ST as Stripe
+
+    rect rgb(230, 255, 230)
+    Note over U,ST: Nouvel abonnement via Stripe Checkout
+    U->>S: Cliquer "Get started" sur un plan
+    S->>S: setSelectedPlanId(plan._id)
+    alt boutiqueId manquant
+        S-->>U: Toast "Boutique profile is missing. Contact support"
+    else boutiqueId présent
+        S->>S: setProcessing(true), bouton "Processing..."
+
+        S->>S: POST /api/boutiques/{boutiqueId}/subscription/checkout-session {planId, billingInterval}
+        Note over S: Backend :<br/>1. Valider plan + boutique<br/>2. Créer Stripe Checkout Session (mode "subscription")<br/>3. Stocker BoutiqueSubscription status="pending_payment"<br/>4. Renvoyer checkoutUrl
+        alt Erreur backend ou Stripe non configuré
+            S-->>U: Toast "Subscription activation failed"
+        else checkoutUrl absent
+            S-->>U: Toast "Stripe checkout URL was not returned"
+        else Succès
+            S-->>U: window.location.href = checkoutUrl (redirection)
+            U->>ST: Saisir CB sur la page Stripe Checkout
+            alt Paiement annulé
+                ST-->>U: Retour vers cancel_url (?checkout=cancel)
+            else Paiement réussi
+                ST-->>S: Webhook "checkout.session.completed" (en parallèle)
+                S->>S: Activer BoutiqueSubscription (status="active", periodEnd, etc.)
+                ST-->>U: Retour vers success_url (?checkout=success&session_id=...)
+            end
+        end
+        S->>S: setProcessing(false)
+    end
+    end

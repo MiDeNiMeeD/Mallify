@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    Note over U,S: Flux complet Edit Profile
+
+    Note right of U: voir profilesys/load_profile.txt
+    ref over U,S: Chargement (cache + GET /users/profile)
+
+    opt Photo de profil
+        Note right of U: voir profilesys/pick_image.txt
+        ref over U,S: Modifier la photo (permission + ImagePicker + base64)
+    end
+
+    opt Date de naissance
+        Note right of U: voir profilesys/pick_date.txt
+        ref over U,S: Sélectionner la date (calendar + month/year pickers)
+    end
+
+    opt Ville
+        Note right of U: voir profilesys/pick_city.txt
+        ref over U,S: Sélectionner la ville (24 villes TN)
+    end
+
+    opt Genre
+        Note right of U: voir profilesys/pick_gender.txt
+        ref over U,S: Sélectionner le genre
+    end
+
+    opt Nom / nickname / téléphone
+        U->>S: Saisir dans les champs texte
+    end
+
+    Note right of U: voir profilesys/update_profile.txt
+    ref over U,S: Sauvegarder (validation + PUT /users/profile)

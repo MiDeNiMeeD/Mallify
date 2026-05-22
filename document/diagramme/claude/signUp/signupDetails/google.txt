@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:SignUpView
+    participant C as C:AuthController
+    participant OAuth as S:OAuthProvider
+    participant EU as E:User
+
+    rect rgb(220, 240, 255)
+    Note over U,C: Inscription via Google
+    U->>V1: Cliquer sur l'icône Google
+    activate V1
+    V1->>OAuth: startGoogleAuth()
+    activate OAuth
+    OAuth-->>U: Ouvrir la fenêtre Google
+    U->>OAuth: Choisir un compte et autoriser
+    OAuth-->>V1: Token Google
+    deactivate OAuth
+    V1->>C: POST /auth/google {token}
+    activate C
+    C->>OAuth: vérifier(token)
+    OAuth-->>C: Profil utilisateur
+    C->>EU: créer / récupérer (email, provider:"google", vérifié:true)
+    activate EU
+    EU-->>C: Utilisateur
+    deactivate EU
+    C-->>V1: HTTP 200 (compte créé)
+    deactivate C
+    V1->>V1: navigation.replace("MainTabs")
+    deactivate V1
+    end

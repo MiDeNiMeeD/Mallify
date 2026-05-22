@@ -1,0 +1,54 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant V2 as I:ProfileView
+    participant SVC as C:ShopApi
+    participant C as C:UserController
+    participant EU as E:User
+
+    rect rgb(220, 240, 255)
+    Note over U,EU: Sauvegarder les modifications
+    activate V
+    U->>V: Cliquer "Update"
+    V->>V: Valider fullName.trim() non vide
+    alt fullName vide
+        V-->>U: Alerte "Please enter your full name"
+    else fullName OK
+        V->>V: Valider phoneNumber.trim() non vide
+        alt phoneNumber vide
+            V-->>U: Alerte "Please enter your phone number"
+        else phoneNumber OK
+            V->>V: toE164Phone(phoneNumber)
+            Note over V: Règles E.164 :<br/>+ déjà → +digits<br/>8 chiffres → +216 (Tunisie)<br/>10-15 → +digits<br/>sinon → ""
+            alt Téléphone invalide ("")
+                V-->>U: Alerte "Invalid phone — Example: +21624905669"
+            else Téléphone valide
+                V->>V: setIsSaving(true)
+                V->>SVC: updateMyProfile({name, nickname?, phone, city?, gender?, dateOfBirth (ISO), profileImage?})
+                activate SVC
+                SVC->>C: PUT /users/profile (auth)
+                activate C
+                C->>EU: mettre à jour User (par userId du token)
+                activate EU
+                EU-->>C: User mis à jour
+                deactivate EU
+                alt Erreur
+                    C-->>SVC: HTTP 4xx/5xx
+                    SVC-->>V: throw
+                    V-->>U: Alerte "Update failed"
+                else Succès
+                    C-->>SVC: HTTP 200 {data:{user}}
+                    SVC-->>V: profile mis à jour
+                    V-->>U: Alerte "Profile updated successfully!"
+                    U->>V: Fermer l'alerte (onPress)
+                    V->>V2: navigation.goBack()
+                end
+                deactivate C
+                deactivate SVC
+                V->>V: setIsSaving(false)
+            end
+        end
+    end
+    deactivate V
+    end

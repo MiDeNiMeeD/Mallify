@@ -1,0 +1,37 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant S as Système
+
+    rect rgb(230, 255, 230)
+    Note over A,S: Créer un nouveau manager
+    A->>S: Cliquer "Add Manager"
+    S->>S: setShowAddModal(true) + reset form (role par défaut: delivery_manager)
+    S-->>A: Afficher la modal "Add Manager"
+
+    loop Saisie des champs
+        A->>S: Saisir nom, email, mot de passe, téléphone
+        A->>S: Choisir rôle (delivery_manager / boutiques_manager) + statut (active/inactive)
+        S->>S: Effacer l'erreur sur le champ modifié
+    end
+
+    A->>S: Cliquer "Create"
+    S->>S: validateForm()
+    Note over S: Règles :<br/>name requis<br/>email requis + regex<br/>password requis + min 6 caractères<br/>phone requis
+
+    alt Erreurs de validation
+        S->>S: setFormErrors(errors)
+        S-->>A: Afficher les erreurs sous chaque champ
+    else Validation OK
+        S->>S: setSubmitting(true) + bouton spinner
+        S->>S: POST /api/auth/register { ...form, skipEmailVerification: true }
+        alt Erreur
+            S-->>A: Toast "Failed to create manager" (avec message backend)
+        else Succès
+            S->>S: fetchManagers() (rafraîchir la liste)
+            S->>S: closeAddModal() + reset form
+            S-->>A: Toast "Manager created successfully"
+        end
+        S->>S: setSubmitting(false)
+    end
+    end

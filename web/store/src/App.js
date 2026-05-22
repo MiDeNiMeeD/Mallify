@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AppChatProvider } from "./chat/AppChatProvider";
 import LoginPage2 from "./pages/LoginPage2";
 import Layout from "./components/Layout/Layout";
 import DashboardOverview from "./pages/Dashboard/DashboardOverview";
@@ -330,9 +331,11 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="App">
-          <AppRoutes />
-        </div>
+        <AppChatProvider>
+          <div className="App">
+            <AppRoutes />
+          </div>
+        </AppChatProvider>
       </AuthProvider>
     </Router>
   );

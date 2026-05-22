@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Chargement de l'écran Edit Profile
+    U->>S: Ouvrir "Edit Profile"
+    S->>S: Lire le cache module (cachedProfile)
+    alt Cache présent
+        S-->>U: Pré-remplir les champs depuis le cache (paint instantané)
+    else Cache vide (cold mount)
+        S-->>U: Afficher loader "Loading profile..."
+    end
+    S->>S: GET /users/profile (avec auth)
+    alt Erreur
+        S-->>U: Conserver les valeurs courantes (échec silencieux)
+    else Succès
+        S->>S: Mettre à jour cache module
+        S-->>U: Remplir : name, nickname, email, phone, city, gender, dateOfBirth, profileImage
+    end
+    S-->>U: Cacher le loader, afficher le formulaire
+    Note over U,S: Email affiché en lecture seule (champ grisé)
+    end

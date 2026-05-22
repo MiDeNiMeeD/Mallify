@@ -1,0 +1,54 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant V as I:ManagersUsersView
+    participant API as C:ApiClient
+    participant C as C:UserController
+    participant EU as E:User
+
+    rect rgb(230, 244, 255)
+    Note over A,EU: Chargement de la page Managers
+    activate V
+    A->>V: Ouvrir "Managers Users"
+    V->>V: useEffect → fetchManagers()
+    V->>V: setLoading(true)
+    V-->>A: Loader "Loading managers..."
+
+    V->>API: getUsers()
+    activate API
+    API->>C: GET /api/users (auth)
+    activate C
+    C->>EU: lister tous les utilisateurs
+    activate EU
+    EU-->>C: Users
+    deactivate EU
+    alt Erreur
+        C-->>API: HTTP 4xx/5xx
+        API-->>V: throw
+        V->>V: setLoadError(message)
+        V-->>A: Toast "Failed to fetch managers"
+    else Succès
+        C-->>API: HTTP 200 {data:[users]}
+        API-->>V: payload
+        V->>V: payload.filter(role == "delivery_manager" OR "boutiques_manager")
+        V->>V: setManagers(managerData)
+        V-->>A: Liste + 4 stats (total / active / delivery / boutiques)
+    end
+    deactivate C
+    deactivate API
+    V->>V: setLoading(false)
+
+    opt Recherche / filtre
+        A->>V: Saisir nom/email OU choisir un rôle
+        V->>V: managers.filter (côté client)
+        V->>V: setCurrentPage(1) (reset pagination)
+        V-->>A: Liste filtrée
+    end
+
+    opt Pagination
+        A->>V: Cliquer "Previous" / "Next"
+        V->>V: setCurrentPage(±1)
+        V-->>A: 10 managers de la page courante
+    end
+    deactivate V
+    end

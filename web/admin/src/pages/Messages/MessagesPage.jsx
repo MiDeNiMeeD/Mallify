@@ -1,23 +1,13 @@
-import React, { useMemo } from 'react';
-import { ChatProvider, ChatLayout } from '../../chat';
+import React from 'react';
+import { ChatLayout } from '../../chat';
 import '../../chat/styles/chat.css';
 import { useAuth } from '../../context/AuthContext';
 import './MessagesPage.css';
 
-const API_BASE_URL = 'http://localhost:4000';
-
+// ChatProvider is mounted at the app root (AppChatProvider) so the sidebar
+// unread badge can subscribe to it. This page just renders the chat UI.
 const MessagesPage = () => {
   const { user } = useAuth();
-
-  const chatConfig = useMemo(
-    () => ({
-      apiBaseUrl: API_BASE_URL,
-      getToken: () => localStorage.getItem('accessToken'),
-      getCurrentUserId: () => user?._id || user?.id || null,
-      getCurrentUserRole: () => user?.role || 'admin',
-    }),
-    [user]
-  );
 
   if (!user) {
     return <div style={{ padding: 24 }}>Please sign in to use chat.</div>;
@@ -25,9 +15,7 @@ const MessagesPage = () => {
 
   return (
     <div className="mc-root admin-messages-page">
-      <ChatProvider config={chatConfig}>
-        <ChatLayout />
-      </ChatProvider>
+      <ChatLayout />
     </div>
   );
 };

@@ -1,0 +1,11 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant S as Système
+
+    rect rgb(220, 240, 255)
+    Note over A,S: Éditer un manager (placeholder)
+    A->>S: Cliquer l'icône crayon
+    Note over S: ⚠️ Fonction non implémentée
+    S-->>A: Toast "Edit manager <nom> not implemented yet"
+    end

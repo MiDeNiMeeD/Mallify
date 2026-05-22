@@ -31,7 +31,7 @@ function DeliveryOptions() {
             setOptions([
               { id: '1', name: 'Standard Delivery', description: '3-5 business days', cost: 5, estimatedDays: '3-5', enabled: true },
               { id: '2', name: 'Express Delivery', description: '1-2 business days', cost: 15, estimatedDays: '1-2', enabled: true },
-              { id: '3', name: 'Free Shipping', description: 'Orders over $50', cost: 0, estimatedDays: '5-7', minOrderAmount: 50, enabled: false }
+              { id: '3', name: 'Free Shipping', description: 'Orders over 50 DT', cost: 0, estimatedDays: '5-7', minOrderAmount: 50, enabled: false }
             ]);
           } else {
             setOptions(deliveryOptions);
@@ -85,10 +85,7 @@ function DeliveryOptions() {
   }
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+    return `${new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(amount) || 0)} DT`;
   };
 
   return (

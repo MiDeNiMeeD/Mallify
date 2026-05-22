@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 255, 230)
+    Note over U,S: Modification de la quantité (UI optimiste)
+    U->>S: Cliquer "+" ou "-" sur un item
+    S->>S: Calculer nouvelle quantité (min 1)
+    alt Quantité inchangée
+        Note over U,S: Aucune action
+    else Nouvelle quantité différente
+        S-->>U: Mettre à jour l'UI immédiatement (optimiste)
+        S->>S: PATCH /cart/{userId}/items/{productId} {quantity, color, size}
+        alt Échec
+            S-->>U: Rollback (restaurer ancienne quantité)
+        else Succès
+            S-->>U: État confirmé
+        end
+    end
+    end

@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant S as Système
+
+    rect rgb(245, 230, 255)
+    Note over U,S: Upgrade vers un plan supérieur (abonné actif)
+    Note over S: Conditions :<br/>- planOrder > currentDisplayOrder (upgrade uniquement)<br/>- isLowerTier → aucun bouton (downgrade interdit)
+    U->>S: Cliquer "Upgrade" sur un plan supérieur
+    alt boutiqueId manquant
+        S-->>U: Toast "Boutique profile is missing"
+    else boutiqueId présent
+        S->>S: setProcessing(true)
+        S->>S: POST /api/boutiques/{boutiqueId}/subscription/upgrade {planId}
+        Note over S: Backend applique le crédit de proration<br/>(jours restants × montant du plan actuel)
+        alt Erreur
+            S-->>U: Toast "Upgrade failed"
+        else Succès
+            S-->>U: Toast "Plan upgraded successfully! Remaining days credited"
+            S->>S: loadData() (rafraîchir plans + access)
+            S-->>U: Carte du plan supérieur affichée comme "Current Plan"
+        end
+        S->>S: setProcessing(false)
+    end
+    end

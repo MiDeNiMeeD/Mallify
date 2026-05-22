@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:CheckoutView
+    participant V5 as I:ChooseShippingView
+
+    rect rgb(245, 230, 255)
+    Note over U,V5: Choisir la méthode de livraison
+    activate V3
+    U->>V3: Cliquer la carte "Choose Shipping"
+    V3->>V5: navigation.navigate("ChooseShipping", {selectedShippingId})
+    deactivate V3
+    activate V5
+    V5-->>U: Liste des méthodes (Regular / Express / etc.)
+    U->>V5: Sélectionner un type
+    V5->>V3: navigation.goBack({selectedShippingType})
+    deactivate V5
+    activate V3
+    V3->>V3: useEffect(route.params.selectedShippingType)
+    V3->>V3: setSelectedShippingType(type)
+    V3->>V3: getTotal() = subtotal + shipping + tax (recalcul)
+    V3-->>U: Méthode + prix + total mis à jour
+    deactivate V3
+    end

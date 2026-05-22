@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant M as I:GenderPickerModal
+
+    rect rgb(255, 235, 235)
+    Note over U,M: Sélectionner le genre
+    activate V
+    U->>V: Cliquer le champ "Gender"
+    V->>M: setShowGenderPicker(true)
+    activate M
+    M-->>U: Liste : Male / Female / Prefer not to say
+    U->>M: Choisir une option (genderOption)
+    M->>V: setGender(genderOption)
+    M->>V: setShowGenderPicker(false)
+    deactivate M
+    V-->>U: Champ affiche le genre sélectionné
+    deactivate V
+    end

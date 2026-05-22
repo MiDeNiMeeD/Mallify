@@ -269,7 +269,7 @@ function PromotionsDiscounts() {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', backgroundColor: 'var(--light-bg)', borderRadius: '6px' }}>
                   <span>Total Discount Given</span>
-                  <strong>$12,450</strong>
+                  <strong>12,450 DT</strong>
                 </div>
               </div>
             </div>

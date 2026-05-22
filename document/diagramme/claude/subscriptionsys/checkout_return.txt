@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant S as Système
+
+    rect rgb(255, 235, 235)
+    Note over U,S: Retour de Stripe Checkout (URL params)
+    U->>S: Charger la page avec ?checkout=success OU ?checkout=cancel
+    S->>S: Lire URLSearchParams (checkout, session_id, boutiqueId)
+    alt checkout == "success"
+        S-->>U: Toast "Payment completed. Confirming your subscription..."
+        S->>S: refreshSubscriptionAccess() (GET .../subscription/access)
+        Note over S: Si webhook a déjà mis à jour la base,<br/>l'abonnement apparaît comme "active"
+    else checkout == "cancel"
+        S-->>U: Toast "Checkout canceled. No charge was made"
+    end
+    S->>S: Nettoyer l'URL (supprimer checkout, session_id, boutiqueId)
+    S-->>U: window.history.replaceState (URL propre)
+    end

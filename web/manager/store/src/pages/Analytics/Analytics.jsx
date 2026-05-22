@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiBarChart2, FiShoppingCart, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import { FiArrowLeft, FiBarChart2, FiShoppingCart, FiTrendingUp, FiUsers, FiCalendar, FiDownload, FiRefreshCw, FiArrowUp, FiArrowDown, FiDollarSign, FiPackage, FiActivity, FiStar, FiHeart, FiClock, FiShoppingBag } from 'react-icons/fi';
 import {
   ResponsiveContainer,
   BarChart,
@@ -104,31 +104,114 @@ const Analytics = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(DEFAULT_STATS);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [focusMetric, setFocusMetric] = useState('revenue');
   const [range, setRange] = useState('weekly');
   const [reportFilter, setReportFilter] = useState('performance');
+  const [mainChartMetric, setMainChartMetric] = useState('revenue');
+  const [dateRange, setDateRange] = useState('30');
+
+  const dateRanges = [
+    { value: '7', label: 'Last 7 Days' },
+    { value: '30', label: 'Last 30 Days' },
+    { value: '90', label: 'Last 90 Days' },
+    { value: '365', label: 'Last Year' }
+  ];
+
+  const metricColors = {
+    revenue: { main: '#0EA5E9', light: '#0EA5E9', dark: '#0284C7' },
+    orders: { main: '#A855F7', light: '#A855F7', dark: '#7E22CE' },
+    customers: { main: '#22C55E', light: '#22C55E', dark: '#16A34A' },
+    aov: { main: '#F97316', light: '#F97316', dark: '#EA580C' }
+  };
+
+  // Demo data generators
+  const generateRevenueData = (days) => {
+    const data = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const dayOfWeek = date.getDay();
+      const weekendMultiplier = (dayOfWeek === 0 || dayOfWeek === 6) ? 1.3 : 1;
+      data.push({
+        date: dateStr,
+        value: Math.floor((Math.random() * 5000 + 2000) * weekendMultiplier)
+      });
+    }
+    return data;
+  };
+
+  const generateOrdersData = (days) => {
+    const data = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      data.push({ date: dateStr, value: Math.floor(Math.random() * 150 + 50) });
+    }
+    return data;
+  };
+
+  const generateCustomersData = (days) => {
+    const data = [];
+    let base = 200;
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      base += Math.floor(Math.random() * 30 + 5);
+      data.push({ date: dateStr, value: base });
+    }
+    return data;
+  };
+
+  const generateAOVData = (days) => {
+    const data = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      data.push({ date: dateStr, value: Math.floor(Math.random() * 80 + 120) });
+    }
+    return data;
+  };
+
+  const [chartData, setChartData] = useState({
+    revenue: [],
+    orders: [],
+    customers: [],
+    aov: []
+  });
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
         setLoading(true);
-        const boutiquesResponse = await apiClient.getBoutiques({ limit: 120 });
-        const boutiques = boutiquesResponse.data || [];
+        const days = parseInt(dateRange);
+        const revenueData = generateRevenueData(days);
+        const ordersData = generateOrdersData(days);
+        const customersData = generateCustomersData(days);
+        const aovData = generateAOVData(days);
 
-        const totalRevenue = boutiques.reduce((sum, boutique) => sum + (boutique.totalSales || 0), 0);
-        const totalOrders = boutiques.reduce((sum, boutique) => sum + (boutique.orderCount || 0), 0);
-        const averageOrderValue = totalOrders ? totalRevenue / totalOrders : 0;
-        const active = boutiques.filter((boutique) => boutique.status === 'active');
+        const totalRevenue = revenueData.reduce((s, d) => s + d.value, 0);
+        const totalOrders = ordersData.reduce((s, d) => s + d.value, 0);
 
         setStats({
           totalRevenue,
           totalOrders,
-          totalCustomers: boutiques.length * 16,
-          averageOrderValue,
-          activeBoutiques: active.length,
-          topBoutiques: active
-            .sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0))
-            .slice(0, 6)
+          totalCustomers: customersData[customersData.length - 1].value,
+          averageOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
+          activeBoutiques: Math.floor(Math.random() * 20 + 40),
+          topBoutiques: FALLBACK_BOUTIQUES
+        });
+
+        setChartData({
+          revenue: revenueData,
+          orders: ordersData,
+          customers: customersData,
+          aov: aovData
         });
       } catch (error) {
         console.error('Failed to fetch analytics:', error);
@@ -139,7 +222,42 @@ const Analytics = () => {
     };
 
     fetchAnalytics();
-  }, []);
+  }, [dateRange]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      const days = parseInt(dateRange);
+      setChartData({
+        revenue: generateRevenueData(days),
+        orders: generateOrdersData(days),
+        customers: generateCustomersData(days),
+        aov: generateAOVData(days)
+      });
+      setRefreshing(false);
+    }, 800);
+  };
+
+  const handleExport = () => {
+    setExporting(true);
+    setTimeout(() => {
+      const exportData = {
+        dateRange: `${dateRange} days`,
+        generatedAt: new Date().toISOString(),
+        stats,
+        charts: chartData
+      };
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `store-analytics-${dateRange}days-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setExporting(false);
+    }, 1000);
+  };
 
   const revenueSerie = useMemo(() => buildSerie(stats.totalRevenue, FALLBACK_REVENUE), [stats.totalRevenue]);
   const ordersSerie = useMemo(() => buildSerie(stats.totalOrders, FALLBACK_ORDERS), [stats.totalOrders]);
@@ -291,39 +409,33 @@ const Analytics = () => {
     ];
   }, [stats.totalCustomers, stats.totalOrders]);
 
-  const handoffTiles = useMemo(() => {
+  // 8 Stats Cards
+  const statsCards = useMemo(() => {
     const averageTicket = stats.averageOrderValue ? formatCurrency(Math.round(stats.averageOrderValue)) : '$0';
     return [
-      {
-        id: 'hand-revenue',
-        label: 'Platform Revenue',
-        value: formatCurrency(stats.totalRevenue),
-        icon: FiBarChart2,
-        iconClass: 'info'
-      },
-      {
-        id: 'hand-orders',
-        label: 'Orders Processed',
-        value: stats.totalOrders.toLocaleString(),
-        icon: FiShoppingCart,
-        iconClass: 'pink'
-      },
-      {
-        id: 'hand-aov',
-        label: 'Average Order Value',
-        value: averageTicket,
-        icon: FiTrendingUp,
-        iconClass: 'success'
-      },
-      {
-        id: 'hand-boutiques',
-        label: 'Active Boutiques',
-        value: stats.activeBoutiques.toString(),
-        icon: FiUsers,
-        iconClass: 'warning'
-      }
+      { id: 'hand-revenue', label: 'Platform Revenue', value: formatCurrency(stats.totalRevenue), icon: FiDollarSign, color: '#0EA5E9', change: '+14.2%', sub: 'vs last period' },
+      { id: 'hand-orders', label: 'Orders Processed', value: stats.totalOrders.toLocaleString(), icon: FiPackage, color: '#A855F7', change: '+6.8%', sub: 'throughput increase' },
+      { id: 'hand-aov', label: 'Average Order Value', value: averageTicket, icon: FiTrendingUp, color: '#22C55E', change: '+3.2%', sub: 'per transaction' },
+      { id: 'hand-boutiques', label: 'Active Boutiques', value: stats.activeBoutiques.toString(), icon: FiShoppingBag, color: '#F97316', change: '+2', sub: 'new this month' },
+      { id: 'hand-customers', label: 'Total Customers', value: stats.totalCustomers.toLocaleString(), icon: FiUsers, color: '#EC4899', change: '+12.5%', sub: 'customer growth' },
+      { id: 'hand-retention', label: 'Retention Rate', value: `${retentionRate}%`, icon: FiHeart, color: '#8B5CF6', change: '+2.1%', sub: '30-day retention' },
+      { id: 'hand-satisfaction', label: 'Satisfaction', value: '4.7/5.0', icon: FiStar, color: '#F59E0B', change: '+0.2', sub: 'based on reviews' },
+      { id: 'hand-fulfillment', label: 'Fulfillment Pace', value: `${fulfillmentHours}h`, icon: FiClock, color: '#06B6D4', change: '-3h', sub: 'avg SLA time' }
     ];
-  }, [stats.activeBoutiques, stats.averageOrderValue, stats.totalOrders, stats.totalRevenue]);
+  }, [stats.totalRevenue, stats.totalOrders, stats.averageOrderValue, stats.activeBoutiques, stats.totalCustomers, retentionRate, fulfillmentHours]);
+
+  const currentColor = metricColors[mainChartMetric] || metricColors.revenue;
+  const gradientId = `storeBarGradient-${mainChartMetric}`;
+
+  const handoffTiles = useMemo(() => {
+    return statsCards.map(card => ({
+      id: card.id,
+      label: card.label,
+      value: card.value,
+      icon: card.icon,
+      iconClass: card.color === '#0EA5E9' ? 'info' : card.color === '#A855F7' ? 'pink' : card.color === '#22C55E' ? 'success' : card.color === '#F97316' ? 'warning' : 'info'
+    }));
+  }, [statsCards]);
 
   const pieColors = ['#0EA5E9', '#22C55E', '#F97316', '#818CF8', '#38BDF8'];
 
@@ -661,27 +773,50 @@ const Analytics = () => {
   return (
     <div className="dashboard-page analytics-page">
       <div className="analytics-v2">
-      <div className="page-header ">
+      <div className="page-header">
         <div>
           <h1 className="page-title">Analytics Command Center</h1>
           <p className="page-subtitle">Deep dive into demand signals, channel mix, and boutique velocity.</p>
         </div>
-       
+        <div className="header-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div className="date-range-selector" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'white', padding: '0.5rem 1rem', borderRadius: '10px', border: '2px solid #E5E7EB' }}>
+            <FiCalendar color="#0EA5E9" />
+            <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} disabled={refreshing}
+              style={{ border: "none", outline: "none", boxShadow: "none", background: "transparent", appearance: "none", fontSize: '0.875rem', color: '#374151', fontWeight: 500, cursor: 'pointer' }}>
+              {dateRanges.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+            </select>
+          </div>
+          <button className="btn btn-primary" onClick={handleRefresh} disabled={refreshing}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', background: 'white', border: '2px solid #E5E7EB', borderRadius: '10px', color: '#374151', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer' }}>
+            <FiRefreshCw className={refreshing ? 'spinning' : ''} /><span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
+          </button>
+          <button className="btn btn-primary btn-export" onClick={handleExport} disabled={exporting}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', background: 'linear-gradient(135deg, #0EA5E9, #0284C7)', border: 'none', borderRadius: '10px', color: 'white', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer' }}>
+            <FiDownload /><span>{exporting ? 'Exporting...' : 'Export'}</span>
+          </button>
+        </div>
       </div>
 
+      {/* 8 Stats Cards */}
       <div className="stats-grid analytics-stats">
-        {handoffTiles.map((tile) => (
-          <div key={tile.id} className="stat-card">
+        {statsCards.map((card) => (
+          <div key={card.id} className="stat-card" style={{ borderTop: `3px solid ${card.color}` }}>
             <div className="stat-card-header">
-              <span className="stat-label">{tile.label}</span>
-              <div className={`stat-icon ${tile.iconClass}`}>
-                <tile.icon />
+              <span className="stat-label">{card.label}</span>
+              <div className="stat-icon" style={{ background: `${card.color}20`, color: card.color }}>
+                <card.icon size={20} />
               </div>
             </div>
-            <div className="stat-value">{tile.value}</div>
+            <div className="stat-value" style={{ color: '#111827', fontSize: '1.75rem', fontWeight: 800 }}>{card.value}</div>
+            <div style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 600, marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <FiArrowUp size={12} />{card.change}
+            </div>
+            <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: '0.15rem' }}>{card.sub}</div>
           </div>
         ))}
       </div>
+
+     
 
       <section className="intro-panel">
         <div className="intro-copy">

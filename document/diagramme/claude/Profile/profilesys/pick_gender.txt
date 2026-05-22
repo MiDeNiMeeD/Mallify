@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 235, 235)
+    Note over U,S: Sélectionner le genre
+    U->>S: Cliquer le champ "Gender"
+    S-->>U: Ouvrir la modal "Select Gender" (Male / Female / Prefer not to say)
+    U->>S: Choisir une option
+    S->>S: setGender(option sélectionnée)
+    S-->>U: Fermer la modal, afficher le genre choisi
+    end

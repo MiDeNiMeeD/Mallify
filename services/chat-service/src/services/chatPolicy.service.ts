@@ -59,8 +59,17 @@ export const canChatWith = async (
     return { allowed: true };
   }
 
-  // Clients / drivers / etc. — allowed to message admin/manager only (handled above).
-  // For peer-to-peer between non-managers, deny.
+  if (role === 'client') {
+    // Customers can chat with stores (boutique owners) and other customers,
+    // plus admins/managers (handled above).
+    if (peerRole === 'boutique_owner' || peerRole === 'client') return { allowed: true };
+    return {
+      allowed: false,
+      reason: 'You can only chat with stores, other customers, admins, or managers',
+    };
+  }
+
+  // Drivers / etc. — allowed to message admin/manager only (handled above).
   return {
     allowed: false,
     reason: 'You are not allowed to start a conversation with this user',

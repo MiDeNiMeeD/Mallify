@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant V as I:SubscriptionPlansView
+
+    rect rgb(255, 245, 220)
+    Note over U,V: Choisir l'intervalle de facturation
+    activate V
+    U->>V: Cliquer radio "Monthly" ou "Yearly"
+    V->>V: setInterval(value)
+    V->>V: Recalcul du prix affiché : interval === "yearly" ? plan.yearlyPrice : plan.monthlyPrice
+    V-->>U: Re-render des 3 cartes avec nouveau prix + label "per user / {interval}"
+    deactivate V
+    end

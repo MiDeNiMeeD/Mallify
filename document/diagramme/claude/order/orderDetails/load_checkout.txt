@@ -1,0 +1,69 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:CheckoutView
+    participant SVC as C:ShopApi
+    participant C as C:CartController
+    participant CA as C:AddressController
+    participant EC as E:Cart
+    participant EA as E:Address
+
+    rect rgb(230, 244, 255)
+    Note over U,EA: Chargement de l'écran Checkout
+    activate V3
+    U->>V3: Naviguer vers Checkout (depuis Cart)
+
+    Note over V3: useMemo(orderItems) — depuis route.params
+    alt route.params.cartItems présent
+        V3->>V3: mapper cartItems en OrderItem[]
+    else cartItems absents
+        V3->>SVC: resolveCartUserId()
+        activate SVC
+        SVC-->>V3: userId
+        V3->>SVC: fetchCartItems(userId)
+        SVC->>C: GET /cart/{userId}
+        activate C
+        C->>EC: récupérer items
+        activate EC
+        EC-->>C: Items
+        deactivate EC
+        C-->>SVC: HTTP 200
+        deactivate C
+        SVC-->>V3: Items
+        deactivate SVC
+        V3->>V3: setDbOrderItems(items)
+    end
+
+    Note over V3,EA: Chargement de l'adresse (useEffect)
+    V3->>SVC: fetchMyAddresses()
+    activate SVC
+    SVC->>CA: GET /addresses
+    activate CA
+    CA->>EA: lister adresses utilisateur
+    activate EA
+    EA-->>CA: Addresses
+    deactivate EA
+    alt Échec
+        CA-->>SVC: throw
+        SVC->>SVC: getActiveUserIdentity() → email
+        SVC->>CA: GET /addresses?email=...
+        CA->>EA: lister par email
+        EA-->>CA: Addresses
+        CA-->>SVC: Addresses
+    else Succès
+        CA-->>SVC: Addresses
+    end
+    deactivate CA
+    SVC-->>V3: Addresses
+    deactivate SVC
+
+    alt Adresses présentes
+        V3->>V3: choisir préférée (route.params > isDefault > [0])
+        V3->>V3: setSelectedAddress(preferred)
+    else Aucune
+        V3->>V3: setSelectedAddress(null) — fallback affichage par défaut
+    end
+
+    V3-->>U: Afficher items + adresse + shipping (Regular $15) + promo + total
+    deactivate V3
+    end

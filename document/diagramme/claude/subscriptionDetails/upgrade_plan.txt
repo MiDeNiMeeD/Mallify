@@ -1,0 +1,47 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant V as I:SubscriptionPlansView
+    participant API as C:ApiClient
+    participant C as C:SubscriptionController
+    participant EB as E:BoutiqueSubscription
+
+    rect rgb(245, 230, 255)
+    Note over U,EB: Upgrade (abonnement actif → plan supérieur)
+    Note over V: Conditions UI :<br/>currentPlanId existe<br/>planOrder > currentDisplayOrder<br/>(downgrade = pas de bouton)
+    activate V
+    U->>V: Cliquer "Upgrade" (handleUpgrade)
+    alt !boutiqueId OU !planId
+        V-->>U: Toast "Boutique profile is missing"
+    else IDs présents
+        V->>V: setProcessing(true)
+        V->>API: upgradeBoutiqueSubscription(boutiqueId, planId)
+        activate API
+        API->>C: POST /api/boutiques/{boutiqueId}/subscription/upgrade {planId}
+        activate C
+        C->>EB: findOne({boutiqueId, status:"active"})
+        activate EB
+        EB-->>C: subscription actuelle
+        deactivate EB
+        Note over C: Calculer le crédit de proration :<br/>(remainingMs / totalMs) × amount actuel
+        C->>EB: update(planId, amount, ajuster currentPeriodEnd avec crédit)
+        activate EB
+        EB-->>C: subscription mise à jour
+        deactivate EB
+        alt Erreur
+            C-->>API: HTTP 4xx/5xx
+            API-->>V: throw
+            V-->>U: Toast "Upgrade failed"
+        else Succès
+            C-->>API: HTTP 200 {subscription}
+            API-->>V: response
+            V-->>U: Toast "Plan upgraded successfully! Remaining days credited"
+            V->>V: await loadData() (refetch plans + access)
+            V-->>U: Carte du nouveau plan badge "Current Plan"
+        end
+        deactivate C
+        deactivate API
+        V->>V: setProcessing(false)
+    end
+    deactivate V
+    end

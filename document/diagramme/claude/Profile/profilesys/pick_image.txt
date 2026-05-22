@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 245, 220)
+    Note over U,S: Modifier la photo de profil
+    U->>S: Cliquer l'icône crayon sur la photo
+    S->>S: Demander la permission Media Library
+    alt Permission refusée
+        S-->>U: Alerte "Permission Required"
+    else Permission accordée
+        S-->>U: Ouvrir le sélecteur d'image (carré, qualité 0.8, base64)
+        alt Sélection annulée
+            Note over U,S: Aucune action
+        else Image sélectionnée
+            alt base64 disponible
+                S->>S: setProfileImage("data:image/jpeg;base64,...")
+            else base64 absent
+                S->>S: setProfileImage(asset.uri)
+            end
+            S-->>U: Aperçu de la nouvelle photo
+        end
+    end
+    end

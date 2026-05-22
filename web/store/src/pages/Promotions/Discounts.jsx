@@ -11,7 +11,7 @@ function Discounts() {
 
   const activeCoupons = [
     { code: 'SAVE20', type: 'Percentage', value: '20%', uses: 145, maxUses: 500, status: 'active' },
-    { code: 'WINTER50', type: 'Fixed Amount', value: '$50', uses: 78, maxUses: 200, status: 'active' },
+    { code: 'WINTER50', type: 'Fixed Amount', value: '50 DT', uses: 78, maxUses: 200, status: 'active' },
     { code: 'NEWMEMBER', type: 'Percentage', value: '15%', uses: 234, maxUses: 0, status: 'active' },
     { code: 'FLASH30', type: 'Percentage', value: '30%', uses: 56, maxUses: 100, status: 'active' },
   ];
@@ -188,7 +188,7 @@ function Discounts() {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', backgroundColor: 'var(--light-bg)', borderRadius: '6px' }}>
                   <span>Total Discount Given</span>
-                  <strong>$12,450</strong>
+                  <strong>12,450 DT</strong>
                 </div>
               </div>
             </div>

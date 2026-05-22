@@ -20,7 +20,7 @@ const REPORT_REASONS = [
 ];
 
 export const ChatThread = ({ conversation, onBack, onConversationChanged }) => {
-  const { client, currentUserId, resolveUser } = useChat();
+  const { client, currentUserId, resolveUser, markConversationRead } = useChat();
   const conversationId = conversation?.id;
   const peerId = conversation?.peerId;
 
@@ -49,6 +49,13 @@ export const ChatThread = ({ conversation, onBack, onConversationChanged }) => {
 
   const [replyingTo, setReplyingTo] = useState(null);
 
+  // Drop the sidebar badge counter immediately when a conversation is opened,
+  // then mark as read on the server in the background.
+  useEffect(() => {
+    if (!conversationId) return;
+    markConversationRead(conversationId);
+  }, [conversationId, markConversationRead]);
+
   // Mark as read whenever the thread is visible and new messages arrive
   useEffect(() => {
     if (!conversationId || !messages.length) return;
@@ -59,10 +66,10 @@ export const ChatThread = ({ conversation, onBack, onConversationChanged }) => {
     );
     if (!hasUnread) return;
     const t = setTimeout(() => {
-      client.markRead(conversationId).then(() => onConversationChanged?.()).catch(() => {});
+      markConversationRead(conversationId).then(() => onConversationChanged?.());
     }, 300);
     return () => clearTimeout(t);
-  }, [conversationId, messages, currentUserId, client, onConversationChanged]);
+  }, [conversationId, messages, currentUserId, markConversationRead, onConversationChanged]);
 
   if (!conversation) {
     return (

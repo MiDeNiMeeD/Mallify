@@ -153,10 +153,7 @@ function MyBoutique() {
     fetchBoutiqueData();
   }, [user, authLoading, refreshUserProfile]);
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: boutique?.currency || 'TND'
-    }).format(amount);
+    return `${new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(amount) || 0)} DT`;
   };
 
   const formatNumber = (value) => {

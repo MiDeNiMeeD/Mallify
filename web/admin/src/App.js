@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AppChatProvider } from "./chat/AppChatProvider";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout/Layout";
 import DashboardHome from "./pages/DashboardHome";
@@ -155,9 +156,11 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <AppChatProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AppChatProvider>
     </AuthProvider>
   );
 }

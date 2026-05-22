@@ -1,0 +1,50 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:SignUpView
+    participant V2 as I:OTPView
+    participant C as C:AuthController
+    participant Cache as E:TempRegistration
+    participant EU as E:User
+    participant M as S:EmailService
+
+    rect rgb(255, 245, 220)
+    Note over U,V1: Saisie + validation locale
+    activate V1
+    loop Saisie des données
+        U->>V1: Saisir email, mot de passe, confirmation
+    end
+    U->>V1: Cliquer "Sign up"
+    V1->>V1: valider() (champs non vides, password === repassword)
+    alt Données invalides
+        V1-->>U: Alerte "Missing info" / "Password mismatch"
+    end
+    end
+
+    rect rgb(230, 255, 230)
+    Note over V1,C: Demande d'inscription
+    V1->>C: POST /auth/register {email, password, role:"client"}
+    activate C
+    C->>EU: vérifier(email existe ?)
+    activate EU
+    EU-->>C: Résultat
+    deactivate EU
+    alt Email déjà utilisé
+        C-->>V1: HTTP 400 {message}
+        V1-->>U: Alerte "Error"
+    else Email disponible
+        C->>C: hacher(password) + générer codeOTP
+        C->>Cache: stocker(email, hash, codeOTP, expiration)
+        activate Cache
+        Cache-->>C: OK
+        deactivate Cache
+        C->>M: envoyerOTP(email, codeOTP)
+        activate M
+        M-->>U: Email avec le code OTP
+        deactivate M
+        C-->>V1: HTTP 200 (en attente de vérification)
+        V1->>V2: navigation.navigate("OTP", {email})
+        deactivate V1
+        deactivate C
+    end
+    end

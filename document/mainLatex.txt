@@ -1,0 +1,273 @@
+\documentclass[A4wide,12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{multirow} 
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{tablefootnote}
+\usepackage{lscape}
+\usepackage{verbatim}
+%\usepackage{graphicx,wrapfig,lipsum} % les deux derniers ajoutees par
+%\usepackage{slashbox}%%% pour backslashbox dans un table
+\usepackage{subfigure}
+%\usepackage[francais]{babel}
+\usepackage[french]{babel}
+%%\selectlanguage{french}
+%\usepackage{pifont} %  poour les ding
+\usepackage{minitoc} % pour faire minitoc(sommaire pour chaque chap)
+\usepackage{footnote}
+\usepackage{enumitem} %%pour faire la numérotation: a, b, ...
+%ajouté comme rapport  pour design de l'entête%
+\usepackage{a4wide,mathpi,indentfirst}
+\usepackage{a4wide}  
+\usepackage{lscape}
+\usepackage{lastpage}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{scalerel}
+\usepackage{stackengine}
+\usepackage{comment} % pour ajouter un commentaire sur plusieurs lignes
+\usepackage{pifont}
+\usepackage{adjustbox}
+\usepackage{pdflscape}
+\usepackage{url} 
+\usepackage{xurl}
+\usepackage{cite}
+\newcommand\bigdoublecap{%
+  \mathop{\ensurestackMath{\stackinset{c}{}{b}{.15pt}%
+    {\stretchto{\scaleto{\bigcap}{1.6ex}}{2ex}}{\bigcap}}}
+}
+%%%%%%%%%%%%%%%%%%%%%
+%\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}%le nbre de niveau dans la table de matière
+\setcounter{tocdepth}{4}
+
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+
+\newcommand{\figScaleX}[3]{
+  \begin{figure}[htp!]
+    \includegraphics[width=#1\textwidth]{./figures/#2}
+    \caption{#3}
+    \label{fig:#2}
+  \end{figure}
+}
+\newcommand{\figScale}[2]{
+ \figScaleX{0.95}{#1}{#2}
+}
+\newcommand{\figScaleRot}[3]{
+  \begin{figure}[htp!]
+    \includegraphics[angle=#1,width=0.95\textwidth]{./figures/#2}
+    \caption{#3}
+    \label{fig:#2}
+  \end{figure}
+}
+\usepackage{textcomp}  % pour symbole euro
+\usepackage{longtable}
+\usepackage{subfigure}
+%\usepackage{slashbox}
+\usepackage{graphicx}
+%\usepackage{varwidth} %ajouté (new)
+%\usepackage{adjustbox} %ajouté (new)
+\usepackage{frame} %ajouté (new)
+\usepackage{colortbl}
+\usepackage{mathptmx}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{hyperref}
+ 
+\pagestyle{plain} 
+\usepackage{fancyhdr}
+\usepackage{listings}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+%\pagestyle{fancy}  %ajouté par hana :pour ajout de trait horizontal pour entete
+\usepackage{algorithm} %add pour l'ecriture de l'algorithme
+%\usepackage{algorithmic} % add aussi
+% [french]{algorithme} % add le 17/10 pour version francais
+%\usepackage[english]{algorithme} % add le 17/10 pour version englais
+\usepackage{algpseudocode}
+%\usepackage{tikz} %add pour dessiner figure du Wk
+%\usepackage{tkz-graph} %add pour dessiner figure du Wk
+%\usepackage{xcolor}
+%%%%%%%%%%%% De Faten pour symbole mathèmatiques --------------
+%\usepackage{amsmath} 
+%\usepackage{amssymb}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pdfpages}%include pdf
+
+\newcommand*\rot{\rotatebox{90}} % add par hana pour faire roter texte dans tableau
+%\usepackage[table]{xcolor} % add par hana pour faire coloration dans tab 
+% fin ajout
+%\newcommand*\p{\rotatebox{45}} % add par hana pour faire roter texte dans tableau
+\usepackage{float}% add par hana pour placer tableau dasn bon endroit comme dasn le code
+%\usepackage{diagbox} % add par hana pour antislash dasn table
+
+%\newpage
+%\title{Contributions à la gestion des Workflows dynamiques dans un environnement de Cloud Computing}
+
+
+\usepackage{tabularx}
+\begin{document}
+%\frontmatter % pour entete on les utilise si type book
+\maketitle
+%-- pour faire une entête 
+\sloppy
+%\makeatletter
+\makeatletter
+\newlength{\chapter@number@width}
+\def\@makechapterhead#1{%
+  {\normalfont
+  \setlength{\parindent}{0pt}%
+  \vspace*{10pt}%
+  \settowidth{\chapter@number@width}{%
+    \hbox{\color{white}\Large\bfseries
+          \hspace{\dimexpr 1mm+3pt}%
+          \thechapter
+          \hspace{\dimexpr 1mm+3pt}%
+    }}
+  \hbox{%
+    \vtop{%
+      \hsize=\dimexpr\chapter@number@width+\tabcolsep+2\fboxrule+\tabcolsep  
+      \begin{tabular}[t]{@{}c}
+        \scshape\strut\makebox[0pt]{\hspace{0pt plus 1 fill minus 1 fill}\@chapapp\hspace{0pt plus 1 fill minus 1 fill}} \\
+        \fboxsep=0pt
+        \colorbox{black}{\vbox{%
+           \hbox{\vbox to 1cm{}}
+           \hbox{\color{white}\LARGE\bfseries
+                 \hspace{\dimexpr 1mm+3pt}%
+                 \thechapter
+                 \hspace{\dimexpr 1mm+3pt}%
+                }
+           \hrule height 0.4pt depth 0pt width 0pt
+           \hbox{\vbox to 6pt{}}
+           \hbox{\parbox{0pt}{\Large\bfseries\vphantom{E}}}
+           }}%
+      \end{tabular}%
+      }%
+    \vtop{%
+      \advance\hsize by -\dimexpr\chapter@number@width+2\fboxrule+\tabcolsep
+      \hspace*{-0.5cm}\begin{tabular}[t]{c}
+        \scshape\strut\vphantom{\@chapapp} \\
+        \fboxsep=0pt
+        \colorbox{white}{\vbox{%
+           \hbox{\vbox to \dimexpr 1mm+3pt{}}
+           \hbox{\LARGE\bfseries
+                  \hspace{\dimexpr 1mm+3pt}%
+                 \phantom{\thechapter}
+                 \hspace{\dimexpr 1mm+3pt}%
+                }
+           \hrule height 0.4pt depth 0pt width \hsize
+           \hbox{\vbox to 6pt{}}
+           \hbox{\hspace*{20pt}\parbox{\dimexpr\textwidth-2mm-6pt-\chapter@number@width-\tabcolsep-2\fboxrule-20pt}{\Large\bfseries #1}}
+           }}%
+      \end{tabular}%
+      }%
+    }%
+  \vspace{50pt}%
+  }
+}
+
+
+
+%--- Fin code design entête--------------
+%\maketitle
+%\includepdf[pages=-]{page-de-garde_a_imprimer.pdf}
+
+\pagenumbering{roman}
+\setstretch{1.5} % pour aligner entre les lignes en ecriture
+\renewcommand{\theparagraph}{\alph{paragraph})}
+\dominitoc %   pour faire minitoc(sommaire pour chaque chap)
+\mtcselectlanguage{french} 
+
+%\input{page_de_garde_oumayma.pdf}
+
+%\includepdf[pages=-]{page_de_garde_oumayma.pdf}
+
+\newpage
+%\input{dedicaces_remerciment/dedicaces}
+\newpage
+%\input{dedicaces_remerciment/remerciement}
+\tableofcontents
+\listoffigures
+\newpage
+\listoftables
+\newpage
+%\listoflistings
+%\lstlistoflistings
+\newpage
+\pagenumbering{arabic}
+
+%\input{introduction/Introduction_generale}
+%\input{chapitres/(1)PresentationGenerale}
+\input{chapitres/(2)SpecificationEtAnalyseBesoin}
+%\input{chapitres/(3)Analyse et conception Objet}
+ % \input{chapitres/(4)Realisation}
+
+
+
+%\input{chapitres/chapitre_1}
+%\input{chapitres/chapitre_2}
+%\input{chapitres/chapitre_3} 
+
+%\input{Conclusion_generale}  
+
+%\newpage
+
+
+\clearpage
+
+%\lhead{\emph{Bibliographie}}
+\setstretch{1.4}  % pour augmenter les espaces ds la bib et %l'annexe
+
+
+\clearpage
+
+\markboth{}{}
+\pagestyle{plain}
+\bibliographystyle{unsrt}
+\bibliography{Webo.bib} 
+
+
+\input{dedicaces_remerciment/dedicaces2}
+
+%---------
+%\clearpage
+%\includegraphics[width=\textwidth]{Abstract.pdf}
+
+
+
+%\input{liste des Abréviations }
+
+%\input{Annexe1}
+
+\end{document}
+

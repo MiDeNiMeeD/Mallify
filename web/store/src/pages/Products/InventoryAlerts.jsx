@@ -93,7 +93,7 @@ function InventoryAlerts() {
                         {product.stock} units
                       </span>
                     </td>
-                    <td>${product.price}</td>
+                    <td>{product.price} DT</td>
                     <td>
                       <span className="status-badge" style={{ 
                         backgroundColor: product.stock < 5 ? 'var(--danger-light)' : 'var(--warning-light)',
@@ -147,7 +147,7 @@ function InventoryAlerts() {
                   <tr key={product.id}>
                     <td><strong>{product.name}</strong></td>
                     <td>{product.category}</td>
-                    <td>${product.price}</td>
+                    <td>{product.price} DT</td>
                     <td style={{ color: 'var(--text-secondary)' }}>2 days ago</td>
                     <td>
                       <button 

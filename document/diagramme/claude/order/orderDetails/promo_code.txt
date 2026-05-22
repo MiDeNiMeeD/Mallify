@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:CheckoutView
+
+    rect rgb(255, 235, 235)
+    Note over U,V3: Saisie d'un code promo
+    activate V3
+    U->>V3: Saisir un code promo (setPromoCode)
+    U->>V3: Cliquer "Apply"
+    V3->>V3: handleApplyPromo()
+    Note over V3: ⚠️ console.log("Apply promo code:", promoCode)<br/>Aucun appel backend, aucune mise à jour du total
+    V3-->>U: Aucun feedback visible
+    deactivate V3
+    end

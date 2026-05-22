@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    Note over U,S: Flux complet Commande / Checkout
+
+    Note right of U: voir ordersys/load_checkout.txt
+    ref over U,S: Chargement de l'écran Checkout (items + adresse)
+
+    opt Modifier l'adresse
+        Note right of U: voir ordersys/edit_address.txt
+        ref over U,S: Modifier l'adresse de livraison
+    end
+
+    opt Modifier la livraison
+        Note right of U: voir ordersys/choose_shipping.txt
+        ref over U,S: Choisir la méthode de livraison
+    end
+
+    opt Code promo
+        Note right of U: voir ordersys/promo_code.txt
+        ref over U,S: Saisie d'un code promo
+    end
+
+    Note right of U: voir ordersys/confirm_order.txt
+    ref over U,S: Confirmation de la commande + vidage panier + modal succès

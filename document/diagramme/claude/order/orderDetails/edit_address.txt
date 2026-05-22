@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:CheckoutView
+    participant V4 as I:ShippingAddressView
+
+    rect rgb(255, 245, 220)
+    Note over U,V4: Modifier l'adresse de livraison
+    activate V3
+    U->>V3: Cliquer l'icône éditer
+    V3->>V4: navigation.navigate("ShippingAddress", {selectedAddressId})
+    deactivate V3
+    activate V4
+    V4-->>U: Interface adresses
+    U->>V4: Choisir / ajouter une adresse
+    V4->>V3: navigation.goBack({selectedShippingAddress})
+    deactivate V4
+    activate V3
+    V3->>V3: useEffect(route.params.selectedShippingAddress)
+    V3->>V3: setSelectedAddress(adresse)
+    V3-->>U: Adresse mise à jour dans le récap
+    deactivate V3
+    end

@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(245, 230, 255)
+    Note over U,S: Étape 2 — Saisie du code OTP (mode password_reset)
+    S->>S: Démarrer compte à rebours (55s)
+    loop Saisie des 6 chiffres
+        U->>S: Saisir un chiffre
+    end
+
+    alt Renvoyer le code (countdown terminé)
+        U->>S: Cliquer "Resend code"
+        S->>S: POST /auth/forgot-password {email}
+        S->>S: Générer nouveau code OTP
+        S-->>U: Envoyer nouveau code par email
+        S-->>U: Alerte "A new OTP has been sent"
+        S->>S: Réinitialiser le compte à rebours
+    end
+
+    U->>S: Cliquer "Verify"
+    S->>S: Vérifier longueur === 6
+    alt Code incomplet
+        S-->>U: Alerte "Please enter the full 6-digit OTP"
+    else Code complet
+        Note over U,S: ⚠️ Aucun appel API ici — le code est juste transmis
+        S-->>U: Afficher l'écran CreateNewPassword (avec email + code)
+    end
+    end

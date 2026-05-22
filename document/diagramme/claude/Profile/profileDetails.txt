@@ -1,0 +1,48 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant V2 as I:ProfileView
+    participant M1 as I:CalendarModal
+    participant M2 as I:MonthPickerModal
+    participant M3 as I:YearPickerModal
+    participant MC as I:CityPickerModal
+    participant MG as I:GenderPickerModal
+    participant IP as S:ImagePicker
+    participant OS as S:OS
+    participant SVC as C:ShopApi
+    participant Cache as E:ProfileCache
+    participant C as C:UserController
+    participant EU as E:User
+
+    Note over U,EU: Flux complet Edit Profile (MVC)
+
+    Note right of U: voir profileDetails/load_profile.txt
+    ref over U,V,SVC,Cache,C,EU: Chargement (cache + GET /users/profile)
+
+    opt Photo de profil
+        Note right of U: voir profileDetails/pick_image.txt
+        ref over U,V,IP,OS: Modifier la photo (permission + ImagePicker)
+    end
+
+    opt Date de naissance
+        Note right of U: voir profileDetails/pick_date.txt
+        ref over U,V,M1,M2,M3: Sélection date (calendar + month/year)
+    end
+
+    opt Ville
+        Note right of U: voir profileDetails/pick_city.txt
+        ref over U,V,MC: Sélection de la ville
+    end
+
+    opt Genre
+        Note right of U: voir profileDetails/pick_gender.txt
+        ref over U,V,MG: Sélection du genre
+    end
+
+    opt Nom / nickname / téléphone
+        U->>V: Saisir dans les champs texte (setFullName, setNickname, setPhoneNumber)
+    end
+
+    Note right of U: voir profileDetails/update_profile.txt
+    ref over U,V,V2,SVC,C,EU: Sauvegarde (validation + PUT /users/profile)

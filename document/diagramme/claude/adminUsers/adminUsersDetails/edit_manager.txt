@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant V as I:ManagersUsersView
+
+    rect rgb(220, 240, 255)
+    Note over A,V: Éditer un manager (placeholder)
+    activate V
+    A->>V: Cliquer l'icône crayon (handleEditManager)
+    Note over V: ⚠️ Fonction non implémentée<br/>showToast("Edit manager <nom> not implemented yet", "info")
+    V-->>A: Toast info
+    deactivate V
+    end

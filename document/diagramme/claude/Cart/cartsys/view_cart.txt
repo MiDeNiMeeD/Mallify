@@ -1,0 +1,26 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 245, 220)
+    Note over U,S: Affichage du panier
+    U->>S: Ouvrir l'onglet "Cart"
+    S->>S: Résoudre userId
+    S->>S: Lire le cache mémoire du panier
+    alt Cache présent
+        S-->>U: Afficher immédiatement les items en cache
+    else Cache vide
+        S-->>U: Afficher un loader "Loading your cart..."
+    end
+    S->>S: GET /cart/{userId} (rafraîchissement réseau)
+    alt Erreur
+        S-->>U: Afficher panier vide
+    else Succès
+        S->>S: Mettre à jour le cache
+        S-->>U: Afficher la liste d'items + total
+        alt Panier vide
+            S-->>U: Message "Your cart is empty"
+        end
+    end
+    end

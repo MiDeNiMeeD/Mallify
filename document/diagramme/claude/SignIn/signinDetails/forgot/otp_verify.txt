@@ -1,0 +1,40 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:OTPView
+    participant V4 as I:CreateNewPasswordView
+    participant C as C:AuthController
+    participant Cache as E:PasswordResetCache
+    participant M as S:EmailService
+
+    rect rgb(245, 230, 255)
+    Note over U,V4: Étape 2 — Saisie du code OTP (mode password_reset)
+    activate V3
+    V3->>V3: démarrerCompteARebours(55s)
+    loop Saisie des 6 chiffres
+        U->>V3: Saisir un chiffre
+    end
+
+    opt Renvoyer le code (countdown terminé)
+        U->>V3: Cliquer "Resend code"
+        V3->>C: POST /auth/forgot-password {email}
+        activate C
+        C->>Cache: mettreAJour(nouveauCodeOTP, expiration)
+        C->>M: envoyerOTP(email, nouveauCode)
+        M-->>U: Nouveau code par email
+        C-->>V3: HTTP 200
+        deactivate C
+        V3-->>U: Alerte "A new OTP has been sent"
+        V3->>V3: réinitialiser compte à rebours
+    end
+
+    U->>V3: Cliquer "Verify"
+    V3->>V3: valider(longueur === 6)
+    alt Code incomplet
+        V3-->>U: Alerte "Please enter the full 6-digit OTP"
+    else Code complet
+        Note over V3,V4: ⚠️ Aucun appel API ici — le code est juste transmis
+        V3->>V4: navigation.navigate("CreateNewPassword", {email, code})
+        deactivate V3
+    end
+    end

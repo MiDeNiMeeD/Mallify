@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 255, 230)
+    Note over U,S: Sélectionner la ville
+    U->>S: Cliquer le champ "City"
+    S-->>U: Ouvrir la modal "Select City" (liste de 24 villes tunisiennes)
+    U->>S: Choisir une ville
+    S->>S: setCity(ville sélectionnée)
+    S-->>U: Fermer la modal, afficher la ville choisie
+    end

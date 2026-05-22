@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 255, 230)
+    Note over U,S: Confirmation de la commande
+    U->>S: Cliquer "Confirm Order"
+    alt Soumission en cours OU panier vide
+        Note over S: Bouton désactivé — aucune action
+    else Action valide
+        S->>S: setSubmittingOrder(true), bouton "Confirming..."
+        S->>S: Résoudre userId
+
+        S->>S: POST /orders/checkout {userId, items, shippingAddress, sharedShippingFee, taxRate:0, discount:0}
+        alt Erreur
+            S-->>U: Pas de feedback explicite (silencieux), bouton réactivé
+        else Succès
+            S->>S: Commande créée en base
+            Note over S: Calcul backend : subtotal + shipping + tax
+            par Pour chaque item avec productId
+                S->>S: DELETE /cart/{userId}/items/{productId}?color=...&size=...
+            end
+            S->>S: setDbOrderItems([]) → panier local vidé
+            S-->>U: Afficher la modal "Order Successful!"
+        end
+        S->>S: setSubmittingOrder(false)
+    end
+
+    Note over U,S: Après la modal de succès
+    alt Cliquer "View Order"
+        U->>S: Cliquer
+        S-->>U: Naviguer vers OrderScreen
+    else Cliquer "Back Home"
+        U->>S: Cliquer
+        S-->>U: Naviguer vers MainTabs
+    end
+    end

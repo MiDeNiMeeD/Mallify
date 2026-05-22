@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 245, 220)
+    Note over U,S: Saisie + validation
+    loop Saisie des données
+        U->>S: Saisir email et mot de passe
+    end
+    U->>S: Cliquer "Sign in"
+    S->>S: Valider (champs non vides)
+    alt Champs manquants
+        S-->>U: Alerte "Missing info - enter email and password"
+    end
+    end
+
+    rect rgb(230, 255, 230)
+    Note over U,S: Demande de connexion
+    S->>S: Rechercher l'utilisateur par email
+    alt Utilisateur introuvable
+        S-->>U: Alerte "User not found"
+    else Compte non vérifié
+        S-->>U: Alerte "Email not verified"
+    else Mot de passe incorrect
+        S->>S: Comparer(password, hash) → ✗
+        S-->>U: Alerte "Invalid credentials"
+    else Identifiants valides
+        S->>S: Comparer(password, hash) → ✓
+        S->>S: Générer accessToken + refreshToken
+        S->>S: Stocker tokens (AsyncStorage)
+        S-->>U: Alerte "Signed in successfully"
+        S-->>U: Afficher l'accueil (MainTabs)
+    end
+    end

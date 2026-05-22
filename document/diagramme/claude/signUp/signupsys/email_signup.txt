@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 245, 220)
+    Note over U,S: Saisie + validation
+    loop Saisie des données
+        U->>S: Saisir email, mot de passe, confirmation
+    end
+    U->>S: Cliquer "Sign up"
+    S->>S: Valider (champs non vides, password === repassword)
+    alt Données invalides
+        S-->>U: Alerte "Missing info" / "Password mismatch"
+    end
+    end
+
+    rect rgb(230, 255, 230)
+    Note over U,S: Demande d'inscription
+    S->>S: Vérifier si l'email existe déjà
+    alt Email déjà utilisé
+        S-->>U: Alerte "Email déjà utilisé"
+    else Email disponible
+        S->>S: Hacher le mot de passe + générer code OTP
+        S->>S: Stocker temporairement (email, hash, code OTP, expiration)
+        S-->>U: Envoyer code OTP par email
+        S-->>U: Afficher l'écran OTP
+    end
+    end

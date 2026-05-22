@@ -180,13 +180,9 @@ const buildVariantMatrices = (input) => {
 
 const formatCurrency = (amount) => {
   if (typeof amount !== 'number') {
-    return '$0.00';
+    return '0.00 DT';
   }
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format(amount);
+  return `${new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount)} DT`;
 };
 
 function ViewProduct() {
@@ -487,7 +483,7 @@ function ViewProduct() {
  <ul className="product-view__advantages">
             <li>
               <Truck size={18} />
-              Free delivery on orders over $80
+              Free delivery on orders over 80 DT
             </li>
             <li>
               <ShieldCheck size={18} />

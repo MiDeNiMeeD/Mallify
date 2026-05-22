@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant IP as S:ImagePicker
+    participant OS as S:OS
+
+    rect rgb(255, 245, 220)
+    Note over U,OS: Modifier la photo de profil
+    activate V
+    U->>V: Cliquer le bouton "edit image" (crayon)
+    V->>IP: requestMediaLibraryPermissionsAsync()
+    activate IP
+    IP->>OS: Demander la permission Media Library
+    OS-->>IP: status
+    IP-->>V: {status}
+    deactivate IP
+    alt status != "granted"
+        V-->>U: Alerte "Permission Required"
+    else status == "granted"
+        V->>IP: launchImageLibraryAsync({Images, allowsEditing, aspect:[1,1], quality:0.8, base64:true})
+        activate IP
+        IP-->>U: Ouvrir le sélecteur d'image
+        U->>IP: Choisir une image (ou annuler)
+        IP-->>V: {canceled, assets:[{base64?, uri, mimeType}]}
+        deactivate IP
+        alt canceled
+            Note over V: Aucune action
+        else Image sélectionnée
+            alt asset.base64 disponible
+                V->>V: setProfileImage("data:" + mimeType + ";base64," + base64)
+            else base64 absent
+                V->>V: setProfileImage(asset.uri)
+            end
+            V-->>U: Aperçu de la nouvelle photo
+        end
+    end
+    deactivate V
+    end

@@ -417,6 +417,35 @@ export const getSubscriptionAccess = async (req: Request, res: Response): Promis
       }
     }
 
+    // Self-heal: if the record is stuck on pending_payment but Stripe already collected the payment
+    // (webhook delivery failed / not configured), reconcile by retrieving the checkout session.
+    if (
+      normalizedSubscription.status === 'pending_payment' &&
+      normalizedSubscription.provider === 'stripe' &&
+      normalizedSubscription.stripeCheckoutSessionId &&
+      hasStripeConfig &&
+      stripeClient
+    ) {
+      const session = await stripeClient.checkout.sessions.retrieve(normalizedSubscription.stripeCheckoutSessionId);
+      const subscriptionId = getSessionSubscriptionId(session);
+
+      if (session.payment_status === 'paid' && subscriptionId) {
+        const stripeSubscription = await stripeClient.subscriptions.retrieve(subscriptionId);
+        await syncStripeSubscriptionToLocal(stripeSubscription, {
+          boutiqueId: String(normalizedSubscription.boutiqueId),
+          planId: String(normalizedSubscription.planId),
+          ownerId: String(normalizedSubscription.ownerId),
+          billingInterval: normalizedSubscription.billingInterval,
+          sessionId: session.id,
+        });
+
+        const refreshed = await BoutiqueSubscription.findOne({ boutiqueId }).lean();
+        if (refreshed) {
+          normalizedSubscription = refreshed;
+        }
+      }
+    }
+
     const hasManagementAccess = isSubscriptionActiveNow(normalizedSubscription);
     const reason = hasManagementAccess ? 'active' : normalizedSubscription.status === 'expired' ? 'expired' : 'inactive';
 

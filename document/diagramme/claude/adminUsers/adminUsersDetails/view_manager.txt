@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant V as I:ManagersUsersView
+    participant M as I:ManagerDetailModal
+
+    rect rgb(255, 245, 220)
+    Note over A,M: Visualiser un manager (modal)
+    activate V
+    A->>V: Cliquer l'icône œil (handleViewManager)
+    V->>V: setSelectedManager(manager)
+    V->>M: render(selectedManager)
+    activate M
+    M-->>A: Modal avec nom, email, téléphone, rôle, statut, date d'inscription
+    A->>M: Cliquer "X"
+    M->>V: closeManagerModal()
+    V->>V: setSelectedManager(null)
+    deactivate M
+    V-->>A: Modal fermée
+    deactivate V
+    end

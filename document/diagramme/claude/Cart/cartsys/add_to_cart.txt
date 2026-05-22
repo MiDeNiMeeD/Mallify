@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Ajout d'un produit au panier (depuis ProductDetails)
+    U->>S: Sélectionner couleur / taille (optionnel)
+    U->>S: Cliquer "Add to Cart"
+    alt Produit sans id (produit invalide)
+        S-->>U: Rediriger vers l'onglet Cart
+    else Produit valide
+        S->>S: Résoudre userId (depuis session / wishlist)
+        S->>S: POST /cart/{userId}/items {productId, boutiqueId, storeId, name, image, price, quantity, color, size}
+        alt Erreur réseau / serveur
+            S-->>U: Pas de feedback explicite (silencieux)
+        else Succès
+            S-->>U: Produit ajouté au panier
+        end
+    end
+    end

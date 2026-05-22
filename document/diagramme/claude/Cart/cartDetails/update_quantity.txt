@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V2 as I:CartView
+    participant SVC as C:ShopApi
+    participant C as C:CartController
+    participant EC as E:Cart
+
+    rect rgb(230, 255, 230)
+    Note over U,EC: Modification de la quantité (optimiste)
+    activate V2
+    U->>V2: Cliquer "+" / "-"
+    V2->>V2: nextQty = action === "increase" ? +1 : max(1, qty-1)
+    alt Quantité inchangée
+        Note over V2: Aucune action
+    else Nouvelle quantité
+        V2->>V2: Sauvegarder previousItems (snapshot)
+        V2-->>U: setCartItems (mise à jour optimiste)
+        V2->>SVC: updateCartItemQuantity(userId, {productId, qty, color, size})
+        activate SVC
+        SVC->>C: PATCH /cart/{userId}/items/{productId}
+        activate C
+        C->>EC: mettre à jour la quantité
+        activate EC
+        EC-->>C: OK
+        deactivate EC
+        alt Succès
+            C-->>SVC: HTTP 200
+            SVC-->>V2: OK
+        else Échec
+            C-->>SVC: HTTP 4xx/5xx
+            SVC-->>V2: throw
+            V2-->>U: setCartItems(previousItems) (rollback)
+        end
+        deactivate C
+        deactivate SVC
+    end
+    deactivate V2
+    end

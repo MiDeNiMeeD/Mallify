@@ -1,0 +1,33 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(245, 230, 255)
+    Note over U,S: Sélectionner la date de naissance
+    U->>S: Cliquer le champ "Date of Birth"
+    S-->>U: Ouvrir la modal Calendrier (mois courant)
+
+    opt Naviguer entre mois
+        U->>S: Cliquer flèche gauche / droite
+        S-->>U: Afficher mois précédent / suivant
+    end
+
+    opt Choisir le mois directement
+        U->>S: Cliquer le nom du mois (en-tête)
+        S-->>U: Ouvrir la modal "Select Month"
+        U->>S: Choisir un mois
+        S-->>U: Fermer + mettre à jour le calendrier
+    end
+
+    opt Choisir l'année
+        U->>S: Cliquer l'année (en-tête)
+        S-->>U: Ouvrir la modal "Select Year" (1950 → année courante)
+        U->>S: Choisir une année
+        S-->>U: Fermer + mettre à jour le calendrier
+    end
+
+    U->>S: Cliquer un jour
+    S->>S: setDateOfBirth(nouvelle date)
+    S-->>U: Fermer la modal, afficher MM/DD/YYYY dans le champ
+    end

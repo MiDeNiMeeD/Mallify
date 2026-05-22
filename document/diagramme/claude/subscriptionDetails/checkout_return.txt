@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant V as I:SubscriptionPlansView
+    participant Auth as C:AuthContext
+    participant API as C:ApiClient
+    participant C as C:SubscriptionController
+    participant EB as E:BoutiqueSubscription
+
+    rect rgb(255, 235, 235)
+    Note over U,EB: Retour de Stripe Checkout (gestion URL params)
+    activate V
+    U->>V: Charger /subscription avec ?checkout=success OU ?checkout=cancel
+    V->>V: useEffect → URLSearchParams (checkout, session_id, boutiqueId)
+    alt checkoutStatus absent
+        Note over V: Aucune action
+    else checkoutStatus == "success"
+        V-->>U: Toast "Payment completed. Confirming your subscription..."
+        V->>Auth: refreshSubscriptionAccess()
+        Auth->>API: getBoutiqueSubscriptionAccess(boutiqueId)
+        API->>C: GET /api/boutiques/{boutiqueId}/subscription/access
+        activate C
+        C->>EB: findOne({boutiqueId})
+        activate EB
+        EB-->>C: subscription (idéalement déjà "active" via webhook)
+        deactivate EB
+        C-->>API: {hasManagementAccess, subscription}
+        deactivate C
+        API-->>Auth: response
+        Auth-->>V: subscriptionAccess mis à jour
+        V-->>U: Stats "Management Access: Active" + currentPeriodEnd affiché
+    else checkoutStatus == "cancel"
+        V-->>U: Toast "Checkout canceled. No charge was made"
+    end
+    V->>V: params.delete("checkout"), delete("session_id"), delete("boutiqueId")
+    V->>V: window.history.replaceState (URL propre sans params Stripe)
+    deactivate V
+    end

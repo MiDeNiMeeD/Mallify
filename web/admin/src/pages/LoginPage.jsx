@@ -75,7 +75,6 @@ const LoginPage = () => {
             <div className="card-header2">
               <div>
                 <h1>Sign in</h1>
-                <p className="role-badge2">Admin Portal</p>
               </div>
               <button className="google-sign-btn2" onClick={handleGoogleSignIn}>
                 <span className="google-text2">Sign with</span>

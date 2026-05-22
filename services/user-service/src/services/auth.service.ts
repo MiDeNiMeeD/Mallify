@@ -17,7 +17,7 @@ import { sendEmail } from '../utils/email';
 import { setCache, deleteCache } from '../config/redis';
 
 interface RegisterData {
-  name: string;
+  name?: string;
   email: string;
   password: string;
   phone?: string;
@@ -25,14 +25,37 @@ interface RegisterData {
   skipEmailVerification?: boolean; // For service-to-service calls
 }
 
+// Derive a friendly display name from an email's local part.
+// "ahmed.benali_92@example.com" -> "Ahmed Benali"
+const deriveNameFromEmail = (email: string): string => {
+  const local = (email.split('@')[0] || '').replace(/[._\-+]+/g, ' ').replace(/\d+/g, '').trim();
+  if (!local) return 'User';
+  return local
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(' ');
+};
+
+// Standard avatar generated from the user's name — colored background with
+// initials. Free, no auth, returns a stable image for the same name.
+const defaultProfileImageFor = (name: string): string => {
+  const seed = encodeURIComponent(name || 'User');
+  return `https://ui-avatars.com/api/?name=${seed}&background=000000&color=ffffff&size=256&bold=true`;
+};
+
 interface LoginResponse {
   user: Partial<IUser>;
   accessToken: string;
   refreshToken: string;
 }
 
+type CreateUserInput = RegisterData & {
+  isEmailVerified?: boolean;
+  profileImage?: string;
+};
+
 export class AuthService {
-  private async createUserByRole(data: RegisterData & { isEmailVerified?: boolean }): Promise<IUser> {
+  private async createUserByRole(data: CreateUserInput): Promise<IUser> {
     switch (data.role) {
       case UserRole.CLIENT:
         return Client.create(data);
@@ -94,15 +117,23 @@ export class AuthService {
       throw new ConflictError('Email already registered');
     }
 
+    // Email/password signups don't collect a name in the UI — derive it from
+    // the email's local part. Social logins (Google/Facebook) pass a real name
+    // via the separate socialLogin path, so they're unaffected.
+    const resolvedName = data.name?.trim() || deriveNameFromEmail(normalizedEmail);
+
     const registerData: RegisterData = {
       ...data,
       email: normalizedEmail,
+      name: resolvedName,
     };
 
     // Skip email verification if requested (for service-to-service calls)
     if (registerData.skipEmailVerification) {
       const user = await this.createUserByRole({
         ...registerData,
+        name: resolvedName,
+        profileImage: defaultProfileImageFor(resolvedName),
         isEmailVerified: true,
       });
 
@@ -126,7 +157,7 @@ export class AuthService {
         type: 'verification',
         expiresAt,
         pendingRegistration: {
-          name: registerData.name,
+          name: resolvedName,
           password: registerData.password,
           phone: registerData.phone,
           role: registerData.role,
@@ -399,6 +430,7 @@ export class AuthService {
         password: pending.password,
         phone: pending.phone,
         role: pending.role as UserRole,
+        profileImage: defaultProfileImageFor(pending.name),
         isEmailVerified: true,
       });
     }

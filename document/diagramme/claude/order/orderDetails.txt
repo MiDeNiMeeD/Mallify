@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V3 as I:CheckoutView
+    participant V4 as I:ShippingAddressView
+    participant V5 as I:ChooseShippingView
+    participant V6 as I:OrderView
+    participant V7 as I:MainTabs
+    participant M as I:SuccessModal
+    participant SVC as C:ShopApi
+    participant CO as C:OrderController
+    participant CC as C:CartController
+    participant CA as C:AddressController
+    participant EO as E:Order
+    participant EC as E:Cart
+    participant EA as E:Address
+
+    Note over U,EA: Flux complet Commande / Checkout (MVC)
+
+    Note right of U: voir orderDetails/load_checkout.txt
+    ref over U,V3,SVC,CC,CA,EC,EA: Chargement de l'écran Checkout
+
+    opt Modifier l'adresse
+        Note right of U: voir orderDetails/edit_address.txt
+        ref over U,V3,V4: Modifier l'adresse de livraison
+    end
+
+    opt Modifier la livraison
+        Note right of U: voir orderDetails/choose_shipping.txt
+        ref over U,V3,V5: Choisir la méthode de livraison
+    end
+
+    opt Code promo
+        Note right of U: voir orderDetails/promo_code.txt
+        ref over U,V3: Saisie d'un code promo (UI seulement)
+    end
+
+    Note right of U: voir orderDetails/confirm_order.txt
+    ref over U,V3,M,V6,V7,SVC,CO,CC,EO,EC: Confirmation de la commande

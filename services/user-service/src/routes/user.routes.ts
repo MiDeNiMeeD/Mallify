@@ -31,6 +31,41 @@ router.get(
 router.get('/profile', authenticate, userController.getProfile);
 
 /**
+ * @route   PUT /api/users/profile
+ * @desc    Update user profile
+ * @access  Private
+ */
+router.put('/profile', authenticate, validate(updateProfileSchema), userController.updateProfile);
+
+/**
+ * @route   POST /api/users/addresses
+ * @desc    Add new address
+ * @access  Private
+ */
+router.post('/addresses', authenticate, validate(addAddressSchema), userController.addAddress);
+
+/**
+ * @route   PUT /api/users/addresses/:addressId
+ * @desc    Update address
+ * @access  Private
+ */
+router.put('/addresses/:addressId', authenticate, validate(updateAddressSchema), userController.updateAddress);
+
+/**
+ * @route   DELETE /api/users/addresses/:addressId
+ * @desc    Delete address
+ * @access  Private
+ */
+router.delete('/addresses/:addressId', authenticate, userController.deleteAddress);
+
+/**
+ * @route   POST /api/users/deactivate
+ * @desc    Deactivate user account
+ * @access  Private
+ */
+router.post('/deactivate', authenticate, userController.deactivateAccount);
+
+/**
  * @route   GET /api/users/buyers/:userId/basic
  * @desc    Get buyer basic profile (name/email/phone) for order views
  * @access  Private (Admin, Managers, Boutique Owner)
@@ -77,41 +112,6 @@ router.delete(
   authorize(UserRole.ADMIN, UserRole.DELIVERY_MANAGER, UserRole.BOUTIQUES_MANAGER),
   userController.deleteUserById
 );
-
-/**
- * @route   PUT /api/users/profile
- * @desc    Update user profile
- * @access  Private
- */
-router.put('/profile', authenticate, validate(updateProfileSchema), userController.updateProfile);
-
-/**
- * @route   POST /api/users/addresses
- * @desc    Add new address
- * @access  Private
- */
-router.post('/addresses', authenticate, validate(addAddressSchema), userController.addAddress);
-
-/**
- * @route   PUT /api/users/addresses/:addressId
- * @desc    Update address
- * @access  Private
- */
-router.put('/addresses/:addressId', authenticate, validate(updateAddressSchema), userController.updateAddress);
-
-/**
- * @route   DELETE /api/users/addresses/:addressId
- * @desc    Delete address
- * @access  Private
- */
-router.delete('/addresses/:addressId', authenticate, userController.deleteAddress);
-
-/**
- * @route   POST /api/users/deactivate
- * @desc    Deactivate user account
- * @access  Private
- */
-router.post('/deactivate', authenticate, userController.deactivateAccount);
 
 /**
  * @route   PUT /api/users/:userId/application-status

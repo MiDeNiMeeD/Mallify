@@ -1,0 +1,77 @@
+---
+config:
+  theme: redux
+---
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant V@{ "type": "boundary" } as SubscriptionPlansView
+    participant API@{ "type": "control" } as ApiClient
+    participant C@{ "type": "control" } as SubscriptionController
+    participant EP@{ "type": "entity" } as SubscriptionPlan
+    participant EB@{ "type": "entity" } as BoutiqueSubscription
+    participant ST as Service:Stripe
+
+    activate V
+    U->>V: Cliquer "Get started" (handleSubscribe)
+    V->>V: setSelectedPlanId(plan._id)
+    alt !boutiqueId OU !planId
+        V-->>U: Toast "Boutique profile is missing"
+    else IDs présents
+        V->>V: setProcessing(true), bouton "Processing..."
+
+        V->>API: createSubscriptionCheckoutSession(boutiqueId, {planId, billingInterval})
+        activate API
+        API->>C: POST /api/boutiques/{boutiqueId}/subscription/checkout-session
+        activate C
+        C->>EP: findOne({_id:planId, isActive:true})
+        activate EP
+        EP-->>C: plan
+        deactivate EP
+        alt plan absent
+            C-->>API: HTTP 404 "Plan not found"
+        else stripe non configuré
+            C-->>API: HTTP 500 "Stripe is not configured"
+        else OK
+            C->>C: selectedAmount = billingInterval === "yearly" ? yearlyPrice : monthlyPrice
+            C->>C: stripeInterval = "year" | "month"
+            C->>ST: checkout.sessions.create({mode:"subscription", customer_email, success_url, cancel_url, client_reference_id, <br>metadata:{boutiqueId, ownerId, planId, billingInterval}, line_items:[{price_data:{unit_amount, recurring}}]})
+            activate ST
+            ST-->>C: session {id, url, ...}
+            deactivate ST
+            C->>EB: findOneAndUpdate({boutiqueId}, {status:"pending_payment", planId, billingInterval, amount, currency:"stripe", stripeCheckoutSessionId}, {upsert:true})
+            activate EB
+            EB-->>C: subscription (pending)
+            deactivate EB
+            alt session.url absent
+                C-->>API: HTTP 500 "Failed to create Stripe Checkout URL"
+            else
+                C-->>API: HTTP 200 {data:{sessionId, checkoutUrl, amount, currency}}
+            end
+        end
+        deactivate C
+        API-->>V: response (ou throw)
+        deactivate API
+
+        alt Erreur ou checkoutUrl absent
+            V-->>U: Toast d'erreur
+        else Succès
+            V->>V: window.location.href = checkoutUrl
+            U->>ST: Page Stripe Checkout (saisie CB, 3DS si nécessaire)
+            alt Paiement annulé / fermé
+                ST-->>U: Redirect vers cancel_url (?checkout=cancel&boutiqueId=...)
+            else Paiement réussi
+                par En parallèle
+                    ST-->>C: POST webhook (event "checkout.session.completed")
+                    C->>C: stripeClient.webhooks.constructEvent (vérif signature)
+                    C->>EB: activer (status:"active", currentPeriodStart, currentPeriodEnd, stripeSubscriptionId)
+                    EB-->>C: OK
+                    C-->>ST: HTTP 200 {received:true}
+                and
+                    ST-->>U: Redirect vers success_url (?checkout=success&session_id=...)
+                end
+            end
+        end
+        V->>V: setProcessing(false)
+    end
+    deactivate V

@@ -2,7 +2,9 @@ import Joi from 'joi';
 import { UserRole } from '@mallify/shared';
 
 export const registerSchema = Joi.object({
-  name: Joi.string().min(2).max(100).required(),
+  // Email/password signups derive the display name from the email's local part.
+  // Clients may still send a name (e.g. social-style flows) and we'll prefer it.
+  name: Joi.string().min(2).max(100).optional(),
   email: Joi.string().email().required(),
   password: Joi.string()
     .min(8)

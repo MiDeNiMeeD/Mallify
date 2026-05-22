@@ -1,0 +1,37 @@
+sequenceDiagram
+    autonumber
+    actor U as Boutique (utilisateur)
+    participant V as I:SubscriptionPlansView
+    participant Auth as C:AuthContext
+    participant API as C:ApiClient
+    participant C as C:SubscriptionController
+    participant EP as E:SubscriptionPlan
+    participant EB as E:BoutiqueSubscription
+    participant ST as S:Stripe
+
+    Note over U,ST: Flux complet "Sélection plan + paiement Stripe" (MVC + backend)
+
+    Note right of U: voir subscriptionDetails/load_plans.txt
+    ref over U,V,Auth,API,C,EP,EB: Chargement plans + subscription access
+
+    opt Retour depuis Stripe Checkout (URL ?checkout=...)
+        Note right of U: voir subscriptionDetails/checkout_return.txt
+        ref over U,V,Auth,API,C,EB: Traitement params success/cancel + cleanup URL
+    end
+
+    opt Changer l'intervalle
+        Note right of U: voir subscriptionDetails/select_billing.txt
+        ref over U,V: Monthly / Yearly
+    end
+
+    alt Pas encore abonné — Nouvel abonnement
+        Note right of U: voir subscriptionDetails/subscribe_stripe.txt
+        ref over U,V,API,C,EP,EB,ST: Stripe Checkout (redirection + paiement + webhook)
+    else Déjà abonné — Upgrade vers plan supérieur
+        Note right of U: voir subscriptionDetails/upgrade_plan.txt
+        ref over U,V,API,C,EB: Upgrade direct (crédit proration)
+    else Déjà abonné — Plan courant
+        Note over V: Badge "Current Plan", bouton désactivé
+    else Déjà abonné — Plan de tier inférieur
+        Note over V: isLowerTier → aucun bouton (downgrade interdit)
+    end

@@ -52,7 +52,7 @@ export const outOfStockProducts = products.filter(p => p.stock === 0);
 
 export const promotions = [
   { id: "PROMO-001", name: "Spring Sale 2026", type: "Seasonal", discount: "20%", code: "SPRING20", startDate: "2026-03-01", endDate: "2026-03-31", status: "scheduled", uses: 0, maxUses: 1000 },
-  { id: "PROMO-002", name: "Valentine's Special", type: "Holiday", discount: "$15 off", code: "LOVE15", startDate: "2026-02-10", endDate: "2026-02-15", status: "active", uses: 278, maxUses: 500 },
+  { id: "PROMO-002", name: "Valentine's Special", type: "Holiday", discount: "15 DT off", code: "LOVE15", startDate: "2026-02-10", endDate: "2026-02-15", status: "active", uses: 278, maxUses: 500 },
   { id: "PROMO-003", name: "New Customer Discount", type: "Welcome", discount: "10%", code: "WELCOME10", startDate: "2026-01-01", endDate: "2026-12-31", status: "active", uses: 456, maxUses: 0 },
   { id: "PROMO-004", name: "Flash Sale Weekend", type: "Flash Sale", discount: "30%", code: "FLASH30", startDate: "2026-02-08", endDate: "2026-02-09", status: "expired", uses: 523, maxUses: 500 },
   { id: "PROMO-005", name: "Buy 2 Get 1 Free", type: "BOGO", discount: "BOGO", code: "BOGO2026", startDate: "2026-02-01", endDate: "2026-02-28", status: "active", uses: 189, maxUses: 300 },

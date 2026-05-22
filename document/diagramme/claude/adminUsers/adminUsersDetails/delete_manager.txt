@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant V as I:ManagersUsersView
+    participant T as I:Toast
+    participant API as C:ApiClient
+    participant C as C:UserController
+    participant EU as E:User
+
+    rect rgb(255, 235, 235)
+    Note over A,EU: Suppression d'un manager
+    activate V
+    A->>V: Cliquer l'icône poubelle (handleDeleteManager)
+    V->>V: setPendingDeleteId(managerId)
+    V->>T: setToast(warning + actions Cancel/Confirm)
+    activate T
+    T-->>A: Toast "Delete this manager? This action cannot be undone"
+    alt Annuler
+        A->>T: Cliquer "Cancel"
+        T->>V: closeToast()
+        V->>V: setPendingDeleteId(null) + reset toast
+    else Confirmer
+        A->>T: Cliquer "Confirm"
+        T->>V: confirmDeleteManager()
+        deactivate T
+        V->>API: deleteUser(pendingDeleteId)
+        activate API
+        API->>C: DELETE /api/users/{id}
+        activate C
+        C->>EU: supprimer User
+        activate EU
+        EU-->>C: OK
+        deactivate EU
+        alt Erreur
+            C-->>API: HTTP 4xx/5xx
+            API-->>V: throw
+            V-->>A: Toast "Failed to delete manager"
+        else Succès
+            C-->>API: HTTP 200
+            API-->>V: OK
+            V->>V: setManagers(filter(_id != pendingDeleteId))
+            V-->>A: Toast "Manager deleted successfully"
+        end
+        deactivate C
+        deactivate API
+        V->>V: setPendingDeleteId(null)
+    end
+    deactivate V
+    end

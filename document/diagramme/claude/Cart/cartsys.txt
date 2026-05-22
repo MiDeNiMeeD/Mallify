@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    Note over U,S: Flux complet du panier
+
+    Note right of U: voir cartsys/add_to_cart.txt
+    ref over U,S: Ajout d'un produit au panier
+
+    Note right of U: voir cartsys/view_cart.txt
+    ref over U,S: Affichage du panier
+
+    opt Actions sur les items
+        Note right of U: voir cartsys/update_quantity.txt
+        ref over U,S: Modification de la quantité
+        Note right of U: voir cartsys/remove_item.txt
+        ref over U,S: Suppression d'un item
+    end
+
+    opt Aller au paiement
+        U->>S: Cliquer "Checkout"
+        S-->>U: Naviguer vers Checkout (voir ordersys.txt)
+    end

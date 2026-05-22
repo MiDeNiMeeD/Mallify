@@ -30,6 +30,7 @@ import {
   FiCreditCard
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { useChat } from '../../chat';
 import './Sidebar.css';
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
@@ -38,6 +39,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, hasManagementAccess, subscriptionAccess } = useAuth();
+  const { totalUnread } = useChat();
 
   const handleLogout = () => {
     logout();
@@ -142,11 +144,12 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       ]
     },
     
-    { 
-      icon: FiMessageSquare, 
+    {
+      icon: FiMessageSquare,
       label: 'Communication',
+      badge: totalUnread,
       children: [
-        { path: '/communication/customers', icon: FiUsers, label: 'Customer Messages' },
+        { path: '/communication/customers', icon: FiUsers, label: 'Customer Messages', badge: totalUnread },
         { path: '/communication/reviews', icon: FiStar, label: 'Reviews & Ratings' }
       ]
     }
@@ -213,7 +216,14 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                     title={collapsed ? item.label : ''}
                     disabled={parentLocked}
                   >
-                    <item.icon size={20} className="nav-icon" />
+                    <span className="nav-icon-wrap">
+                      <item.icon size={20} className="nav-icon" />
+                      {item.badge > 0 && (
+                        <span className="nav-badge">
+                          {item.badge > 99 ? '99+' : item.badge}
+                        </span>
+                      )}
+                    </span>
                     {!collapsed && (
                       <>
                         <span className="nav-label">{item.label}</span>
@@ -246,6 +256,11 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                         >
                           <child.icon size={18} className="nav-icon" />
                           <span className="nav-label">{child.label}</span>
+                          {child.badge > 0 && (
+                            <span className="nav-badge nav-badge-inline">
+                              {child.badge > 99 ? '99+' : child.badge}
+                            </span>
+                          )}
                         </NavLink>
                       ))}
                     </div>

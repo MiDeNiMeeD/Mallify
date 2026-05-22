@@ -1,0 +1,50 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant SVC as C:ShopApi
+    participant Cache as E:ProfileCache
+    participant C as C:UserController
+    participant EU as E:User
+
+    rect rgb(230, 244, 255)
+    Note over U,EU: Chargement de l'écran Edit Profile
+    activate V
+    U->>V: Naviguer vers Edit Profile
+    V->>SVC: getCachedProfile()
+    activate SVC
+    SVC->>Cache: lire cachedProfile
+    Cache-->>SVC: profil cached (ou null)
+    SVC-->>V: cached
+    deactivate SVC
+    alt cached présent
+        V->>V: useMemo(cachedSeed) → pré-remplir tous les champs
+        V-->>U: Formulaire affiché immédiatement
+    else cached null
+        V->>V: setIsLoadingProfile(true)
+        V-->>U: Loader "Loading profile..."
+    end
+
+    V->>V: useEffect → loadProfile()
+    V->>SVC: fetchMyProfile()
+    activate SVC
+    SVC->>C: GET /users/profile (auth)
+    activate C
+    C->>EU: récupérer(userId du token)
+    activate EU
+    EU-->>C: User document
+    deactivate EU
+    C-->>SVC: HTTP 200 {data:{user}}
+    deactivate C
+    SVC->>Cache: cachedProfile = profile
+    SVC-->>V: profile
+    deactivate SVC
+    alt Erreur
+        V-->>U: Conserver champs courants (catch silencieux)
+    else Succès
+        V->>V: setFullName / setNickname / setEmail / setPhone / setCity / setGender / setDateOfBirth / setProfileImage
+    end
+    V->>V: setIsLoadingProfile(false)
+    V-->>U: Formulaire à jour (email en lecture seule)
+    deactivate V
+    end

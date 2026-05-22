@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V as I:EditProfileView
+    participant M as I:CityPickerModal
+
+    rect rgb(230, 255, 230)
+    Note over U,M: Sélectionner la ville
+    activate V
+    U->>V: Cliquer le champ "City"
+    V->>M: setShowCityPicker(true)
+    activate M
+    M-->>U: Liste de 24 villes (Tunis, Ariana, Ben Arous, ...)
+    U->>M: Choisir une ville (cityOption)
+    M->>V: setCity(cityOption)
+    M->>V: setShowCityPicker(false)
+    deactivate M
+    V-->>U: Champ affiche la ville sélectionnée
+    deactivate V
+    end

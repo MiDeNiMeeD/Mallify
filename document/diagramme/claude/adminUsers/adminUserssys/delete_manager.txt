@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant S as Système
+
+    rect rgb(255, 235, 235)
+    Note over A,S: Suppression d'un manager
+    A->>S: Cliquer l'icône poubelle
+    S->>S: setPendingDeleteId(managerId)
+    S-->>A: Toast "Delete this manager? This action cannot be undone" + boutons Cancel / Confirm
+    alt Annuler
+        A->>S: Cliquer "Cancel"
+        S->>S: setPendingDeleteId(null), fermer le toast
+    else Confirmer
+        A->>S: Cliquer "Confirm"
+        S->>S: DELETE /api/users/{managerId}
+        alt Erreur
+            S-->>A: Toast "Failed to delete manager"
+        else Succès
+            S->>S: Filtrer localement (managers.filter(m._id != id))
+            S-->>A: Toast "Manager deleted successfully"
+        end
+        S->>S: setPendingDeleteId(null)
+    end
+    end

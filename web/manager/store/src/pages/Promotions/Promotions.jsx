@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FiEdit2, FiPlusCircle, FiRefreshCw, FiTrash2 } from 'react-icons/fi';
+import { FiEdit2, FiPlusCircle, FiRefreshCw, FiTrash2, FiDollarSign, FiPackage, FiCheckCircle, FiXCircle, FiArchive, FiSave, FiList, FiSettings } from 'react-icons/fi';
 import apiClient from '../../api/apiClient';
 import '../../styles/Dashboard.css';
 import './Promotions.css';
@@ -168,7 +168,7 @@ const Promotions = () => {
         <div>
           <h1 className="page-title">Subscription Plans Management</h1>
           <p className="page-subtitle">
-            Configure the 3 boutique plans from database and control pricing/features from one place.
+            Configure the boutique plans from database and control pricing/features from one place.
           </p>
         </div>
         <div className="page-actions">
@@ -182,51 +182,89 @@ const Promotions = () => {
       </div>
 
       {error && (
-        <section className="content-card" style={{ marginBottom: '1rem' }}>
-          <div className="card-body" style={{ color: '#b91c1c' }}>{error}</div>
+        <section className="content-card" style={{ marginBottom: '1rem', border: '2px solid #FEE2E2', background: '#FFF5F5' }}>
+          <div className="card-body" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#991B1B' }}>
+            <FiXCircle size={20} />
+            <span>{error}</span>
+          </div>
         </section>
       )}
 
-      <section className="content-card" style={{ marginBottom: '1rem' }}>
-        <div className="card-header">
+      {/* Existing Plans Table */}
+      <section className="content-card" style={{ marginBottom: '2rem', overflow: 'hidden' }}>
+        <div className="card-header" style={{ paddingBottom: '1.25rem', borderBottom: '2px solid #F3F4F6', marginBottom: 0 }}>
           <div>
-            <h3 className="card-title">Existing Plans</h3>
-            <p className="card-kicker">Loaded from database</p>
+            <p className="card-kicker" style={{ color: '#7C3AED' }}>Database Records</p>
+            <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <FiList color="#7C3AED" /> Existing Plans
+            </h3>
           </div>
+          <span className="report-count" style={{ fontSize: '0.85rem', color: '#6B7280', background: '#F9FAFB', padding: '0.35rem 0.75rem', borderRadius: '8px' }}>
+            {orderedPlans.length} plan{orderedPlans.length !== 1 ? 's' : ''}
+          </span>
         </div>
-        <div className="card-body" style={{ overflowX: 'auto' }}>
+        <div style={{ overflowX: 'auto' }}>
           {loading ? (
-            <p>Loading plans...</p>
+            <div style={{ padding: '2rem', textAlign: 'center', color: '#6B7280' }}>
+              <div className="spinner" style={{ margin: '0 auto 1rem' }} />
+              <p>Loading plans...</p>
+            </div>
           ) : (
-            <table>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Code</th>
-                  <th>Monthly</th>
-                  <th>Yearly</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                <tr style={{ background: 'linear-gradient(135deg, #7C3AED, #5B21B6)' }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', color: 'white', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Name</th>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', color: 'white', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Code</th>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', color: 'white', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Monthly</th>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', color: 'white', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Yearly</th>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', color: 'white', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</th>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'center', color: 'white', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {orderedPlans.map((plan) => (
-                  <tr key={plan._id}>
-                    <td>{plan.name}</td>
-                    <td>{plan.code}</td>
-                    <td>{plan.monthlyPrice} {plan.currency}</td>
-                    <td>{plan.yearlyPrice} {plan.currency}</td>
-                    <td>{plan.isActive ? 'Active' : 'Archived'}</td>
-                    <td>
-                      <button type="button" className="btn btn-secondary" onClick={() => handleSelectPlan(plan._id)}>
-                        <FiEdit2 /> Edit
+                {orderedPlans.map((plan, i) => (
+                  <tr key={plan._id} style={{ 
+                    borderBottom: i < orderedPlans.length - 1 ? '1px solid #F3F4F6' : 'none',
+                    transition: 'background 0.2s ease',
+                    cursor: 'pointer'
+                  }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = '#FAFAFA'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <td style={{ padding: '0.875rem 1.25rem', fontWeight: 600, color: '#111827', fontSize: '0.9rem' }}>{plan.name}</td>
+                    <td style={{ padding: '0.875rem 1.25rem', color: '#6B7280', fontSize: '0.85rem', fontFamily: 'monospace' }}>{plan.code}</td>
+                    <td style={{ padding: '0.875rem 1.25rem', fontWeight: 600, color: '#059669', fontSize: '0.9rem' }}>${plan.monthlyPrice} <span style={{ fontWeight: 400, color: '#9CA3AF', fontSize: '0.75rem' }}>{plan.currency}</span></td>
+                    <td style={{ padding: '0.875rem 1.25rem', fontWeight: 600, color: '#2563EB', fontSize: '0.9rem' }}>${plan.yearlyPrice} <span style={{ fontWeight: 400, color: '#9CA3AF', fontSize: '0.75rem' }}>{plan.currency}</span></td>
+                    <td style={{ padding: '0.875rem 1.25rem' }}>
+                      <span style={{ 
+                        padding: '0.35rem 0.85rem', 
+                        borderRadius: '8px', 
+                        fontSize: '0.75rem', 
+                        fontWeight: 600,
+                        background: plan.isActive ? '#D1FAE5' : '#FEF3C7',
+                        color: plan.isActive ? '#065F46' : '#92400E',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem'
+                      }}>
+                        {plan.isActive ? <FiCheckCircle size={12} /> : <FiArchive size={12} />}
+                        {plan.isActive ? 'Active' : 'Archived'}
+                      </span>
+                    </td>
+                    <td style={{ padding: '0.875rem 1.25rem', textAlign: 'center' }}>
+                      <button type="button" className="btn btn-secondary" onClick={() => handleSelectPlan(plan._id)}
+                        style={{ padding: '0.4rem 0.85rem', fontSize: '0.75rem', borderRadius: '8px', background: '#F3F4F6', border: '1px solid #E5E7EB', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontWeight: 600, color: '#374151' }}>
+                        <FiEdit2 size={12} /> Edit
                       </button>
                     </td>
                   </tr>
                 ))}
                 {!orderedPlans.length && (
                   <tr>
-                    <td colSpan={6}>No plans found.</td>
+                    <td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: '#9CA3AF' }}>
+                      <FiPackage size={32} style={{ opacity: 0.3, marginBottom: '0.5rem' }} />
+                      <p>No plans found. Create your first plan to get started.</p>
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -235,19 +273,33 @@ const Promotions = () => {
         </div>
       </section>
 
-      <section className="plan-editor content-card">
-        <div className="card-header">
+      {/* Plan Editor */}
+      <section className="plan-editor content-card" style={{ borderTop: '4px solid #7C3AED' }}>
+        <div className="card-header" style={{ paddingBottom: '1.25rem', borderBottom: '2px solid #F3F4F6', marginBottom: '1.5rem' }}>
           <div>
-            <p className="card-kicker">Plan Editor</p>
-            <h3 className="card-title">{editingPlanId === 'new' ? 'Create Plan' : 'Update Plan'}</h3>
+            <p className="card-kicker" style={{ color: '#7C3AED' }}>Plan Editor</p>
+            <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <FiSettings color="#7C3AED" /> {editingPlanId === 'new' ? 'Create New Plan' : 'Update Plan'}
+            </h3>
           </div>
-          <button type="button" className="btn btn-primary" onClick={handleSave} disabled={saving}>
-            {saving ? 'Saving...' : 'Save Plan'}
-          </button>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            {editingPlanId !== 'new' && (
+              <button type="button" className="btn btn-secondary" onClick={handleDelete} disabled={saving}
+                style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', borderRadius: '10px', background: '#FEE2E2', border: '1px solid #FECACA', color: '#991B1B', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
+                <FiTrash2 size={14} /> Archive
+              </button>
+            )}
+            <button type="button" className="btn btn-primary" onClick={handleSave} disabled={saving}
+              style={{ padding: '0.6rem 1.25rem', fontSize: '0.85rem', borderRadius: '10px', background: 'linear-gradient(135deg, #7C3AED, #5B21B6)', color: 'white', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, opacity: saving ? 0.7 : 1 }}>
+              {saving ? <><FiRefreshCw className="spinning" size={14} /> Saving...</> : <><FiSave size={14} /> Save Plan</>}
+            </button>
+          </div>
         </div>
-        <div className="plan-editor__controls">
-          <label htmlFor="planSelector">Plan</label>
-          <select id="planSelector" value={editingPlanId} onChange={(e) => handleSelectPlan(e.target.value)}>
+
+        <div className="plan-editor__controls" style={{ marginBottom: '1.75rem' }}>
+          <label htmlFor="planSelector" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#374151' }}>Select Plan</label>
+          <select id="planSelector" value={editingPlanId} onChange={(e) => handleSelectPlan(e.target.value)}
+            style={{ borderRadius: '10px', border: '2px solid #E5E7EB', padding: '0.6rem 1rem', fontSize: '0.875rem', background: '#F9FAFB', color: '#111827', outline: 'none', cursor: 'pointer', flex: 1, maxWidth: '300px' }}>
             <option value="new">+ Create new plan</option>
             {orderedPlans.map((plan) => (
               <option key={`edit-${plan._id}`} value={plan._id}>
@@ -255,66 +307,72 @@ const Promotions = () => {
               </option>
             ))}
           </select>
-          {editingPlanId !== 'new' && (
-            <button type="button" className="btn btn-secondary" onClick={handleDelete} disabled={saving}>
-              <FiTrash2 /> Archive Plan
-            </button>
-          )}
         </div>
+
         <div className="plan-editor__grid">
           <div className="plan-editor__field">
-            <label htmlFor="planName">Name</label>
-            <input id="planName" type="text" value={form.name} onChange={(e) => handleFormChange('name', e.target.value)} />
+            <label htmlFor="planName">Plan Name</label>
+            <input id="planName" type="text" value={form.name} onChange={(e) => handleFormChange('name', e.target.value)} 
+              placeholder="e.g. Premium Plan" />
           </div>
           <div className="plan-editor__field">
             <label htmlFor="planCode">Code</label>
-            <input id="planCode" type="text" value={form.code} onChange={(e) => handleFormChange('code', e.target.value)} />
+            <input id="planCode" type="text" value={form.code} onChange={(e) => handleFormChange('code', e.target.value)} 
+              placeholder="e.g. premium" />
           </div>
           <div className="plan-editor__field">
-            <label htmlFor="planMonthly">Monthly Price</label>
-            <input id="planMonthly" type="number" min="0" value={form.monthlyPrice} onChange={(e) => handleFormChange('monthlyPrice', e.target.value)} />
+            <label htmlFor="planMonthly">Monthly Price ($)</label>
+            <input id="planMonthly" type="number" min="0" step="0.01" value={form.monthlyPrice} onChange={(e) => handleFormChange('monthlyPrice', e.target.value)} 
+              placeholder="0.00" />
           </div>
           <div className="plan-editor__field">
-            <label htmlFor="planYearly">Yearly Price</label>
-            <input id="planYearly" type="number" min="0" value={form.yearlyPrice} onChange={(e) => handleFormChange('yearlyPrice', e.target.value)} />
+            <label htmlFor="planYearly">Yearly Price ($)</label>
+            <input id="planYearly" type="number" min="0" step="0.01" value={form.yearlyPrice} onChange={(e) => handleFormChange('yearlyPrice', e.target.value)} 
+              placeholder="0.00" />
           </div>
           <div className="plan-editor__field">
             <label htmlFor="planCurrency">Currency</label>
-            <input id="planCurrency" type="text" value={form.currency} onChange={(e) => handleFormChange('currency', e.target.value)} />
+            <input id="planCurrency" type="text" value={form.currency} onChange={(e) => handleFormChange('currency', e.target.value)} 
+              placeholder="USD" />
           </div>
           <div className="plan-editor__field">
             <label htmlFor="planOrder">Display Order</label>
             <input id="planOrder" type="number" min="1" value={form.displayOrder} onChange={(e) => handleFormChange('displayOrder', e.target.value)} />
           </div>
           <div className="plan-editor__field">
-            <label htmlFor="planMaxProducts">Max Products (blank = unlimited)</label>
-            <input id="planMaxProducts" type="number" min="0" value={form.maxProducts} onChange={(e) => handleFormChange('maxProducts', e.target.value)} />
+            <label htmlFor="planMaxProducts">Max Products</label>
+            <input id="planMaxProducts" type="number" min="0" value={form.maxProducts} onChange={(e) => handleFormChange('maxProducts', e.target.value)} 
+              placeholder="Blank = unlimited" />
+          </div>
+          <div className="plan-editor__field">
+            <label>Status</label>
+            <div style={{ display: 'flex', gap: '1rem', padding: '0.75rem', background: '#F9FAFB', borderRadius: '10px', border: '2px solid #E5E7EB' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#374151' }}>
+                <input type="checkbox" checked={form.isActive} onChange={(e) => handleFormChange('isActive', e.target.checked)} 
+                  style={{ width: '16px', height: '16px', accentColor: '#7C3AED' }} />
+                Active
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#374151' }}>
+                <input type="checkbox" checked={form.prioritySupport} onChange={(e) => handleFormChange('prioritySupport', e.target.checked)} 
+                  style={{ width: '16px', height: '16px', accentColor: '#7C3AED' }} />
+                Priority Support
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#374151' }}>
+                <input type="checkbox" checked={form.advancedAnalytics} onChange={(e) => handleFormChange('advancedAnalytics', e.target.checked)} 
+                  style={{ width: '16px', height: '16px', accentColor: '#7C3AED' }} />
+                Advanced Analytics
+              </label>
+            </div>
           </div>
           <div className="plan-editor__field plan-editor__field--full">
             <label htmlFor="planDescription">Description</label>
-            <textarea id="planDescription" rows={3} value={form.description} onChange={(e) => handleFormChange('description', e.target.value)} />
+            <textarea id="planDescription" rows={3} value={form.description} onChange={(e) => handleFormChange('description', e.target.value)} 
+              placeholder="Describe what this plan offers..." style={{ minHeight: '80px' }} />
           </div>
           <div className="plan-editor__field plan-editor__field--full">
             <label htmlFor="planFeatures">Features (one per line)</label>
-            <textarea id="planFeatures" rows={4} value={form.featuresText} onChange={(e) => handleFormChange('featuresText', e.target.value)} />
-          </div>
-          <div className="plan-editor__field">
-            <label>
-              <input type="checkbox" checked={form.prioritySupport} onChange={(e) => handleFormChange('prioritySupport', e.target.checked)} />
-              Priority Support
-            </label>
-          </div>
-          <div className="plan-editor__field">
-            <label>
-              <input type="checkbox" checked={form.advancedAnalytics} onChange={(e) => handleFormChange('advancedAnalytics', e.target.checked)} />
-              Advanced Analytics
-            </label>
-          </div>
-          <div className="plan-editor__field">
-            <label>
-              <input type="checkbox" checked={form.isActive} onChange={(e) => handleFormChange('isActive', e.target.checked)} />
-              Active
-            </label>
+            <textarea id="planFeatures" rows={4} value={form.featuresText} onChange={(e) => handleFormChange('featuresText', e.target.value)} 
+              placeholder={`Up to 500 products&#10;Priority support&#10;Advanced analytics`} style={{ minHeight: '120px' }} />
           </div>
         </div>
       </section>

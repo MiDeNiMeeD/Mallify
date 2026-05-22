@@ -1,0 +1,12 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(255, 235, 235)
+    Note over U,S: Saisie d'un code promo
+    U->>S: Saisir un code promo
+    U->>S: Cliquer "Apply"
+    Note over S: ⚠️ Implémentation actuelle : console.log uniquement<br/>(aucun appel API, aucune réduction appliquée)
+    S-->>U: Pas de feedback visible
+    end

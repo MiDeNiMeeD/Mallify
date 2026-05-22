@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(245, 230, 255)
+    Note over U,S: Choisir la méthode de livraison
+    U->>S: Cliquer la carte "Choose Shipping"
+    S-->>U: Afficher l'écran ChooseShipping (avec selectedShippingId)
+    U->>S: Sélectionner un type (Regular / Express / etc.)
+    S-->>U: Retour à Checkout (route.params.selectedShippingType)
+    S->>S: setSelectedShippingType(type retourné)
+    S-->>U: Méthode + prix mis à jour, total recalculé
+    end

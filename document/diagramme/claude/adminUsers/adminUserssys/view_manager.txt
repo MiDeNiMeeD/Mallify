@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant S as Système
+
+    rect rgb(255, 245, 220)
+    Note over A,S: Visualiser un manager (modal détails)
+    A->>S: Cliquer l'icône œil sur une ligne
+    S->>S: setSelectedManager(manager)
+    S-->>A: Afficher la modal avec : nom, email, téléphone, rôle, statut, date d'inscription
+    A->>S: Cliquer "X" pour fermer
+    S->>S: setSelectedManager(null)
+    S-->>A: Fermer la modal
+    end

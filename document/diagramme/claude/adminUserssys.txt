@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor A as Administrateur
+    participant S as Système
+
+    Note over A,S: Flux complet Admin → Gestion des Managers
+
+    Note right of A: voir adminUserssys/load_managers.txt
+    ref over A,S: Chargement (GET /api/users + filtre rôles managers)
+
+    opt Consulter un manager
+        Note right of A: voir adminUserssys/view_manager.txt
+        ref over A,S: Visualiser les détails (modal)
+    end
+
+    opt Créer un manager
+        Note right of A: voir adminUserssys/create_manager.txt
+        ref over A,S: Créer (form + validation + POST /api/auth/register)
+    end
+
+    opt Éditer un manager
+        Note right of A: voir adminUserssys/edit_manager.txt
+        ref over A,S: ⚠️ Non implémenté
+    end
+
+    opt Supprimer un manager
+        Note right of A: voir adminUserssys/delete_manager.txt
+        ref over A,S: Supprimer (toast confirm + DELETE /api/users/:id)
+    end

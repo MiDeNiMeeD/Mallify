@@ -1,0 +1,37 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant V1 as I:SignInView
+    participant C as C:AuthController
+    participant OAuth as S:OAuthProvider
+    participant EU as E:User
+    participant ST as E:TokenStorage
+
+    rect rgb(220, 230, 255)
+    Note over U,C: Connexion via Facebook
+    U->>V1: Cliquer sur l'icône Facebook
+    activate V1
+    V1->>OAuth: startFacebookAuth()
+    activate OAuth
+    OAuth-->>U: Ouvrir la fenêtre Facebook
+    U->>OAuth: Se connecter et autoriser
+    OAuth-->>V1: Token Facebook
+    deactivate OAuth
+    V1->>C: POST /auth/facebook {token}
+    activate C
+    C->>OAuth: vérifier(token)
+    OAuth-->>C: Profil utilisateur
+    C->>EU: rechercher / créer (email, provider:"facebook")
+    activate EU
+    EU-->>C: Utilisateur
+    deactivate EU
+    C->>C: générer accessToken + refreshToken
+    C-->>V1: HTTP 200 {accessToken, refreshToken}
+    deactivate C
+    V1->>ST: setAuthTokens(...)
+    activate ST
+    ST-->>V1: OK
+    deactivate ST
+    V1->>V1: navigation.replace("MainTabs")
+    deactivate V1
+    end

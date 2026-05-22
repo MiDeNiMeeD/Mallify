@@ -26,6 +26,7 @@ import {
   FiMessageCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { useChat } from '../../chat';
 import { notifications } from '../../utils/mockData';
 import './DashboardLayout.css';
 
@@ -38,6 +39,7 @@ const DashboardLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { totalUnread } = useChat();
   const notificationRef = useRef(null);
 
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -143,7 +145,7 @@ const DashboardLayout = ({ children }) => {
       ]
     },
     { path: '/promotions', icon: FiTag, label: 'Promotions' },
-    { path: '/messages', icon: FiMessageCircle, label: 'Messages' },
+    { path: '/messages', icon: FiMessageCircle, label: 'Messages', badge: totalUnread },
   ];
 
   return (
@@ -242,7 +244,14 @@ const DashboardLayout = ({ children }) => {
                   className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                   title={sidebarCollapsed ? item.label : ''}
                 >
-                  <item.icon size={20} className="nav-icon" />
+                  <span className="nav-icon-wrap">
+                    <item.icon size={20} className="nav-icon" />
+                    {item.badge > 0 && (
+                      <span className="nav-badge">
+                        {item.badge > 99 ? '99+' : item.badge}
+                      </span>
+                    )}
+                  </span>
                   {!sidebarCollapsed && <span className="nav-label">{item.label}</span>}
                 </NavLink>
               )}

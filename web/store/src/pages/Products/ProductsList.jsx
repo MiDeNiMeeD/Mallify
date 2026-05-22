@@ -680,10 +680,7 @@ function ProductsList() {
   const shouldShowPagination = filteredProducts.length > ITEMS_PER_PAGE;
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+    return `${new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(amount) || 0)} DT`;
   };
 
   if (loading) {

@@ -1,0 +1,59 @@
+---
+config:
+  theme: redux
+  look: classic
+---
+sequenceDiagram
+    actor A as Administrateur
+    participant V@{ "type": "boundary" } as ManagersUsersView
+    participant M@{ "type": "boundary" } as AddManagerModal
+    participant API@{ "type": "control" } as ApiClient
+    participant C@{ "type": "control" } as AuthController
+    participant EU@{ "type": "entity" } as User
+    autonumber
+
+    activate V
+    A->>V: Cliquer "Add Manager" (handleAddManager)
+    V->>V: setShowAddModal(true), reset newManager (role par défaut: delivery_manager)
+    V->>M: render
+    activate M
+    M-->>A: Modal "Add Manager"
+
+        A->>M: Modifier nom / email / password / phone / role / status
+        M->>V: handleInputChange(e)
+        V->>V: setNewManager(prev, [name]: value)
+        V->>V: Effacer formErrors[name] si présent
+
+    A->>M: Cliquer "Create"
+    M->>V: handleSubmitManager(e)
+    V->>V: validateForm()
+    alt Object.keys(errors).length > 0
+        V->>V: setFormErrors(errors)
+        V-->>A: Afficher les erreurs sous les champs
+    else Validation OK
+        V->>V: setSubmitting(true)
+        V->>API: createUser({...newManager, skipEmailVerification: true})
+        activate API
+        API->>C: POST /api/auth/register
+        activate C
+        C->>EU: créer utilisateur (déjà vérifié car skipEmailVerification)
+        activate EU
+        EU-->>C: User créé
+        deactivate EU
+        alt Erreur
+            C-->>API: HTTP 4xx/5xx
+            API-->>V: throw (message)
+            V-->>A: Toast "Failed to create manager"
+        else Succès
+            C-->>API: HTTP 200 {user}
+            API-->>V: response
+            V->>V: await fetchManagers() (refresh liste)
+            V->>M: closeAddModal() + reset form
+            deactivate M
+            V-->>A: Toast "Manager created successfully"
+        end
+        deactivate C
+        deactivate API
+        V->>V: setSubmitting(false)
+    end
+    deactivate V

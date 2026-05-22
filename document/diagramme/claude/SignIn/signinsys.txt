@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant S as Système
+
+    rect rgb(230, 244, 255)
+    Note over U,S: Affichage du formulaire
+    U->>S: Demander l'interface de connexion
+    S-->>U: Afficher le formulaire (email + Google + Facebook)
+    end
+
+    alt Connexion avec Facebook
+        Note right of U: voir signinsys/facebook.txt
+        ref over U,S: Connexion Facebook
+    else Connexion avec Google
+        Note right of U: voir signinsys/google.txt
+        ref over U,S: Connexion Google
+    else Connexion avec email / mot de passe
+        Note right of U: voir signinsys/email.txt
+        ref over U,S: Saisie + validation + Demande de connexion
+    else Mot de passe oublié
+        Note right of U: voir signinsys/forgot_password.txt
+        ref over U,S: Mot de passe oublié (3 étapes)
+    end
